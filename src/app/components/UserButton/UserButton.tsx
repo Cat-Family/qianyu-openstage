@@ -4,26 +4,10 @@ import {
   Group,
   Avatar,
   Text,
-  createStyles,
   Box
 } from '@mantine/core'
 import { IconChevronRight } from '@tabler/icons-react'
-
-const useStyles = createStyles(theme => ({
-  user: {
-    display: 'block',
-    width: '100%',
-    padding: theme.spacing.md,
-    color: theme.colorScheme === 'dark' ? theme.colors.dark[0] : theme.black,
-
-    '&:hover': {
-      backgroundColor:
-        theme.colorScheme === 'dark'
-          ? theme.colors.dark[8]
-          : theme.colors.gray[0]
-    }
-  }
-}))
+import { forwardRef } from 'react'
 
 interface UserButtonProps extends UnstyledButtonProps {
   image: string
@@ -32,21 +16,30 @@ interface UserButtonProps extends UnstyledButtonProps {
   icon?: React.ReactNode
 }
 
-export function UserButton({
-  image,
-  name,
-  email,
-  icon,
-  ...others
-}: UserButtonProps) {
-  const { classes } = useStyles()
+const UserButton = forwardRef<HTMLButtonElement, UserButtonProps>(
+  ({ image, name, email, icon, ...others }: UserButtonProps, ref) => (
+    <UnstyledButton
+      ref={ref}
+      sx={theme => ({
+        display: 'block',
+        width: '100%',
+        padding: theme.spacing.md,
+        color:
+          theme.colorScheme === 'dark' ? theme.colors.dark[0] : theme.black,
 
-  return (
-    <UnstyledButton className={classes.user} {...others}>
-      <Group>
+        '&:hover': {
+          backgroundColor:
+            theme.colorScheme === 'dark'
+              ? theme.colors.dark[8]
+              : theme.colors.gray[0]
+        }
+      })}
+      {...others}
+    >
+      <Group spacing="xs" sx={{ flexWrap: 'nowrap' }}>
         <Avatar src={image} radius="xl" />
 
-        <Box style={{ flex: 1 }}>
+        <Box sx={{ flex: 1 }}>
           <Text size="sm" weight={500}>
             {name}
           </Text>
@@ -55,9 +48,10 @@ export function UserButton({
             {email}
           </Text>
         </Box>
-
-        {icon || <IconChevronRight size="0.9rem" stroke={1.5} />}
+        {icon || <IconChevronRight size="1rem" stroke={1.5} />}
       </Group>
     </UnstyledButton>
   )
-}
+)
+
+export default UserButton

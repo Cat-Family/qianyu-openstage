@@ -9,7 +9,9 @@ import {
   useMantineTheme,
   ActionIcon,
   Group,
-  Box
+  Box,
+  Text,
+  Flex
 } from '@mantine/core'
 import { Outlet } from 'react-router-dom'
 import { NavbarSegmented } from './NavBar'
@@ -36,7 +38,7 @@ export default function Layout() {
           p="md"
           hiddenBreakpoint="sm"
           hidden={!opened}
-          width={{ sm: 200, lg: 300 }}
+          width={{ xs: 300, sm: 300, md: 300, lg: 300 }}
         />
       }
       footer={
@@ -56,16 +58,22 @@ export default function Layout() {
                 mr="xl"
               />
             </MediaQuery>
-
-            <Title order={1} size="h3" color="blue.9" align="center">
-              千渝掌柜
-            </Title>
+            <Flex direction="column" align="center" justify="center">
+              <Title order={1} size="h3" color="blue.9" align="center">
+                千渝掌柜
+              </Title>
+              <Text size="xs" color="gray">
+                开放平台
+              </Text>
+            </Flex>
             <Box sx={{ flex: 1 }} />
-            <Group position="center" my="xl" pr="xl">
-              <ActionIcon size="lg" onClick={() => spotlight.open()}>
-                <IconSearch size="1.4rem" stroke={1.5} />
-              </ActionIcon>
-            </Group>
+            <MediaQuery smallerThan="sm" styles={{ display: 'none' }}>
+              <Group position="center" my="xl" pr="xl">
+                <ActionIcon size="lg" onClick={() => spotlight.open()}>
+                  <IconSearch size="1.4rem" stroke={1.5} />
+                </ActionIcon>
+              </Group>
+            </MediaQuery>
             <SegmentedToggle />
           </Box>
         </Header>

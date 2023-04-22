@@ -1,13 +1,17 @@
 import { useState } from 'react'
 import {
+  Box,
   MantineNumberSize,
+  Menu,
   Navbar,
+  ScrollArea,
   SegmentedControl,
   SpacingValue,
   SystemProp,
   createStyles,
   getStylesRef,
-  rem
+  rem,
+  Text
 } from '@mantine/core'
 import {
   IconShoppingCart,
@@ -20,13 +24,19 @@ import {
   IconSettings,
   Icon2fa,
   IconUsers,
-  IconFileAnalytics,
   IconDatabaseImport,
   IconReceipt2,
   IconReceiptRefund,
-  IconLogout
+  IconDashboard,
+  IconMessageCircle,
+  IconSearch,
+  IconPhoto,
+  IconArrowsLeftRight,
+  IconTrash
 } from '@tabler/icons-react'
-import { UserButton } from './components/UserButton/UserButton'
+import { Link } from 'react-router-dom'
+import UserButton from './components/UserButton/UserButton'
+import { spotlight } from '@mantine/spotlight'
 
 const useStyles = createStyles(theme => ({
   navbar: {
@@ -99,9 +109,9 @@ const useStyles = createStyles(theme => ({
 }))
 
 const tabs = {
-  account: [
-    { link: '', label: 'Notifications', icon: IconBellRinging },
-    { link: '', label: 'Billing', icon: IconReceipt2 },
+  store: [
+    { link: '/', label: 'Notifications', icon: IconBellRinging },
+    { link: '/about', label: 'Billing', icon: IconReceipt2 },
     { link: '', label: 'Security', icon: IconFingerprint },
     { link: '', label: 'SSH Keys', icon: IconKey },
     { link: '', label: 'Databases', icon: IconDatabaseImport },
@@ -109,13 +119,13 @@ const tabs = {
     { link: '', label: 'Other Settings', icon: IconSettings }
   ],
   general: [
+    { link: '/dashboard', label: 'Dashboard', icon: IconDashboard },
+    { link: '/users', label: 'Users', icon: IconUsers },
     { link: '', label: 'Orders', icon: IconShoppingCart },
     { link: '', label: 'Receipts', icon: IconLicense },
     { link: '', label: 'Reviews', icon: IconMessage2 },
     { link: '', label: 'Messages', icon: IconMessages },
-    { link: '', label: 'Customers', icon: IconUsers },
-    { link: '', label: 'Refunds', icon: IconReceiptRefund },
-    { link: '', label: 'Files', icon: IconFileAnalytics }
+    { link: '', label: 'Refunds', icon: IconReceiptRefund }
   ]
 }
 
@@ -131,24 +141,23 @@ export function NavbarSegmented({
   width: Partial<Record<string, string | number>> | undefined
 }) {
   const { classes, cx } = useStyles()
-  const [section, setSection] = useState<'account' | 'general'>('account')
+  const [section, setSection] = useState<'store' | 'general'>('store')
   const [active, setActive] = useState('Billing')
 
   const links = tabs[section].map(item => (
-    <a
+    <Link
       className={cx(classes.link, {
         [classes.linkActive]: item.label === active
       })}
-      href={item.link}
+      to={item.link}
       key={item.label}
-      onClick={event => {
-        event.preventDefault()
+      onClick={() => {
         setActive(item.label)
       }}
     >
       <item.icon className={classes.linkIcon} stroke={1.5} />
       <span>{item.label}</span>
-    </a>
+    </Link>
   ))
 
   return (
@@ -162,35 +171,59 @@ export function NavbarSegmented({
       <Navbar.Section>
         <SegmentedControl
           value={section}
-          onChange={(value: 'account' | 'general') => setSection(value)}
+          onChange={(value: 'store' | 'general') => setSection(value)}
           transitionTimingFunction="ease"
           fullWidth
           data={[
-            { label: 'Account', value: 'account' },
+            { label: 'Store', value: 'store' },
             { label: 'System', value: 'general' }
           ]}
         />
       </Navbar.Section>
-
-      <Navbar.Section grow mt="xl">
-        {links}
-      </Navbar.Section>
-
+      <ScrollArea mt="md">
+        <Navbar.Section grow>{links}</Navbar.Section>
+      </ScrollArea>
+      <Box sx={{ flex: 1 }} />
       <Navbar.Section className={classes.footer}>
-        <UserButton
-          image="https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=255&q=80"
-          name="Ann Nullpointer"
-          email="anullpointer@yahoo.com"
-        />
+        <Menu withArrow>
+          <Menu.Target>
+            <UserButton
+              image="https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=255&q=80"
+              name="Ann Nullpointer"
+              email="anullpointer@yahoo.com"
+            />
+          </Menu.Target>
 
-        <a
-          href="#"
-          className={classes.link}
-          onClick={event => event.preventDefault()}
-        >
-          <IconLogout className={classes.linkIcon} stroke={1.5} />
-          <span>Logout</span>
-        </a>
+          <Menu.Dropdown>
+            <Menu.Label>Application</Menu.Label>
+            <Menu.Item icon={<IconSettings size={14} />}>Settings</Menu.Item>
+            <Menu.Item icon={<IconMessageCircle size={14} />}>
+              Messages
+            </Menu.Item>
+            <Menu.Item icon={<IconPhoto size={14} />}>Gallery</Menu.Item>
+            <Menu.Item
+              onClick={() => spotlight.open()}
+              icon={<IconSearch size={14} />}
+              rightSection={
+                <Text size="xs" color="dimmed">
+                  ⌘K
+                </Text>
+              }
+            >
+              Search
+            </Menu.Item>
+
+            <Menu.Divider />
+
+            <Menu.Label>Danger zone</Menu.Label>
+            <Menu.Item icon={<IconArrowsLeftRight size={14} />}>
+              Transfer my data
+            </Menu.Item>
+            <Menu.Item color="red" icon={<IconTrash size={14} />}>
+              Delete my account
+            </Menu.Item>
+          </Menu.Dropdown>
+        </Menu>
       </Navbar.Section>
     </Navbar>
   )
