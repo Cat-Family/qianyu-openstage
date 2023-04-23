@@ -11,33 +11,27 @@ import {
   createStyles,
   getStylesRef,
   rem,
-  Text,
-  Title
+  Text
 } from '@mantine/core'
 import {
-  IconShoppingCart,
-  IconLicense,
-  IconMessage2,
-  IconBellRinging,
   IconMessages,
-  IconFingerprint,
-  IconKey,
   IconSettings,
-  Icon2fa,
   IconUsers,
-  IconDatabaseImport,
-  IconReceipt2,
-  IconReceiptRefund,
   IconDashboard,
-  IconMessageCircle,
   IconSearch,
-  IconPhoto,
   IconArrowsLeftRight,
-  IconTrash
+  IconBuildingStore,
+  IconUserBolt,
+  IconApi,
+  IconVersions,
+  IconPlus,
+  IconLogout,
+  IconToolsKitchen2
 } from '@tabler/icons-react'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import UserButton from './components/UserButton/UserButton'
 import { spotlight } from '@mantine/spotlight'
+import { matchSorter } from 'match-sorter'
 
 const useStyles = createStyles(theme => ({
   navbar: {
@@ -110,23 +104,30 @@ const useStyles = createStyles(theme => ({
 }))
 
 const tabs = {
-  store: [
-    { link: '/', label: 'Notifications', icon: IconBellRinging },
-    { link: '/about', label: 'Billing', icon: IconReceipt2 },
-    { link: '', label: 'Security', icon: IconFingerprint },
-    { link: '', label: 'SSH Keys', icon: IconKey },
-    { link: '', label: 'Databases', icon: IconDatabaseImport },
-    { link: '', label: 'Authentication', icon: Icon2fa },
-    { link: '', label: 'Other Settings', icon: IconSettings }
+  system: [
+    { link: '/', label: 'Dashboard', icon: IconDashboard },
+    { link: '/caretakers', label: 'Caretakers', icon: IconUserBolt },
+    { link: '/api', label: 'API', icon: IconApi },
+    { link: '/system/messages', label: 'Messages', icon: IconMessages },
+    { link: '/versions', label: 'Versions', icon: IconVersions }
   ],
-  general: [
-    { link: '/dashboard', label: 'Dashboard', icon: IconDashboard },
-    { link: '/users', label: 'Users', icon: IconUsers },
-    { link: '', label: 'Orders', icon: IconShoppingCart },
-    { link: '', label: 'Receipts', icon: IconLicense },
-    { link: '', label: 'Reviews', icon: IconMessage2 },
-    { link: '', label: 'Messages', icon: IconMessages },
-    { link: '', label: 'Refunds', icon: IconReceiptRefund }
+  store: [
+    { link: '/stores', label: 'Stores', icon: IconBuildingStore },
+    {
+      link: '/stores/messages',
+      label: 'Messages',
+      icon: IconMessages
+    },
+    {
+      link: '/stores/menu',
+      label: 'Menu',
+      icon: IconToolsKitchen2
+    },
+    {
+      link: '/customer',
+      label: 'Customers',
+      icon: IconUsers
+    }
   ]
 }
 
@@ -141,19 +142,25 @@ export function NavbarSegmented({
   hidden?: boolean | undefined
   width: Partial<Record<string, string | number>> | undefined
 }) {
+  const location = useLocation()
+
   const { classes, cx } = useStyles()
-  const [section, setSection] = useState<'store' | 'general'>('store')
-  const [active, setActive] = useState('Billing')
+  const [section, setSection] = useState<'store' | 'system'>(
+    matchSorter(tabs.system, location.pathname, { keys: ['link'] }).length > 0
+      ? 'system'
+      : 'store'
+  )
+  const [active, setActive] = useState(location.pathname)
 
   const links = tabs[section].map(item => (
     <Link
       className={cx(classes.link, {
-        [classes.linkActive]: item.label === active
+        [classes.linkActive]: item.link === active
       })}
       to={item.link}
       key={item.label}
       onClick={() => {
-        setActive(item.label)
+        setActive(item.link)
       }}
     >
       <item.icon className={classes.linkIcon} stroke={1.5} />
@@ -172,12 +179,12 @@ export function NavbarSegmented({
       <Navbar.Section>
         <SegmentedControl
           value={section}
-          onChange={(value: 'store' | 'general') => setSection(value)}
+          onChange={(value: 'store' | 'system') => setSection(value)}
           transitionTimingFunction="ease"
           fullWidth
           data={[
-            { label: 'Store', value: 'store' },
-            { label: 'System', value: 'general' }
+            { label: 'System', value: 'system' },
+            { label: 'Store', value: 'store' }
           ]}
         />
       </Navbar.Section>
@@ -198,10 +205,6 @@ export function NavbarSegmented({
           <Menu.Dropdown>
             <Menu.Label>Application</Menu.Label>
             <Menu.Item icon={<IconSettings size={14} />}>Settings</Menu.Item>
-            <Menu.Item icon={<IconMessageCircle size={14} />}>
-              Messages
-            </Menu.Item>
-            <Menu.Item icon={<IconPhoto size={14} />}>Gallery</Menu.Item>
             <Menu.Item
               onClick={() => spotlight.open()}
               icon={<IconSearch size={14} />}
@@ -216,12 +219,12 @@ export function NavbarSegmented({
 
             <Menu.Divider />
 
-            <Menu.Label>Danger zone</Menu.Label>
+            <Menu.Label>User zone</Menu.Label>
             <Menu.Item icon={<IconArrowsLeftRight size={14} />}>
-              Transfer my data
+              Switch account
             </Menu.Item>
-            <Menu.Item color="red" icon={<IconTrash size={14} />}>
-              Delete my account
+            <Menu.Item color="red" icon={<IconLogout size={14} />}>
+              Sign out
             </Menu.Item>
           </Menu.Dropdown>
         </Menu>

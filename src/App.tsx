@@ -62,8 +62,25 @@ function App() {
           <BrowserRouter>
             <Routes>
               <Route element={<Layout />}>
-                <Route path="/" element={<h2>Home</h2>} />
-                <Route path="/about" element={<h2>About</h2>} />
+                <Route path="/" element={<h2>Dashboard</h2>} />
+                <Route path="/caretakers" element={<h2>caretakers</h2>} />
+                <Route path="/api" element={<h2>api</h2>} />
+
+                <Route
+                  path="/system/messages"
+                  element={<h2>system message</h2>}
+                />
+
+                <Route path="/versions" element={<h2>version</h2>} />
+                <Route path="/stores" element={<h2>stores</h2>} />
+                <Route
+                  path="/stores/messages"
+                  element={<h2>stores messages</h2>}
+                />
+
+                <Route path="/stores/menu" element={<h2>menu</h2>} />
+
+                <Route path="/customer" element={<h2>customer</h2>} />
               </Route>
             </Routes>
           </BrowserRouter>
