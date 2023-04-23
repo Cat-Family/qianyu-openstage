@@ -11,7 +11,8 @@ import {
   createStyles,
   getStylesRef,
   rem,
-  Text
+  Text,
+  Title
 } from '@mantine/core'
 import {
   IconShoppingCart,

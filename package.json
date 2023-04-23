@@ -52,15 +52,6 @@
     "commit": "git-cz",
     "genlog": " conventional-changelog -p angular -i CHANGELOG.md -s"
   },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest",
-      "prettier",
-      "@typescript-eslint/eslint-plugin",
-      "@typescript-eslint/parser"
-    ]
-  },
   "browserslist": {
     "production": [
       ">0.2%",
@@ -88,6 +79,11 @@
     "cz-conventional-changelog": "^3.3.0",
     "eslint": "^8.38.0",
     "eslint-config-prettier": "^8.8.0",
+    "eslint-config-standard-with-typescript": "^34.0.1",
+    "eslint-plugin-import": "^2.25.2",
+    "eslint-plugin-n": "^15.0.0",
+    "eslint-plugin-promise": "^6.0.0",
+    "eslint-plugin-react": "^7.32.2",
     "prettier": "^2.8.7",
     "typescript": "^4.4.2"
   },
