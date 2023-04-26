@@ -24,7 +24,6 @@ import {
   IconUserBolt,
   IconApi,
   IconVersions,
-  IconPlus,
   IconLogout,
   IconToolsKitchen2
 } from '@tabler/icons-react'

@@ -24,6 +24,7 @@ export default function Layout() {
   const [opened, setOpened] = useState(false)
   return (
     <AppShell
+      layout="default"
       styles={{
         main: {
           background:

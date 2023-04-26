@@ -15,6 +15,11 @@ import {
   IconSearch
 } from '@tabler/icons-react'
 
+import { AuthenticationForm } from './pages/Login'
+import GithubOAuthPage from './pages/GithubOAuth'
+import RequireAuth from './components/RequireAuth'
+import UnauthorizedPage from './pages/UnauthorizedPage'
+
 const actions: SpotlightAction[] = [
   {
     title: 'Home',
@@ -61,26 +66,29 @@ function App() {
         >
           <BrowserRouter>
             <Routes>
-              <Route element={<Layout />}>
-                <Route path="/" element={<h2>Dashboard</h2>} />
-                <Route path="/caretakers" element={<h2>caretakers</h2>} />
-                <Route path="/api" element={<h2>api</h2>} />
+              <Route path="/users/login" element={<AuthenticationForm />} />
+              <Route path="/oauth/github" element={<GithubOAuthPage />} />
+              <Route path="/unauthorized" element={<UnauthorizedPage />} />
 
-                <Route
-                  path="/system/messages"
-                  element={<h2>system message</h2>}
-                />
+              <Route element={<RequireAuth allowedRoles={[19999]} />}>
+                <Route element={<Layout />}>
+                  <Route path="/" element={<h2>Dashboard</h2>} />
+                  <Route path="/caretakers" element={<h2>caretakers</h2>} />
+                  <Route path="/api" element={<h2>api</h2>} />
+                  <Route
+                    path="/system/messages"
+                    element={<h2>system message</h2>}
+                  />
 
-                <Route path="/versions" element={<h2>version</h2>} />
-                <Route path="/stores" element={<h2>stores</h2>} />
-                <Route
-                  path="/stores/messages"
-                  element={<h2>stores messages</h2>}
-                />
-
-                <Route path="/stores/menu" element={<h2>menu</h2>} />
-
-                <Route path="/customer" element={<h2>customer</h2>} />
+                  <Route path="/versions" element={<h2>version</h2>} />
+                  <Route path="/stores" element={<h2>stores</h2>} />
+                  <Route
+                    path="/stores/messages"
+                    element={<h2>stores messages</h2>}
+                  />
+                  <Route path="/stores/menu" element={<h2>menu</h2>} />
+                  <Route path="/customer" element={<h2>customer</h2>} />
+                </Route>
               </Route>
             </Routes>
           </BrowserRouter>
