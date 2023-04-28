@@ -9,27 +9,55 @@ import {
   PaperProps,
   Button,
   Divider,
-  Checkbox,
   Anchor,
   Stack,
-  Container,
   Title,
-  ActionIcon
+  ActionIcon,
+  createStyles,
+  rem,
+  Box
 } from '@mantine/core'
 
 import {
   IconBrandAlipay,
   IconBrandGithub,
-  IconBrandQq,
-  IconBrandWechat
+  IconBrandQq
 } from '@tabler/icons-react'
 
+const useStyle = createStyles(theme => ({
+  wrapper: {
+    minHeight: '100vh',
+    background: 'cover',
+    backgroundImage:
+      'url(https://images.unsplash.com/photo-1484242857719-4b9144542727?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1280&q=80)'
+  },
+  form: {
+    display: 'flex',
+    flexDirection: 'column',
+    borderRight: `${rem(1)} solid ${
+      theme.colorScheme === 'dark' ? theme.colors.dark[7] : theme.colors.gray[3]
+    }`,
+    minHeight: '100vh',
+    maxWidth: rem(450),
+    paddingTop: rem(80),
+
+    [theme.fn.smallerThan('sm')]: {
+      maxWidth: '100%'
+    }
+  },
+  title: {
+    color: theme.colorScheme === 'dark' ? theme.white : theme.black,
+    fontFamily: `Greycliff CF, ${theme.fontFamily}`
+  }
+}))
+
 export function AuthenticationForm(props: PaperProps) {
+  const { classes } = useStyle()
   const github_client_id = process.env.REACT_APP_GITHUB_CLIENT_ID
   const redirect_uri = process.env.REACT_APP_REDIRECT_URI
   const alipay_app_id = process.env.REACT_APP_ALIPAY_APP_ID
-  const [type, toggle] = useToggle(['login', 'register'])
-
+  const windowFeatures =
+    'left=600,top=200,width=500,height=500,scrollbars,status'
   const form = useForm({
     initialValues: {
       email: '',
@@ -46,38 +74,17 @@ export function AuthenticationForm(props: PaperProps) {
   })
 
   return (
-    <Container size={420} my={40}>
-      <Title
-        align="center"
-        sx={theme => ({
-          fontFamily: `Greycliff CF, ${theme.fontFamily}`,
-          fontWeight: 900
-        })}
-      >
-        Welcome back!
-      </Title>
-      <Text color="dimmed" size="sm" align="center" mt={5}>
-        Do not have an account yet?{' '}
-        <Anchor size="sm" component="button">
-          Create account
-        </Anchor>
-      </Text>
-
-      <Paper withBorder shadow="md" p={30} mt={30} radius="md" {...props}>
+    <div className={classes.wrapper}>
+      <Paper withBorder className={classes.form} radius={0} p={30}>
+        <Title order={2} className={classes.title} ta="center" mt="md">
+          欢迎使用
+        </Title>
+        <Title order={2} className={classes.title} ta="center" mb={50}>
+          千渝掌柜开放平台!
+        </Title>
+        <Box sx={{ flex: 1 }} />
         <form onSubmit={form.onSubmit(() => {})}>
           <Stack>
-            {type === 'register' && (
-              <TextInput
-                label="Name"
-                placeholder="Your name"
-                value={form.values.name}
-                onChange={event =>
-                  form.setFieldValue('name', event.currentTarget.value)
-                }
-                radius="md"
-              />
-            )}
-
             <TextInput
               required
               label="Email"
@@ -104,32 +111,14 @@ export function AuthenticationForm(props: PaperProps) {
               }
               radius="md"
             />
-
-            {type === 'register' && (
-              <Checkbox
-                label="I accept terms and conditions"
-                checked={form.values.terms}
-                onChange={event =>
-                  form.setFieldValue('terms', event.currentTarget.checked)
-                }
-              />
-            )}
           </Stack>
 
           <Group position="apart" mt="xl">
-            <Anchor
-              component="button"
-              type="button"
-              color="dimmed"
-              onClick={() => toggle()}
-              size="xs"
-            >
-              {type === 'register'
-                ? 'Already have an account? Login'
-                : "Don't have an account? Register"}
+            <Anchor component="button" type="button" color="dimmed" size="xs">
+              Don't have an account? Register
             </Anchor>
             <Button type="submit" radius="xl">
-              {upperFirst(type)}
+              {upperFirst('submit')}
             </Button>
           </Group>
         </form>
@@ -143,8 +132,8 @@ export function AuthenticationForm(props: PaperProps) {
             onClick={() => {
               window.open(
                 `https://github.com/login/oauth/authorize?client_id=${github_client_id}&scope=user:email`,
-                'DescriptiveWindowName',
-                'resizable,scrollbars,status'
+                'Github',
+                windowFeatures
               )
             }}
             radius="xl"
@@ -161,25 +150,11 @@ export function AuthenticationForm(props: PaperProps) {
             <IconBrandGithub size="1rem" />
           </ActionIcon>
           <ActionIcon
-            radius="xl"
-            sx={theme => ({
-              backgroundColor:
-                theme.colors.green[theme.colorScheme === 'dark' ? 9 : 6],
-              color: '#fff',
-              '&:hover': {
-                backgroundColor:
-                  theme.colors.green[theme.colorScheme === 'dark' ? 9 : 9]
-              }
-            })}
-          >
-            <IconBrandWechat size="1rem" />
-          </ActionIcon>
-          <ActionIcon
             onClick={async () => {
               window.open(
                 `https://openauth.alipay.com/oauth2/publicAppAuthorize.htm?app_id=${alipay_app_id}&scope=auth_user&redirect_uri=${'https://qianyushop.shop/'}&state=init`,
-                'DescriptiveWindowName',
-                'resizable,scrollbars,status'
+                'Alipay',
+                windowFeatures
               )
             }}
             radius="xl"
@@ -210,7 +185,12 @@ export function AuthenticationForm(props: PaperProps) {
             <IconBrandQq size="1rem" />
           </ActionIcon>
         </Group>
+
+        <Box sx={{ flex: 4 }} />
+        <Text align="center">
+          Copy right by @<a href="https://github.com/Cat-Family">Cat Family</a>
+        </Text>
       </Paper>
-    </Container>
+    </div>
   )
 }

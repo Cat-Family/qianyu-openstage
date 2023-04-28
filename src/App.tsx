@@ -19,6 +19,7 @@ import { AuthenticationForm } from './pages/Login'
 import GithubOAuthPage from './pages/GithubOAuth'
 import RequireAuth from './components/RequireAuth'
 import UnauthorizedPage from './pages/UnauthorizedPage'
+import CaretakersPage from './pages/Caretakers'
 
 const actions: SpotlightAction[] = [
   {
@@ -51,11 +52,7 @@ function App() {
       colorScheme={colorScheme}
       toggleColorScheme={toggleColorScheme}
     >
-      <MantineProvider
-        theme={{ colorScheme }}
-        withGlobalStyles
-        withNormalizeCSS
-      >
+      <MantineProvider theme={{ colorScheme }}>
         <SpotlightProvider
           transitionProps={{ duration: 300, transition: 'slide-down' }}
           actions={actions}
@@ -73,7 +70,7 @@ function App() {
               <Route element={<RequireAuth allowedRoles={[19999]} />}>
                 <Route element={<Layout />}>
                   <Route path="/" element={<h2>Dashboard</h2>} />
-                  <Route path="/caretakers" element={<h2>caretakers</h2>} />
+                  <Route path="/caretakers" element={<CaretakersPage />} />
                   <Route path="/api" element={<h2>api</h2>} />
                   <Route
                     path="/system/messages"

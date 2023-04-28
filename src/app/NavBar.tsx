@@ -222,7 +222,12 @@ export function NavbarSegmented({
             <Menu.Item icon={<IconArrowsLeftRight size={14} />}>
               Switch account
             </Menu.Item>
-            <Menu.Item color="red" icon={<IconLogout size={14} />}>
+            <Menu.Item
+              component={Link}
+              to="/users/login"
+              color="red"
+              icon={<IconLogout size={14} />}
+            >
               Sign out
             </Menu.Item>
           </Menu.Dropdown>
