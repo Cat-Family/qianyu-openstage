@@ -1,0 +1,7 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`test Movebox component render test Movebox component render success 1`] = `
+<div>
+  Github auth success will, code 
+</div>
+`;
