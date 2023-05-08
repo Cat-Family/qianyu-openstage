@@ -131,7 +131,7 @@ export function AuthenticationForm(props: PaperProps) {
           <ActionIcon
             onClick={() => {
               window.open(
-                `https://github.com/login/oauth/authorize?client_id=${github_client_id}&scope=user:email`,
+                `https://github.com/login/oauth/authorize?client_id=${github_client_id}&scope=user:email&redirect_uri=${redirect_uri}`,
                 'Github',
                 windowFeatures
               )

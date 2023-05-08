@@ -1,23 +1,13 @@
 import { DataTable } from 'mantine-datatable'
-import {
-  ActionIcon,
-  Box,
-  Button,
-  Checkbox,
-  Grid,
-  TextInput
-} from '@mantine/core'
-import { IconDownload, IconSearch, IconTrash } from '@tabler/icons-react'
+import { Button, Grid, TextInput } from '@mantine/core'
+import { IconSearch, IconTrash } from '@tabler/icons-react'
 import companies from './data/companies.json'
 import { useEffect, useState } from 'react'
-import { useDebouncedValue } from '@mantine/hooks'
 
 const PAGE_SIZE = 30
 
 const CaretakersPage = () => {
   const [query, setQuery] = useState('')
-  const [veteransOnly, setVeteransOnly] = useState(false)
-  const [debouncedQuery] = useDebouncedValue(query, 200)
 
   const [page, setPage] = useState(1)
   const [records, setRecords] = useState(companies.slice(0, PAGE_SIZE))
