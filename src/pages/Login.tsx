@@ -21,8 +21,16 @@ import {
 import {
   IconBrandAlipay,
   IconBrandGithub,
-  IconBrandQq
+  IconBrandQq,
+  IconX
 } from '@tabler/icons-react'
+import useFetch from '../hooks/useFetch'
+import { useEffect } from 'react'
+import { notifications } from '@mantine/notifications'
+interface Post {
+  code: number
+  message: string
+}
 
 const useStyle = createStyles(theme => ({
   wrapper: {
@@ -69,9 +77,39 @@ export function AuthenticationForm(props: PaperProps) {
     validate: {
       email: val => (/^\S+@\S+$/.test(val) ? null : 'Invalid email'),
       password: val =>
-        val.length <= 6 ? 'Password should include at least 6 characters' : null
+        val.length <= 4 ? 'Password should include at least 6 characters' : null
     }
   })
+  const { fetchData, data, error } = useFetch<Post>('user/login.action', {
+    method: 'POST',
+    body: JSON.stringify({
+      userEmail: form.values.email,
+      userName: form.values.name,
+      userPwd: form.values.password
+    }),
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    mode: 'cors'
+  })
+
+  useEffect(() => {
+    if (error) {
+      console.log(error)
+      notifications.show({
+        id: 'login-error',
+        withCloseButton: true,
+        autoClose: 5000,
+        title: error.name,
+        message: error.message,
+        color: 'red',
+        icon: <IconX />,
+        radius: 'lg',
+        className: 'my-notification-class',
+        loading: false
+      })
+    }
+  }, [error])
 
   return (
     <div className={classes.wrapper}>
@@ -117,7 +155,7 @@ export function AuthenticationForm(props: PaperProps) {
             <Anchor component="button" type="button" color="dimmed" size="xs">
               Don't have an account? Register
             </Anchor>
-            <Button type="submit" radius="xl">
+            <Button type="submit" radius="xl" onClick={fetchData}>
               {upperFirst('submit')}
             </Button>
           </Group>

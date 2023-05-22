@@ -20,6 +20,7 @@ import GithubOAuthPage from './pages/GithubOAuth'
 import RequireAuth from './components/RequireAuth'
 import UnauthorizedPage from './pages/UnauthorizedPage'
 import CaretakersPage from './pages/Caretakers'
+import { Notifications } from '@mantine/notifications'
 
 const actions: SpotlightAction[] = [
   {
@@ -61,6 +62,7 @@ function App() {
           shortcut={['mod + P', 'mod + K', '/']}
           nothingFoundMessage="Nothing found..."
         >
+          <Notifications position="top-center" />
           <BrowserRouter>
             <Routes>
               <Route path="/users/login" element={<AuthenticationForm />} />
