@@ -56,7 +56,6 @@ const CaretakersPage = () => {
         </Grid.Col>
       </Grid>
       <DataTable
-        height="calc(100vh - 13.7rem)"
         withBorder
         borderRadius="sm"
         withColumnBorders

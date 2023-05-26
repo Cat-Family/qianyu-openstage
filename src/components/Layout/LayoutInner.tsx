@@ -24,6 +24,7 @@ import Header from './Header/Header'
 import Navbar from './Navbar/Navbar'
 import mainLinks from './Navbar/main-links'
 import { Footer } from '../Footer/Footer'
+import { Outlet, useLocation } from 'react-router-dom'
 
 export interface LayoutProps {
   location: {
@@ -69,8 +70,10 @@ const actions: SpotlightAction[] = [
 function AutoOpenSpolight() {
   const spolight = useSpotlight()
 
+  const searchParams = new URLSearchParams(window.location.search)
+
   useEffect(() => {
-    const params = new URLSearchParams(window.location.search)
+    const params = new URLSearchParams(searchParams)
     if (params.has('searchParamName')) {
       spolight.openSpotlight()
     }
@@ -79,7 +82,9 @@ function AutoOpenSpolight() {
   return null
 }
 
-export function LayoutInner({ location }: LayoutProps) {
+export function LayoutInner() {
+  const location = useLocation()
+  const searchParams = new URLSearchParams(window.location.search)
   const navbarCollapse = useMediaQuery(`(max-width: ${em(NAVBAR_BREAKPOINT)})`)
   const shouldRenderHeader = !shouldExcludeHeader(location.pathname)
   const shouldRenderNavbar =
@@ -90,7 +95,7 @@ export function LayoutInner({ location }: LayoutProps) {
 
   useEffect(() => {
     setSpotlightQuery(
-      new URLSearchParams(window.location.search).get('searchParamName') || ''
+      new URLSearchParams(searchParams).get('searchParamName') || ''
     )
   }, [])
 
@@ -145,7 +150,7 @@ export function LayoutInner({ location }: LayoutProps) {
               modals={{ demonstration: demonstrationModal }}
             >
               <div className={classes.page}>
-                <Text>Hello</Text>
+                <Outlet />
               </div>
               <Footer withNavbar />
             </ModalsProvider>

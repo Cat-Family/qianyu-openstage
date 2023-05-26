@@ -3,15 +3,13 @@ import {
   ColorSchemeProvider,
   MantineProvider,
   createEmotionCache,
-  Global,
-  Text
+  Global
 } from '@mantine/core'
 import rtlPlugin from 'stylis-plugin-rtl'
-import { LayoutInner, LayoutProps } from './LayoutInner'
+import { LayoutInner } from './LayoutInner'
 import { useEffect, useState } from 'react'
 import { useHotkeys, useLocalStorage } from '@mantine/hooks'
 import { DirectionContext } from './DirectionContext'
-import { Footer } from '../Footer/Footer'
 
 const THEME_KEY = 'mantine-color-scheme'
 
@@ -21,11 +19,13 @@ const rtlCache = createEmotionCache({
   stylisPlugins: [rtlPlugin]
 })
 
-export default function Layout({ location }: LayoutProps) {
+export default function Layout() {
   const [dir, setDir] = useState<'ltr' | 'rtl'>('ltr')
   const [colorScheme, setColorScheme] = useLocalStorage<'light' | 'dark'>({
     key: THEME_KEY,
-    defaultValue: 'light',
+    defaultValue: window.matchMedia('(prefers-color-scheme: dark)')
+      ? 'dark'
+      : 'light',
     getInitialValueInEffect: true
   })
 
@@ -36,7 +36,7 @@ export default function Layout({ location }: LayoutProps) {
     setDir(current => (current === 'ltr' ? 'rtl' : 'ltr'))
 
   useHotkeys([
-    ['mod+J', () => toggleColorScheme()],
+    ['mod + J', () => toggleColorScheme()],
     ['mod + shift + L', () => toggleDirection()]
   ])
 
@@ -69,7 +69,7 @@ export default function Layout({ location }: LayoutProps) {
             })}
           />
           <div dir={dir}>
-            <LayoutInner location={location}></LayoutInner>
+            <LayoutInner />
           </div>
         </MantineProvider>
       </ColorSchemeProvider>

@@ -45,8 +45,7 @@ export default createStyles((theme, { shouldRenderHeader }: LayoutStyles) => ({
     minHeight: `calc(100vh - ${rem(280)})`
   },
   page: {
-    height: '100vh',
-    paddingTop: rem(20),
+    padding: `${em(45)}  ${theme.spacing.xl} 0`,
     minHeight: `calc(100vh - ${rem(350)})`,
     position: 'relative',
     zIndex: 1,
