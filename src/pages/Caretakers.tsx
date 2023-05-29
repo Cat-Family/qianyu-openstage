@@ -49,9 +49,9 @@ const CaretakersPage = () => {
               ? `Delete ${
                   selectedRecords.length === 1
                     ? 'one record'
-                    : `${selectedRecords.length} records`
+                    : `${selectedRecords.length}`
                 }`
-              : 'Delete selected'}
+              : 'Delete'}
           </Button>
         </Grid.Col>
       </Grid>
