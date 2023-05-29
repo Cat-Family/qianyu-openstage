@@ -1,30 +1,89 @@
-import React from 'react'
-import { ScrollArea, rem } from '@mantine/core'
-import NavbarMainLink from './NavbarMainLink/NavbarMainLink'
-
-import mainLinks from './main-links'
+import { useState } from 'react'
+import { ScrollArea, SegmentedControl, Space } from '@mantine/core'
+import {
+  IconMessages,
+  IconUsers,
+  IconDashboard,
+  IconBuildingStore,
+  IconUserBolt,
+  IconApi,
+  IconVersions,
+  IconToolsKitchen2
+} from '@tabler/icons-react'
 import useStyles from './Navbar.styles'
+import { matchSorter } from 'match-sorter'
+import { Link } from 'react-router-dom'
 
-export default function Navbar({ data, opened, onClose }: any) {
+const tabs = {
+  system: [
+    { link: '/', label: 'Dashboard', icon: IconDashboard },
+    { link: '/caretakers', label: 'Caretakers', icon: IconUserBolt },
+    { link: '/api', label: 'API', icon: IconApi },
+    { link: '/system/messages', label: 'Messages', icon: IconMessages },
+    { link: '/versions', label: 'Versions', icon: IconVersions }
+  ],
+  store: [
+    { link: '/stores', label: 'Stores', icon: IconBuildingStore },
+    {
+      link: '/stores/messages',
+      label: 'Messages',
+      icon: IconMessages
+    },
+    {
+      link: '/stores/menu',
+      label: 'Menu',
+      icon: IconToolsKitchen2
+    },
+    {
+      link: '/customer',
+      label: 'Customers',
+      icon: IconUsers
+    }
+  ]
+}
+
+export default function Navbar({ opened }: any) {
   const { classes, cx } = useStyles()
-
-  const main = mainLinks.map((item: any) => (
-    <NavbarMainLink
-      key={item.to}
-      to={item.to}
-      color={item.color}
-      icon={<item.icon size={rem(item.rawIcon ? 30 : 18)} stroke={2.2} />}
-      onClick={onClose}
-      rawIcon={item.rawIcon}
+  const [section, setSection] = useState<'store' | 'system'>(
+    matchSorter(tabs.system, location.pathname, { keys: ['link'] }).length > 0
+      ? 'system'
+      : 'store'
+  )
+  const [active, setActive] = useState(location.pathname)
+  const links = tabs[section].map(item => (
+    <Link
+      className={cx(classes.link, {
+        [classes.linkActive]: item.link === active
+      })}
+      to={item.link}
+      key={item.label}
+      onClick={() => {
+        setActive(item.link)
+      }}
     >
-      {item.label}
-    </NavbarMainLink>
+      <item.icon className={classes.linkIcon} stroke={1.5} />
+      <span>{item.label}</span>
+    </Link>
   ))
 
   return (
     <nav className={cx(classes.navbar, { [classes.opened]: opened })}>
       <ScrollArea h="100vh" type="scroll">
-        <div className={classes.body}>{main}</div>
+        <div className={classes.body}>
+          <SegmentedControl
+            value={section}
+            onChange={(value: 'store' | 'system') => setSection(value)}
+            transitionTimingFunction="ease"
+            fullWidth
+            data={[
+              { label: 'System', value: 'system' },
+              { label: 'Store', value: 'store' }
+            ]}
+          />
+          <Space h="xl" />
+          {links}
+          <Space h="xl" />
+        </div>
       </ScrollArea>
     </nav>
   )

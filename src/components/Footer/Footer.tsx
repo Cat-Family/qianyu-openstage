@@ -1,6 +1,6 @@
 import React from 'react'
 import { Container, Text, Group } from '@mantine/core'
-import { TwitterButton, DiscordButton } from '@mantine/ds'
+import { TwitterButton, DiscordButton, GithubIcon } from '@mantine/ds'
 import useStyles from './Footer.styles'
 
 interface FooterProps {
@@ -19,30 +19,14 @@ export function Footer({ withNavbar }: FooterProps) {
         <Container size={1100}>
           <div className={classes.inner}>
             <div className={classes.logoSection}>
-              logo
-              <Text className={classes.description} size="sm">
-                Build fully functional accessible web applications faster than
-                ever
+              <img title="logo" src="/logo.png" className={classes.logo} />
+              <Text size="xl" weight={500}>
+                千渝掌柜 - 开放平台
+              </Text>
+              <Text size="sm" color="dimmed">
+                By Cat-Family
               </Text>
             </div>
-
-            <div className={classes.groups}>groups</div>
-          </div>
-
-          <div className={classes.afterFooter}>
-            <Group position="apart">
-              <Text size="xs" className={classes.afterFooterNote}>
-                Built by{' '}
-                <a href="https://github.com/rtivital">Vitaly Rtishchev</a> and{' '}
-                <a href="https://github.com/mantinedev/mantine/graphs/contributors">
-                  these awesome people
-                </a>
-              </Text>
-              <div className={classes.social}>
-                <DiscordButton className={classes.socialButton} />
-                <TwitterButton className={classes.socialButton} ml="md" />
-              </div>
-            </Group>
           </div>
         </Container>
       </div>

@@ -20,7 +20,7 @@ export function HeaderMobile({ navbarOpened, toggleNavbar }: HeaderProps) {
           onClick={toggleNavbar}
           aria-label="Toggle navbar"
         />
-        <div className={classes.logo}>lgo</div>
+        <div className={classes.logo}>千渝掌柜</div>
         <ColorSchemeControl />
       </div>
     </div>

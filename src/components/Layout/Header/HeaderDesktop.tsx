@@ -47,7 +47,7 @@ export function HeaderDesktop() {
     <div className={cx(classes.header, RemoveScroll.classNames.fullWidth)}>
       <div className={classes.mainSection}>
         <div className={classes.logoWrapper}>
-          <div className={classes.logo}>logo</div>
+          <div className={classes.logo}>千渝掌柜 - 开放平台</div>
 
           <Menu width={160} position="bottom-start" withArrow>
             <Menu.Target>

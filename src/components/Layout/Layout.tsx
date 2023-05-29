@@ -1,78 +1,162 @@
+import { randomId, useMediaQuery } from '@mantine/hooks'
+import { NAVBAR_BREAKPOINT } from './Navbar/Navbar.styles'
+import { Button, Text, em, rem } from '@mantine/core'
+import { ModalsProvider, ContextModalProps } from '@mantine/modals'
 import {
-  ColorScheme,
-  ColorSchemeProvider,
-  MantineProvider,
-  createEmotionCache,
-  Global
-} from '@mantine/core'
-import rtlPlugin from 'stylis-plugin-rtl'
-import { LayoutInner } from './LayoutInner'
+  shouldExcludeHeader,
+  shouldExcludeNavbar
+} from '../../settings/exclude-layout'
+import useStyles from './Layout.styles'
 import { useEffect, useState } from 'react'
-import { useHotkeys, useLocalStorage } from '@mantine/hooks'
-import { DirectionContext } from './DirectionContext'
+import {
+  SpotlightAction,
+  SpotlightProvider,
+  useSpotlight
+} from '@mantine/spotlight'
+import {
+  IconDashboard,
+  IconFileText,
+  IconHome,
+  IconSearch
+} from '@tabler/icons-react'
+import { Notifications } from '@mantine/notifications'
+import Header from './Header/Header'
+import Navbar from './Navbar/Navbar'
+import mainLinks from './Navbar/main-links'
+import { Footer } from '../Footer/Footer'
+import { Outlet, useLocation } from 'react-router-dom'
 
-const THEME_KEY = 'mantine-color-scheme'
+export interface LayoutProps {
+  location: {
+    pathname: string
+  }
+}
 
-const rtlCache = createEmotionCache({
-  key: 'mantine-rtl',
-  prepend: true,
-  stylisPlugins: [rtlPlugin]
-})
+const demonstrationModal = ({
+  context,
+  id,
+  innerProps
+}: ContextModalProps<{ modalBody: string }>) => (
+  <>
+    <Text size="sm">{innerProps.modalBody}</Text>
+    <Button fullWidth mt="md" onClick={() => context.closeModal(id)}>
+      Close modal
+    </Button>
+  </>
+)
 
-export default function Layout() {
-  const [dir, setDir] = useState<'ltr' | 'rtl'>('ltr')
-  const [colorScheme, setColorScheme] = useLocalStorage<'light' | 'dark'>({
-    key: THEME_KEY,
-    defaultValue: window.matchMedia('(prefers-color-scheme: dark)')
-      ? 'dark'
-      : 'light',
-    getInitialValueInEffect: true
-  })
+const actions: SpotlightAction[] = [
+  {
+    title: 'Home',
+    description: 'Get to home page',
+    onTrigger: () => console.log('Home'),
+    icon: <IconHome size="1.2rem" />
+  },
+  {
+    title: 'Dashboard',
+    description: 'Get full information about current system status',
+    onTrigger: () => console.log('Dashboard'),
+    icon: <IconDashboard size="1.2rem" />
+  },
+  {
+    title: 'Documentation',
+    description: 'Visit documentation to lean more about all features',
+    onTrigger: () => console.log('Documentation'),
+    icon: <IconFileText size="1.2rem" />
+  }
+]
 
-  const toggleColorScheme = (value?: ColorScheme) =>
-    setColorScheme(value || (colorScheme === 'dark' ? 'light' : 'dark'))
+// Separate component to allow calling useSpotlight hook.
+function AutoOpenSpolight() {
+  const spolight = useSpotlight()
 
-  const toggleDirection = () =>
-    setDir(current => (current === 'ltr' ? 'rtl' : 'ltr'))
+  const searchParams = new URLSearchParams(window.location.search)
 
-  useHotkeys([
-    ['mod + J', () => toggleColorScheme()],
-    ['mod + shift + L', () => toggleDirection()]
-  ])
+  useEffect(() => {
+    const params = new URLSearchParams(searchParams)
+    if (params.has('searchParamName')) {
+      spolight.openSpotlight()
+    }
+  }, [])
 
-  useEffect(() => {}, [])
+  return null
+}
+
+export function Layout() {
+  const location = useLocation()
+  const searchParams = new URLSearchParams(window.location.search)
+  const navbarCollapse = useMediaQuery(`(max-width: ${em(NAVBAR_BREAKPOINT)})`)
+  const shouldRenderHeader = !shouldExcludeHeader(location.pathname)
+  const shouldRenderNavbar =
+    !shouldExcludeNavbar(location.pathname) || navbarCollapse
+  const { classes, cx } = useStyles({ shouldRenderHeader })
+  const [navbarOpened, setNavbarState] = useState(false)
+  const [spotlightQuery, setSpotlightQuery] = useState('')
+
+  useEffect(() => {
+    setSpotlightQuery(
+      new URLSearchParams(searchParams).get('searchParamName') || ''
+    )
+  }, [])
 
   return (
-    <DirectionContext.Provider value={{ dir, toggleDirection }}>
-      <ColorSchemeProvider
-        colorScheme={colorScheme}
-        toggleColorScheme={toggleColorScheme}
+    <SpotlightProvider
+      actions={actions}
+      searchIcon={<IconSearch size="1.2rem" />}
+      searchPlaceholder="Search..."
+      shortcut={['mod + K', 'mod + P', '/']}
+      highlightQuery
+      query={spotlightQuery}
+      onQueryChange={setSpotlightQuery}
+      searchInputProps={{
+        id: randomId(),
+        name: randomId(),
+        autoComplete: 'off'
+      }}
+      transitionProps={{
+        duration: 150,
+        transition: {
+          in: { transform: 'translateY(0)', opacity: 1 },
+          out: { transform: `translateY(-${rem(20)}), opacity: 0` },
+          transitionProperty: 'transform, opacity'
+        }
+      }}
+    >
+      <Notifications />
+      <AutoOpenSpolight />
+      <div
+        className={cx({
+          [classes.withNavbar]: shouldRenderNavbar,
+          [classes.withoutHeader]: !shouldRenderHeader
+        })}
       >
-        <MantineProvider
-          withGlobalStyles
-          withNormalizeCSS
-          theme={{
-            dir,
-            colorScheme,
-            headings: { fontFamily: 'system-ui' }
-          }}
-          emotionCache={dir === 'rtl' ? rtlCache : undefined}
-        >
-          <Global
-            styles={theme => ({
-              body: {
-                color:
-                  theme.colorScheme === 'dark'
-                    ? theme.colors.dark[1]
-                    : theme.colors.gray[8]
-              }
-            })}
+        {shouldRenderHeader && (
+          <Header
+            navbarOpened={navbarOpened}
+            toggleNavbar={() => setNavbarState(o => !o)}
           />
-          <div dir={dir}>
-            <LayoutInner />
+        )}
+        {shouldRenderNavbar && (
+          <Navbar
+            data={mainLinks}
+            opened={navbarOpened}
+            onClose={() => setNavbarState(false)}
+          />
+        )}
+        <main className={classes.main}>
+          <div className={classes.content}>
+            <ModalsProvider
+              labels={{ confirm: 'Confirm', cancel: 'Cancel' }}
+              modals={{ demonstration: demonstrationModal }}
+            >
+              <div className={classes.page}>
+                <Outlet />
+              </div>
+              <Footer withNavbar />
+            </ModalsProvider>
           </div>
-        </MantineProvider>
-      </ColorSchemeProvider>
-    </DirectionContext.Provider>
+        </main>
+      </div>
+    </SpotlightProvider>
   )
 }

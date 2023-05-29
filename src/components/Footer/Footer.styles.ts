@@ -1,8 +1,8 @@
 import { createStyles, rem, em } from '@mantine/core'
 import { NAVBAR_WIDTH, NAVBAR_BREAKPOINT } from '../Layout/Navbar/Navbar.styles'
 
-const FOOTER_HEIGHT = rem(400)
-const FOOTER_HEIGHT_TABLET = rem(460)
+const FOOTER_HEIGHT = rem(320)
+const FOOTER_HEIGHT_TABLET = rem(320)
 const FOOTER_HEIGHT_MOBILE = rem(320)
 
 export default createStyles(theme => ({
@@ -79,7 +79,10 @@ export default createStyles(theme => ({
       marginBottom: 0
     }
   },
-
+  logo: {
+    width: rem(150),
+    height: rem(150)
+  },
   description: {
     marginTop: theme.spacing.xs,
     color:
