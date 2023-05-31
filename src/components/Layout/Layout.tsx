@@ -7,7 +7,7 @@ import {
   shouldExcludeNavbar
 } from '../../settings/exclude-layout'
 import useStyles from './Layout.styles'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import {
   SpotlightAction,
   SpotlightProvider,
@@ -22,15 +22,10 @@ import {
 import { Notifications } from '@mantine/notifications'
 import Header from './Header/Header'
 import Navbar from './Navbar/Navbar'
-import mainLinks from './Navbar/main-links'
 import { Footer } from '../Footer/Footer'
-import { Outlet, useLocation } from 'react-router-dom'
-
-export interface LayoutProps {
-  location: {
-    pathname: string
-  }
-}
+import { useLocation, useOutlet } from 'react-router-dom'
+import { CSSTransition, SwitchTransition } from 'react-transition-group'
+import './styles.css'
 
 const demonstrationModal = ({
   context,
@@ -84,6 +79,8 @@ function AutoOpenSpolight() {
 
 export function Layout() {
   const location = useLocation()
+  const currentOutlet = useOutlet()
+  const nodeRef = useRef(null)
   const searchParams = new URLSearchParams(window.location.search)
   const navbarCollapse = useMediaQuery(`(max-width: ${em(NAVBAR_BREAKPOINT)})`)
   const shouldRenderHeader = !shouldExcludeHeader(location.pathname)
@@ -98,6 +95,10 @@ export function Layout() {
       new URLSearchParams(searchParams).get('searchParamName') || ''
     )
   }, [])
+
+  useEffect(() => {
+    setNavbarState(false)
+  }, [location.pathname])
 
   return (
     <SpotlightProvider
@@ -137,11 +138,7 @@ export function Layout() {
           />
         )}
         {shouldRenderNavbar && (
-          <Navbar
-            data={mainLinks}
-            opened={navbarOpened}
-            onClose={() => setNavbarState(false)}
-          />
+          <Navbar opened={navbarOpened} onClose={() => setNavbarState(false)} />
         )}
         <main className={classes.main}>
           <div className={classes.content}>
@@ -149,9 +146,19 @@ export function Layout() {
               labels={{ confirm: 'Confirm', cancel: 'Cancel' }}
               modals={{ demonstration: demonstrationModal }}
             >
-              <div className={classes.page}>
-                <Outlet />
-              </div>
+              <SwitchTransition>
+                <CSSTransition
+                  key={location.pathname}
+                  nodeRef={nodeRef}
+                  timeout={500}
+                  classNames="page"
+                  unmountOnExit
+                >
+                  <div ref={nodeRef} className={classes.page}>
+                    {currentOutlet}
+                  </div>
+                </CSSTransition>
+              </SwitchTransition>
               <Footer withNavbar />
             </ModalsProvider>
           </div>

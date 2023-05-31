@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { ScrollArea, SegmentedControl, Space } from '@mantine/core'
 import {
   IconMessages,
@@ -12,7 +12,7 @@ import {
 } from '@tabler/icons-react'
 import useStyles from './Navbar.styles'
 import { matchSorter } from 'match-sorter'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 
 const tabs = {
   system: [
@@ -43,6 +43,7 @@ const tabs = {
 }
 
 export default function Navbar({ opened }: any) {
+  const location = useLocation()
   const { classes, cx } = useStyles()
   const [section, setSection] = useState<'store' | 'system'>(
     matchSorter(tabs.system, location.pathname, { keys: ['link'] }).length > 0
@@ -66,6 +67,7 @@ export default function Navbar({ opened }: any) {
     </Link>
   ))
 
+  useEffect(() => {}, [location])
   return (
     <nav className={cx(classes.navbar, { [classes.opened]: opened })}>
       <ScrollArea h="100vh" type="scroll">

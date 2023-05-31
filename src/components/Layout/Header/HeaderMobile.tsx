@@ -1,7 +1,17 @@
-import React from 'react'
-import { Burger } from '@mantine/core'
-import { ColorSchemeControl } from '@mantine/ds'
+import { Avatar, Burger, Menu } from '@mantine/core'
 import useStyles from './HeaderMobile.styles'
+import {
+  IconBell,
+  IconCalendar,
+  IconDeviceMobileMessage,
+  IconHome,
+  IconLogout,
+  IconMapPin,
+  IconMessageCircle,
+  IconSettings,
+  IconUser
+} from '@tabler/icons-react'
+import { Link } from 'react-router-dom'
 
 interface HeaderProps {
   navbarOpened: boolean
@@ -21,7 +31,41 @@ export function HeaderMobile({ navbarOpened, toggleNavbar }: HeaderProps) {
           aria-label="Toggle navbar"
         />
         <div className={classes.logo}>千渝掌柜</div>
-        <ColorSchemeControl />
+        <Menu width={200} shadow="md" position="bottom-end" withArrow>
+          <Menu.Target>
+            <Avatar color="cyan" radius="xl" sx={{ cursor: 'pointer' }}>
+              LL
+            </Avatar>
+          </Menu.Target>
+
+          <Menu.Dropdown>
+            <Menu.Label>Application</Menu.Label>
+            <Menu.Item icon={<IconSettings size={14} />}>Settings</Menu.Item>
+            <Menu.Item icon={<IconMessageCircle size={14} />}>
+              Messages
+            </Menu.Item>
+            <Menu.Item icon={<IconBell size={14} />}>Notifications</Menu.Item>
+            <Menu.Item icon={<IconUser size={14} />}>Profile</Menu.Item>
+            <Menu.Divider />
+            <Menu.Label>Navigation</Menu.Label>
+            <Menu.Item icon={<IconHome size={14} />}>Home</Menu.Item>
+            <Menu.Item icon={<IconCalendar size={14} />}>Calendar</Menu.Item>
+            <Menu.Item icon={<IconMapPin size={14} />}>Locations</Menu.Item>
+            <Menu.Item icon={<IconDeviceMobileMessage size={14} />}>
+              Photos
+            </Menu.Item>
+            <Menu.Item icon={<IconUser size={14} />}>Friends</Menu.Item>
+            <Menu.Divider />
+            <Menu.Label>Actions</Menu.Label>
+            <Menu.Item
+              component={Link}
+              to="/users/login"
+              icon={<IconLogout size={14} />}
+            >
+              Logout
+            </Menu.Item>
+          </Menu.Dropdown>
+        </Menu>
       </div>
     </div>
   )
