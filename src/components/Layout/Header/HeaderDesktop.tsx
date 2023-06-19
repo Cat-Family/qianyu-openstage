@@ -24,9 +24,7 @@ import {
   useMantineColorScheme,
   Center,
   Box,
-  SegmentedControl,
-  Input,
-  Button
+  SegmentedControl
 } from '@mantine/core'
 import { useSpotlight } from '@mantine/spotlight'
 import corePackageJson from '../../../../package.json'

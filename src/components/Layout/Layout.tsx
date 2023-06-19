@@ -1,6 +1,6 @@
 import { randomId, useMediaQuery } from '@mantine/hooks'
 import { NAVBAR_BREAKPOINT } from './Navbar/Navbar.styles'
-import { Button, Text, em, rem } from '@mantine/core'
+import { Button, ScrollArea, Text, em, rem } from '@mantine/core'
 import { ModalsProvider, ContextModalProps } from '@mantine/modals'
 import {
   shouldExcludeHeader,
@@ -26,6 +26,7 @@ import { Footer } from '../Footer/Footer'
 import { useLocation, useOutlet } from 'react-router-dom'
 import { CSSTransition, SwitchTransition } from 'react-transition-group'
 import './styles.css'
+import { HEADER_HEIGHT } from './Header/HeaderDesktop.styles'
 
 const demonstrationModal = ({
   context,
@@ -154,7 +155,7 @@ export function Layout() {
                   classNames="page"
                   unmountOnExit
                 >
-                  <div ref={nodeRef} className={classes.page}>
+                  <div ref={nodeRef} className={`page ${classes.page}`}>
                     {currentOutlet}
                   </div>
                 </CSSTransition>
