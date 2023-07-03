@@ -18,6 +18,7 @@ import stylisRTLPlugin from 'stylis-plugin-rtl'
 import { useHotkeys, useLocalStorage } from '@mantine/hooks'
 import { DirectionContext } from './components/Layout/DirectionContext'
 import { Layout } from './components/Layout/Layout'
+import StoresPage from './pages/StoresPage/StoresPage'
 
 const THEME_KEY = 'mantine-color-scheme'
 
@@ -91,7 +92,7 @@ function App() {
                     />
 
                     <Route path="/versions" element={<h2>version</h2>} />
-                    <Route path="/stores" element={<h2>stores</h2>} />
+                    <Route path="/stores" element={<StoresPage />} />
                     <Route
                       path="/stores/messages"
                       element={<h2>stores messages</h2>}
