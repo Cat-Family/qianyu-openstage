@@ -18,17 +18,17 @@ const tabs = {
   system: [
     { link: '/', label: 'Dashboard', icon: IconDashboard },
     { link: '/caretakers', label: 'Caretakers', icon: IconUserBolt },
-    { link: '/api', label: 'API', icon: IconApi },
-    { link: '/system/messages', label: 'Messages', icon: IconMessages },
-    { link: '/versions', label: 'Versions', icon: IconVersions }
-  ],
-  store: [
-    { link: '/stores', label: 'Stores', icon: IconBuildingStore },
     {
-      link: '/stores/messages',
-      label: 'Messages',
+      link: '/notice',
+      label: 'Notice',
       icon: IconMessages
     },
+    { link: '/stores', label: 'Stores', icon: IconBuildingStore }
+  ],
+  api: [
+    { link: '/versions', label: 'Versions', icon: IconVersions },
+    { link: '/api', label: 'API', icon: IconApi },
+
     {
       link: '/stores/menu',
       label: 'Menu',
@@ -45,10 +45,10 @@ const tabs = {
 export default function Navbar({ opened }: any) {
   const location = useLocation()
   const { classes, cx } = useStyles()
-  const [section, setSection] = useState<'store' | 'system'>(
+  const [section, setSection] = useState<'api' | 'system'>(
     matchSorter(tabs.system, location.pathname, { keys: ['link'] }).length > 0
       ? 'system'
-      : 'store'
+      : 'api'
   )
   const [active, setActive] = useState(location.pathname)
   const links = tabs[section].map(item => (
@@ -74,12 +74,12 @@ export default function Navbar({ opened }: any) {
         <div className={classes.body}>
           <SegmentedControl
             value={section}
-            onChange={(value: 'store' | 'system') => setSection(value)}
+            onChange={(value: 'api' | 'system') => setSection(value)}
             transitionTimingFunction="ease"
             fullWidth
             data={[
               { label: 'System', value: 'system' },
-              { label: 'Store', value: 'store' }
+              { label: 'Api', value: 'api' }
             ]}
           />
           <Space h="xl" />

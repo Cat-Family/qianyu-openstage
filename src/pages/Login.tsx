@@ -190,7 +190,8 @@ export function AuthenticationForm(props: PaperProps) {
           <ActionIcon
             onClick={async () => {
               window.open(
-                `https://openauth.alipay.com/oauth2/publicAppAuthorize.htm?app_id=${alipay_app_id}&scope=auth_user&redirect_uri=${'https://qianyushop.shop/'}&state=init`,
+                `https://openauth.alipay.com/oauth2/publicAppAuthorize.htm?app_id=${alipay_app_id}&scope=auth_user&redirect_uri=
+http://82.157.67.120:7777/qy/api/v1/os/oauth2/zfb/login.action&state=init`,
                 'Alipay',
                 windowFeatures
               )

@@ -18,7 +18,10 @@ import stylisRTLPlugin from 'stylis-plugin-rtl'
 import { useHotkeys, useLocalStorage } from '@mantine/hooks'
 import { DirectionContext } from './components/Layout/DirectionContext'
 import { Layout } from './components/Layout/Layout'
-import StoresPage from './pages/StoresPage/StoresPage'
+import StoresPage from './pages/stores/StoresPage'
+import DashboardPage from './pages/dashboard/DashboardPage'
+import VersionPage from './pages/version/VersionPage'
+import NoticePage from './pages/notice/NoticePage'
 
 const THEME_KEY = 'mantine-color-scheme'
 
@@ -83,7 +86,7 @@ function App() {
 
                 <Route element={<RequireAuth allowedRoles={[19999]} />}>
                   <Route element={<Layout />}>
-                    <Route path="/" element={<h2>Dashboard</h2>} />
+                    <Route path="/" element={<DashboardPage />} />
                     <Route path="/caretakers" element={<CaretakersPage />} />
                     <Route path="/api" element={<h2>api</h2>} />
                     <Route
@@ -91,12 +94,9 @@ function App() {
                       element={<h2>system message</h2>}
                     />
 
-                    <Route path="/versions" element={<h2>version</h2>} />
+                    <Route path="/versions" element={<VersionPage />} />
                     <Route path="/stores" element={<StoresPage />} />
-                    <Route
-                      path="/stores/messages"
-                      element={<h2>stores messages</h2>}
-                    />
+                    <Route path="/notice" element={<NoticePage />} />
                     <Route path="/stores/menu" element={<h2>menu</h2>} />
                     <Route path="/customer" element={<h2>customer</h2>} />
                   </Route>
