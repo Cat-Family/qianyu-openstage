@@ -1,5 +1,5 @@
 import { DataTable } from 'mantine-datatable'
-import { Button, Grid, TextInput } from '@mantine/core'
+import { Box, Button, Grid, TextInput } from '@mantine/core'
 import { IconSearch, IconTrash } from '@tabler/icons-react'
 import companies from './data/companies.json'
 import { useEffect, useState } from 'react'
@@ -22,39 +22,6 @@ const CaretakersPage = () => {
 
   return (
     <>
-      <Grid align="center" mb="md">
-        <Grid.Col span={6}>
-          <TextInput
-            sx={{ flexBasis: '60%' }}
-            placeholder="Search employees..."
-            icon={<IconSearch size={16} />}
-            value={query}
-            onChange={e => setQuery(e.currentTarget.value)}
-          />
-        </Grid.Col>
-        <Grid.Col span={3}>
-          <Button
-            uppercase
-            leftIcon={<IconTrash size={16} />}
-            color="red"
-            disabled={!selectedRecords.length}
-            // onClick={() =>
-            //   showNotification({
-            //     color: 'red',
-            //     message: 'Deleting data is dangerous!'
-            //   })
-            // }
-          >
-            {selectedRecords.length
-              ? `Delete ${
-                  selectedRecords.length === 1
-                    ? 'one record'
-                    : `${selectedRecords.length}`
-                }`
-              : 'Delete'}
-          </Button>
-        </Grid.Col>
-      </Grid>
       <DataTable
         withBorder
         borderRadius="sm"

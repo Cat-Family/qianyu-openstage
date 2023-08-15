@@ -32,7 +32,7 @@ export default createStyles((theme, { shouldRenderHeader }: LayoutStyles) => ({
     flex: 1,
     // aligns page top most heading with navigation and table of contents
     paddingTop: shouldRenderHeader
-      ? `calc(${rem(HEADER_HEIGHT)} - ${theme.spacing.xl} - ${rem(2)})`
+      ? `calc(${rem(HEADER_HEIGHT)} - ${theme.spacing.xl} - ${rem(4)})`
       : 0,
 
     [`@media (max-width: ${em(NAVBAR_BREAKPOINT)})`]: {
@@ -46,10 +46,13 @@ export default createStyles((theme, { shouldRenderHeader }: LayoutStyles) => ({
   },
   page: {
     padding: `${em(45)}  ${theme.spacing.xl} 0`,
-    minHeight: `calc(100vh - ${rem(354)})`,
+    minHeight: shouldRenderHeader
+      ? `calc(100vh - ${rem(354)})`
+      : `calc(100vh - ${rem(320)})`,
     position: 'relative',
     zIndex: 1,
-    backgroundColor: theme.colorScheme === 'dark' ? theme.black : theme.white,
+    backgroundColor:
+      theme.colorScheme === 'dark' ? theme.colors.dark[7] : theme.white,
     boxShadow: theme.colorScheme === 'dark' ? 'none' : theme.shadows.sm,
     paddingBottom: rem(80)
   }

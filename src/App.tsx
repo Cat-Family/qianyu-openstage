@@ -22,6 +22,8 @@ import StoresPage from './pages/stores/StoresPage'
 import DashboardPage from './pages/dashboard/DashboardPage'
 import VersionPage from './pages/version/VersionPage'
 import NoticePage from './pages/notice/NoticePage'
+import SettingsPage from './pages/SettingsPage/SettingsPage'
+import ApiPage from './pages/ApiPage/ApiPage'
 
 const THEME_KEY = 'mantine-color-scheme'
 
@@ -88,17 +90,12 @@ function App() {
                   <Route element={<Layout />}>
                     <Route path="/" element={<DashboardPage />} />
                     <Route path="/caretakers" element={<CaretakersPage />} />
-                    <Route path="/api" element={<h2>api</h2>} />
-                    <Route
-                      path="/system/messages"
-                      element={<h2>system message</h2>}
-                    />
-
-                    <Route path="/versions" element={<VersionPage />} />
-                    <Route path="/stores" element={<StoresPage />} />
                     <Route path="/notice" element={<NoticePage />} />
-                    <Route path="/stores/menu" element={<h2>menu</h2>} />
-                    <Route path="/customer" element={<h2>customer</h2>} />
+                    <Route path="/stores" element={<StoresPage />} />
+                    <Route path="/versions" element={<VersionPage />} />
+                    <Route path="/api" element={<ApiPage />} />
+
+                    <Route path="/settings" element={<SettingsPage />} />
                   </Route>
                 </Route>
               </Routes>

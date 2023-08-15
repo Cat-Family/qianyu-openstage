@@ -21,7 +21,7 @@ import {
 } from '@tabler/icons-react'
 import { Notifications } from '@mantine/notifications'
 import Header from './Header/Header'
-import Navbar from './Navbar/Navbar'
+import NavbarSegmented from './Navbar/Navbar'
 import { Footer } from '../Footer/Footer'
 import { useLocation, useOutlet } from 'react-router-dom'
 import { CSSTransition, SwitchTransition } from 'react-transition-group'
@@ -139,7 +139,10 @@ export function Layout() {
           />
         )}
         {shouldRenderNavbar && (
-          <Navbar opened={navbarOpened} onClose={() => setNavbarState(false)} />
+          <NavbarSegmented
+            opened={navbarOpened}
+            onClose={() => setNavbarState(false)}
+          />
         )}
         <main className={classes.main}>
           <div className={classes.content}>
