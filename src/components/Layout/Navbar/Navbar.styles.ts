@@ -106,8 +106,6 @@ export default createStyles((theme: MantineTheme) => ({
   },
 
   footer: {
-    marginLeft: `calc(${theme.spacing.md} * -1)`,
-    marginRight: `calc(${theme.spacing.md} * -1)`,
     borderTop: `${rem(1)} solid ${
       theme.colorScheme === 'dark' ? theme.colors.dark[4] : theme.colors.gray[3]
     }`
