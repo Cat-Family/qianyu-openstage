@@ -12,8 +12,6 @@ export const NAVBAR_BREAKPOINT = 760
 
 export default createStyles((theme: MantineTheme) => ({
   navbar: {
-    boxSizing: 'border-box',
-    height: '100vh',
     borderRight: `${rem(1)} solid ${
       theme.colorScheme === 'dark' ? theme.colors.dark[7] : theme.colors.gray[2]
     }`,
@@ -40,16 +38,10 @@ export default createStyles((theme: MantineTheme) => ({
   },
 
   body: {
-    display: 'flex',
-    flexDirection: 'column',
+    height: '90vh',
     paddingRight: theme.spacing.md,
-    paddingBottom: `calc(${theme.spacing.xl} * 2)`,
     paddingLeft: theme.spacing.md,
-    paddingTop: `calc(${rem(HEADER_HEIGHT)} + ${theme.spacing.md})`,
-
-    [`@media (max-width: ${em(NAVBAR_BREAKPOINT)})`]: {
-      paddingBottom: rem(120)
-    }
+    paddingTop: `calc(${rem(HEADER_HEIGHT)} - ${theme.spacing.md})`
   },
 
   title: {
@@ -108,10 +100,16 @@ export default createStyles((theme: MantineTheme) => ({
     }
   },
 
+  linksInner: {
+    paddingTop: theme.spacing.xl,
+    paddingBottom: theme.spacing.xl
+  },
+
   footer: {
+    marginLeft: `calc(${theme.spacing.md} * -1)`,
+    marginRight: `calc(${theme.spacing.md} * -1)`,
     borderTop: `${rem(1)} solid ${
       theme.colorScheme === 'dark' ? theme.colors.dark[4] : theme.colors.gray[3]
-    }`,
-    paddingTop: theme.spacing.md
+    }`
   }
 }))

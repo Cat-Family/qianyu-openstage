@@ -1,115 +1,82 @@
 import { useEffect, useState } from 'react'
+import { Navbar, ScrollArea, Space, useMantineTheme } from '@mantine/core'
 import {
-  Button,
-  Group,
-  Modal,
-  ScrollArea,
-  SegmentedControl,
-  Space,
-  useMantineTheme
-} from '@mantine/core'
-import {
-  IconMessages,
-  IconDashboard,
-  IconBuildingStore,
-  IconUserBolt,
-  IconApi,
-  IconVersions,
-  IconSettings
+  IconNotes,
+  IconCalendarStats,
+  IconGauge,
+  IconPresentationAnalytics,
+  IconFileAnalytics,
+  IconAdjustments,
+  IconLock
 } from '@tabler/icons-react'
 import useStyles from './Navbar.styles'
-import { matchSorter } from 'match-sorter'
-import { Link, useLocation } from 'react-router-dom'
-import { useDisclosure } from '@mantine/hooks'
+import { useLocation } from 'react-router-dom'
+import { UserButton } from '../../UserButton/UserButton'
+import { LinksGroup } from '../../NavbarLinksGroup/NavbarLinksGroup'
 
-const tabs = {
-  system: [
-    { link: '/', label: 'Dashboard', icon: IconDashboard },
-    { link: '/caretakers', label: 'Caretakers', icon: IconUserBolt },
-    {
-      link: '/notice',
-      label: 'Notice',
-      icon: IconMessages
-    },
-    { link: '/stores', label: 'Stores', icon: IconBuildingStore },
-    { link: '/settings', label: 'Settings', icon: IconSettings }
-  ],
-  api: [
-    { link: '/versions', label: 'Versions', icon: IconVersions },
-    { link: '/api', label: 'API', icon: IconApi }
-  ]
-}
+const mockdata = [
+  { label: 'Dashboard', icon: IconGauge },
+  {
+    label: 'Market news',
+    icon: IconNotes,
+    initiallyOpened: true,
+    links: [
+      { label: 'Overview', link: '/' },
+      { label: 'Forecasts', link: '/' },
+      { label: 'Outlook', link: '/' },
+      { label: 'Real time', link: '/' }
+    ]
+  },
+  {
+    label: 'Releases',
+    icon: IconCalendarStats,
+    links: [
+      { label: 'Upcoming releases', link: '/' },
+      { label: 'Previous releases', link: '/' },
+      { label: 'Releases schedule', link: '/' }
+    ]
+  },
+  { label: 'Analytics', icon: IconPresentationAnalytics },
+  { label: 'Contracts', icon: IconFileAnalytics },
+  { label: 'Settings', icon: IconAdjustments },
+  {
+    label: 'Security',
+    icon: IconLock,
+    links: [
+      { label: 'Enable 2FA', link: '/' },
+      { label: 'Change password', link: '/' },
+      { label: 'Recovery codes', link: '/' }
+    ]
+  }
+]
 
 export default function NavbarSegmented({ opened }: any) {
-  const [openedDodal, { open, close }] = useDisclosure(false)
   const theme = useMantineTheme()
   const location = useLocation()
   const { classes, cx } = useStyles()
-  const [section, setSection] = useState<'api' | 'system'>(
-    matchSorter(tabs.system, location.pathname, { keys: ['link'] }).length > 0
-      ? 'system'
-      : 'api'
-  )
-  const [active, setActive] = useState(location.pathname)
-  const links = tabs[section].map(item => (
-    <Link
-      className={cx(classes.link, {
-        [classes.linkActive]: item.link === active
-      })}
-      to={item.link}
-      key={item.label}
-      onClick={() => {
-        setActive(item.link)
-      }}
-    >
-      <item.icon className={classes.linkIcon} stroke={1.5} />
-      <span>{item.label}</span>
-    </Link>
-  ))
+
+  const links = mockdata.map(item => <LinksGroup {...item} key={item.label} />)
 
   useEffect(() => {}, [location])
   return (
-    <nav className={cx(classes.navbar, { [classes.opened]: opened })}>
-      <ScrollArea h="100vh" type="scroll">
-        <div className={classes.body}>
-          <SegmentedControl
-            value={section}
-            onChange={(value: 'api' | 'system') => setSection(value)}
-            transitionDuration={500}
-            transitionTimingFunction="linear"
-            data={[
-              { label: 'System', value: 'system' },
-              { label: 'Api', value: 'api' }
-            ]}
-            sx={theme => ({
-              backgroundColor:
-                theme.colorScheme === 'dark'
-                  ? theme.colors.dark[9]
-                  : theme.colors.gray[1]
-            })}
-          />
-          <Space h="xl" />
-          {links}
-          <Space h="xl" />
-          <Modal
-            opened={openedDodal}
-            onClose={close}
-            title="Authentication"
-            overlayProps={{
-              color:
-                theme.colorScheme === 'dark'
-                  ? theme.colors.dark[9]
-                  : theme.colors.gray[2],
-              opacity: 0.55,
-              blur: 3
-            }}
-          >
-            {/* Modal content */}
-          </Modal>
+    <Navbar className={cx(classes.navbar, { [classes.opened]: opened })}>
+      <Navbar.Section
+        grow
+        component={ScrollArea}
+        mx="-xs"
+        px="xs"
+        className={classes.body}
+      >
+        <div className={classes.linksInner}>{links}</div>
+      </Navbar.Section>
 
-          <IconSettings onClick={open} stroke={1.5} />
-        </div>
-      </ScrollArea>
-    </nav>
+      <Navbar.Section className={classes.footer}>
+        <UserButton
+          image="https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=255&q=80"
+          name="Ann Nullpointer"
+          email="anullpointer@yahoo.com"
+        />
+      </Navbar.Section>
+    </Navbar>
   )
 }
