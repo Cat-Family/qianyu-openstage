@@ -9,11 +9,7 @@ import {
   createStyles,
   rem
 } from '@mantine/core'
-import {
-  IconCalendarStats,
-  IconChevronLeft,
-  IconChevronRight
-} from '@tabler/icons-react'
+import { IconChevronLeft, IconChevronRight } from '@tabler/icons-react'
 
 const useStyles = createStyles(theme => ({
   control: {
@@ -68,18 +64,21 @@ interface LinksGroupProps {
   label: string
   initiallyOpened?: boolean
   links?: { label: string; link: string }[]
+  onClick?: () => void
 }
 
 export function LinksGroup({
   icon: Icon,
   label,
   initiallyOpened,
-  links
+  links,
+  onClick
 }: LinksGroupProps) {
   const { classes, theme } = useStyles()
   const hasLinks = Array.isArray(links)
   const [opened, setOpened] = useState(initiallyOpened || false)
   const ChevronIcon = theme.dir === 'ltr' ? IconChevronRight : IconChevronLeft
+
   const items = (hasLinks ? links : []).map(link => (
     <Text<'a'>
       component="a"
@@ -95,7 +94,7 @@ export function LinksGroup({
   return (
     <>
       <UnstyledButton
-        onClick={() => setOpened(o => !o)}
+        onClick={onClick ? onClick : () => setOpened(o => !o)}
         className={classes.control}
       >
         <Group position="apart" spacing={0}>
@@ -121,30 +120,5 @@ export function LinksGroup({
       </UnstyledButton>
       {hasLinks ? <Collapse in={opened}>{items}</Collapse> : null}
     </>
-  )
-}
-
-const mockdata = {
-  label: 'Releases',
-  icon: IconCalendarStats,
-  links: [
-    { label: 'Upcoming releases', link: '/' },
-    { label: 'Previous releases', link: '/' },
-    { label: 'Releases schedule', link: '/' }
-  ]
-}
-
-export function NavbarLinksGroup() {
-  return (
-    <Box
-      sx={theme => ({
-        minHeight: rem(220),
-        padding: theme.spacing.md,
-        backgroundColor:
-          theme.colorScheme === 'dark' ? theme.colors.dark[6] : theme.white
-      })}
-    >
-      <LinksGroup {...mockdata} />
-    </Box>
   )
 }
