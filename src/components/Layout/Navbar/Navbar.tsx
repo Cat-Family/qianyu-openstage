@@ -1,67 +1,36 @@
 import { useEffect } from 'react'
-import { Modal, Navbar, ScrollArea, useMantineTheme } from '@mantine/core'
+import { Navbar, ScrollArea } from '@mantine/core'
 import {
   IconNotes,
-  IconCalendarStats,
   IconGauge,
   IconPresentationAnalytics,
   IconFileAnalytics,
   IconAdjustments,
-  IconLock
+  IconBuildingStore
 } from '@tabler/icons-react'
 import useStyles from './Navbar.styles'
 import { useLocation } from 'react-router-dom'
 import { UserButton } from '../../UserButton/UserButton'
 import { LinksGroup } from '../../NavbarLinksGroup/NavbarLinksGroup'
-import { useDisclosure } from '@mantine/hooks'
 
 const mockdata = [
-  { label: 'Dashboard', icon: IconGauge },
+  { label: 'Dashboard', icon: IconGauge, href: '/' },
   {
     label: 'Market news',
     icon: IconNotes,
     initiallyOpened: true,
-    links: [
-      { label: 'Overview', link: '/' },
-      { label: 'Forecasts', link: '/' },
-      { label: 'Outlook', link: '/' },
-      { label: 'Real time', link: '/' }
-    ]
+    links: [{ label: 'Overview', link: '/caretakers' }]
   },
-  {
-    label: 'Releases',
-    icon: IconCalendarStats,
-    links: [
-      { label: 'Upcoming releases', link: '/' },
-      { label: 'Previous releases', link: '/' },
-      { label: 'Releases schedule', link: '/' }
-    ]
-  },
+  { label: 'Store', icon: IconBuildingStore, href: '/stores' },
   { label: 'Analytics', icon: IconPresentationAnalytics },
   { label: 'Contracts', icon: IconFileAnalytics },
-  { label: 'Settings', icon: IconAdjustments },
-  {
-    label: 'Security',
-    icon: IconLock,
-    links: [
-      { label: 'Enable 2FA', link: '/' },
-      { label: 'Change password', link: '/' },
-      { label: 'Recovery codes', link: '/' }
-    ]
-  }
+  { label: 'Settings', icon: IconAdjustments }
 ]
 
 export default function NavbarSegmented({ opened }: any) {
   const location = useLocation()
   const { classes, cx } = useStyles()
-  const [settingsOpened, { open, close }] = useDisclosure(false)
-  const links = mockdata.map(item =>
-    item.label === 'Settings' ? (
-      <LinksGroup onClick={open} {...item} key={item.label} />
-    ) : (
-      <LinksGroup {...item} key={item.label} />
-    )
-  )
+  const links = mockdata.map(item => <LinksGroup key={item.label} {...item} />)
   useEffect(() => {}, [location])
   return (
     <>
@@ -84,16 +53,6 @@ export default function NavbarSegmented({ opened }: any) {
           />
         </Navbar.Section>
       </Navbar>
-
-      <Modal
-        opened={settingsOpened}
-        onClose={close}
-        title="This is a fullscreen modal"
-        fullScreen
-        transitionProps={{ transition: 'fade', duration: 200 }}
-      >
-        {/* Modal content */}
-      </Modal>
     </>
   )
 }

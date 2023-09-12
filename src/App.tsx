@@ -40,7 +40,7 @@ function App() {
     defaultValue: window.matchMedia('(prefers-color-scheme: dark)')
       ? 'dark'
       : 'light',
-    getInitialValueInEffect: true
+    getInitialValueInEffect: false
   })
 
   const toggleColorScheme = (value?: ColorScheme) =>

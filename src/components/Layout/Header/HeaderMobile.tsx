@@ -1,4 +1,4 @@
-import { Avatar, Burger, Menu } from '@mantine/core'
+import { Avatar, Burger, Menu, Image } from '@mantine/core'
 import useStyles from './HeaderMobile.styles'
 import {
   IconBell,
@@ -12,6 +12,7 @@ import {
   IconUser
 } from '@tabler/icons-react'
 import { Link } from 'react-router-dom'
+import { HEADER_HEIGHT } from './HeaderDesktop.styles'
 
 interface HeaderProps {
   navbarOpened: boolean
@@ -30,7 +31,14 @@ export function HeaderMobile({ navbarOpened, toggleNavbar }: HeaderProps) {
           onClick={toggleNavbar}
           aria-label="Toggle navbar"
         />
-        <div className={classes.logo}>千渝掌柜</div>
+        <Image
+          className={classes.logo}
+          alt="千渝掌柜 - 开放平台 logo"
+          src="/logo.png"
+          radius="md"
+          maw={HEADER_HEIGHT}
+          mx="auto"
+        />
         <Menu width={200} shadow="md" position="bottom-end" withArrow>
           <Menu.Target>
             <Avatar color="cyan" radius="xl" sx={{ cursor: 'pointer' }}>

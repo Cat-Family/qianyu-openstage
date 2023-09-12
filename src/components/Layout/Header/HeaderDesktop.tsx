@@ -18,11 +18,12 @@ import {
   useMantineColorScheme,
   Center,
   Box,
-  SegmentedControl
+  SegmentedControl,
+  Image
 } from '@mantine/core'
 import { useSpotlight } from '@mantine/spotlight'
 import { useDirectionContext } from '../DirectionContext'
-import useStyles from './HeaderDesktop.styles'
+import useStyles, { HEADER_HEIGHT } from './HeaderDesktop.styles'
 import { Link } from 'react-router-dom'
 import { DirectionControl, SearchControl } from '@mantine/ds'
 
@@ -37,7 +38,15 @@ export function HeaderDesktop() {
     <div className={cx(classes.header, RemoveScroll.classNames.fullWidth)}>
       <div className={classes.mainSection}>
         <div className={classes.logoWrapper}>
-          <div className={classes.logo}>千渝掌柜 - 开放平台</div>
+          <Image
+            className={classes.logo}
+            alt="千渝掌柜 - 开放平台 logo"
+            src="/logo.png"
+            radius="md"
+            maw={HEADER_HEIGHT}
+            mx="auto"
+          />
+          千渝掌柜 - 开放平台
         </div>
       </div>
 

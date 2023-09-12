@@ -1,16 +1,16 @@
 .page-enter {
-  transform: translateX(-100%) scale(0.8);
+  /* transform: translateX(-100%) scale(0.8); */
 }
 
 .page-enter-active {
-  animation: page-fromLeft 0.5s ease both;
+  /* animation: page-fromLeft 0.5s ease both; */
 }
 
 .page-exit {
 }
 
 .page-exit-active {
-  animation: page-toRight 0.5s ease both;
+  /* animation: page-toRight 0.5s ease both; */
 }
 
 main {

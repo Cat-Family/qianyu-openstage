@@ -154,7 +154,7 @@ export function Layout() {
                 <CSSTransition
                   key={location.pathname}
                   nodeRef={nodeRef}
-                  timeout={500}
+                  timeout={0}
                   classNames="page"
                   unmountOnExit
                 >
