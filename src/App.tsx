@@ -24,6 +24,7 @@ import VersionPage from './pages/version/VersionPage'
 import NoticePage from './pages/notice/NoticePage'
 import SettingsPage from './pages/SettingsPage/SettingsPage'
 import ApiPage from './pages/ApiPage/ApiPage'
+import { Notifications } from '@mantine/notifications'
 
 const THEME_KEY = 'mantine-color-scheme'
 
@@ -69,6 +70,7 @@ function App() {
           }}
           emotionCache={dir === 'rtl' ? rtlCache : undefined}
         >
+          <Notifications />
           <Global
             styles={theme => ({
               body: {

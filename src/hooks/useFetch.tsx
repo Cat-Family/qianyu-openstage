@@ -16,9 +16,15 @@ type Action<T> =
   | { type: 'fetched'; payload: T }
   | { type: 'error'; payload: Error }
 
+type MethodDirection = 'POST' | 'GET' | 'PUT' | 'DELETE'
+
+interface Options extends RequestInit {
+  method: MethodDirection
+}
+
 function useFetch<T extends { code: number; message: string }>(
   url: string,
-  options?: RequestInit
+  options?: Options
 ): State<T> {
   const cache = useRef<Cache<T>>({})
 
@@ -55,7 +61,10 @@ function useFetch<T extends { code: number; message: string }>(
     }
 
     try {
-      const response = await fetch(BASE_URL + url, options)
+      const response = await fetch(BASE_URL + url, {
+        
+        ...options
+      })
       if (!response.ok) {
         throw new Error(response.statusText)
       }

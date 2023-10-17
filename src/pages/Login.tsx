@@ -95,7 +95,6 @@ export function AuthenticationForm(props: PaperProps) {
 
   useEffect(() => {
     if (error) {
-      console.log(error)
       notifications.show({
         id: 'login-error',
         withCloseButton: true,
