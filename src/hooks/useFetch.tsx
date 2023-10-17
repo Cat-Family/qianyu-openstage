@@ -1,6 +1,6 @@
 import { useReducer, useRef } from 'react'
 
-const BASE_URL: string = 'https://2904084071.eicp.vip/qy/api/v1/os/'
+const BASE_URL: string = 'http://localhost:3000/qy/api/v1/os/'
 
 interface State<T> {
   fetchData?: () => Promise<void>
@@ -55,10 +55,10 @@ function useFetch<T extends { code: number; message: string }>(
     dispatch({ type: 'loading' })
 
     // If a cache exists for this url, return it
-    if (cache.current[url]) {
-      dispatch({ type: 'fetched', payload: cache.current[url] })
-      return
-    }
+    // if (cache.current[url]) {
+    //   dispatch({ type: 'fetched', payload: cache.current[url] })
+    //   return
+    // }
 
     try {
       const response = await fetch(BASE_URL + url, {
@@ -69,9 +69,14 @@ function useFetch<T extends { code: number; message: string }>(
         throw new Error(response.statusText)
       }
 
-      const data = (await response.json()) as T
+      const data = (await response.json())
 
-      if (data.code !== 200) throw new Error(data.message)
+      if (data.code !== 200) {
+        throw {
+          name: data.message,
+          message: data.data
+        }
+      }
 
       cache.current[url] = data
 
