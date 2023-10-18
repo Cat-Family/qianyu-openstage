@@ -103,15 +103,6 @@ export function AuthenticationForm(props: PaperProps) {
         mode: 'cors'
     })
 
-    const handleCodeEntered = (code: string) => {
-        setTwoFACode(code)
-        twoFALogin?.()
-    };
-
-    const handleAuthenticationModalClose = () => {
-        setOpenAuthenticationModal(false)
-    };
-
     const {fetchData: twoFALogin, data: twoFARes, error: twoFAError} = useFetch<Post>('auth/user/2faLogin.action', {
         method: 'POST',
         body: JSON.stringify({
@@ -122,6 +113,15 @@ export function AuthenticationForm(props: PaperProps) {
         },
         mode: 'cors'
     })
+
+    const handleCodeEntered = (code: string) => {
+        setTwoFACode(code)
+        twoFALogin?.()
+    };
+
+    const handleAuthenticationModalClose = () => {
+        setOpenAuthenticationModal(false)
+    };
 
     useEffect(() => {
         if (error || twoFAError) {
@@ -293,37 +293,6 @@ http://82.157.67.120:7777/qy/api/v1/os/oauth2/zfb/login.action&state=init`,
                 </Text>
             </Paper>
 
-            {/*<Modal*/}
-            {/*    centered*/}
-            {/*    opened={opened}*/}
-            {/*    onClose={close}*/}
-            {/*    withCloseButton={false}*/}
-            {/*    overlayProps={{*/}
-            {/*        blur: 3,*/}
-            {/*    }}*/}
-            {/*>*/}
-            {/*    <Flex*/}
-            {/*        justify="center"*/}
-            {/*        align="center"*/}
-            {/*        direction="column"*/}
-            {/*        pb={20}*/}
-            {/*        gap="xl">*/}
-            {/*        <Text fw={700} size='xl'>*/}
-            {/*            双重认证*/}
-            {/*        </Text>*/}
-            {/*        <PinInput*/}
-            {/*            autoFocus*/}
-            {/*            size="xl"*/}
-            {/*            length={6}*/}
-            {/*            type="number"*/}
-            {/*            placeholder=""*/}
-            {/*            value={twoFACode}*/}
-            {/*            onChange={value => {*/}
-            {/*                    setTwoFACode(value)*/}
-            {/*            }}/>*/}
-            {/*    </Flex>*/}
-
-            {/*</Modal>*/}
             <AuthenticationModal
                 title={"双重认证"}
                 withCloseButton={false}
