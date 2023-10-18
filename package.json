@@ -25,6 +25,7 @@
     "dayjs": "^1.11.9",
     "embla-carousel-react": "^7.1.0",
     "framer-motion": "^10.16.4",
+    "http-proxy-middleware": "^2.0.6",
     "localforage": "^1.10.0",
     "mantine-datatable": "^2.9.13",
     "match-sorter": "^6.3.1",
@@ -99,6 +100,5 @@
     "commitizen": {
       "path": "./node_modules/cz-conventional-changelog"
     }
-  },
-  "proxy": "http://localhost:7777"
+  }
 }
