@@ -1,0 +1,22 @@
+.main {
+  scroll-margin-top: var(--app-shell-header-offset, 0);
+  flex: 1;
+  padding-top: var(--app-shell-header-offset) - var(--mantine-spacing-xl);
+}
+
+.content {
+  min-height: calc(100vh - rem(350px));
+  position: relative;
+  z-index: 1;
+  padding-bottom: rem(80px);
+
+  @mixin light {
+    background-color: var(--mantine-color-white);
+    box-shadow: var(--mantine-shadow-sm);
+  }
+
+  @mixin dark {
+    background-color: var(--mantine-color-dark-7);
+    box-shadow: none;
+  }
+}

@@ -1,10 +1,12 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import { HomePage } from './pages/Home.page';
+import { Shell } from './components/Shell/Shell';
+import { Welcome } from './components/Welcome/Welcome';
 
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <HomePage />,
+    element: <Shell />,
+    children: [{ path: '/', element: <Welcome /> }],
   },
 ]);
 
