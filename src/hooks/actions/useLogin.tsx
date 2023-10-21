@@ -3,15 +3,14 @@ import useFetch from '../useFetch';
 import { Flex, Text, PinInput, Button } from '@mantine/core';
 import { Login } from '../../ts/types/interface/login.interface';
 import { useEffect, useState } from 'react';
-import { FetchDataParams } from '../../ts/types/types/fetchData.types';
+import { FetchData } from '../../ts/types/types/fetchData.types';
 
-const useAuthentication = (
-  account: string,
-  password: string
-): {
-  fetchLogin: (url: string[0], options: FetchDataParams[1]) => Promise<void>;
+type UseAuthentication = {
+  fetchLogin: FetchData
   loading: boolean;
-} => {
+}
+
+const useAuthentication = (): UseAuthentication => {
   const [code, setCode] = useState<string>('');
 
   const { fetchData: fetchLogin, data: loginData, loading } = useFetch<Login>(false, false, true);

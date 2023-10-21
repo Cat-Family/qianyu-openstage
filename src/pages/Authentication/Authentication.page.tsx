@@ -10,8 +10,6 @@ import {
   Group,
   ActionIcon,
   Text,
-  PinInput,
-  Flex,
 } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { IconBrandAlipay, IconBrandGithub } from '@tabler/icons-react';
@@ -34,7 +32,7 @@ export function Authentication() {
     },
   });
 
-  const { fetchLogin, loading } = useAuthentication(form.values.account, form.values.password);
+  const { fetchLogin, loading } = useAuthentication();
 
   return (
     <div className={classes.wrapper}>
@@ -50,7 +48,7 @@ export function Authentication() {
           onSubmit={form.onSubmit(
             (values) =>
               values &&
-              fetchLogin('/auth/user/login.action', {
+              fetchLogin('auth/user/login.action', {
                 method: 'POST',
                 body: JSON.stringify({
                   userAccount: form.values.account,
