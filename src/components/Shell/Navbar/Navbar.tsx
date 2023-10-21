@@ -11,6 +11,8 @@ import {
 
 import { LinksGroup } from '../../NavbarLinksGroup/NavbarLinksGroup';
 import classes from './Navbar.module.css';
+import useFetch from '../../../hooks/useFetch';
+import { useEffect, useState } from 'react';
 
 const mockdata = [
   { label: 'Dashboard', icon: IconGauge },
@@ -49,8 +51,16 @@ const mockdata = [
 ];
 
 const Navbar = () => {
-  const links = mockdata.map((item) => <LinksGroup {...item} key={item.label} />);
+  const [links, setLinks] = useState();
+  const { fetchData, data } = useFetch<any>('/menu/loadMenuTree', { method: 'POST' });
 
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    data?.data && setLinks(data.data.map((item: any) => <LinksGroup {...item} key={item.id} />));
+  }, [data]);
   return (
     <AppShell.Navbar>
       <AppShell.Section component={ScrollArea} type="never">

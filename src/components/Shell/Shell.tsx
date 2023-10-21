@@ -2,8 +2,8 @@ import { useDisclosure } from '@mantine/hooks';
 import { AppShell, Burger, Group } from '@mantine/core';
 import { useOutlet } from 'react-router-dom';
 import { Footer } from './Footer/Footer';
-import classes from './Shell.module.css';
 import Navbar from './Navbar/Navbar';
+import classes from './Shell.module.css';
 
 export function Shell() {
   const [opened, { toggle }] = useDisclosure();

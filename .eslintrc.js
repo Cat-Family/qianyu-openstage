@@ -1,9 +1,31 @@
 module.exports = {
-  extends: ['mantine'],
+  root: true,
+  env: {
+    browser: true,
+    es2021: true,
+  },
+  parser: '@typescript-eslint/parser',
+  plugins: ['react', '@typescript-eslint/eslint-plugin'],
+  extends: ['prettier', 'mantine'],
+  overrides: [],
   parserOptions: {
+    ecmaVersion: 'latest',
+    ecmaFeatures: {
+      jsx: true,
+    },
+    sourceType: 'module',
     project: './tsconfig.json',
   },
   rules: {
-    'react/react-in-jsx-scope': 'off',
+    '@typescript-eslint/no-unused-vars': [
+      'warn',
+      {
+        argsIgnorePattern: '^_',
+      },
+    ],
+    'no-unused-vars': 'off',
+    'no-shadow': 'off',
+    '@typescript-eslint/no-shadow': 1,
+    'no-undef': 'off',
   },
 };

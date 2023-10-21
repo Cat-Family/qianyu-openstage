@@ -1,27 +1,27 @@
 import { useState } from 'react';
 import { Group, Box, Collapse, ThemeIcon, Text, UnstyledButton, rem } from '@mantine/core';
-import { IconCalendarStats, IconChevronRight } from '@tabler/icons-react';
+import { Icon2fa, IconCalendarStats, IconChevronRight } from '@tabler/icons-react';
 import classes from './NavbarLinksGroup.module.css';
 
 interface LinksGroupProps {
   icon: React.FC<any>;
-  label: string;
+  menuName: string;
   initiallyOpened?: boolean;
-  links?: { label: string; link: string }[];
+  children?: { label: string; link: string }[];
 }
 
-export function LinksGroup({ icon: Icon, label, initiallyOpened, links }: LinksGroupProps) {
-  const hasLinks = Array.isArray(links);
+export function LinksGroup({ icon: Icon, menuName, initiallyOpened, children }: LinksGroupProps) {
+  const hasLinks = Array.isArray(children);
   const [opened, setOpened] = useState(initiallyOpened || false);
-  const items = (hasLinks ? links : []).map((link) => (
+  const items = (hasLinks ? children : []).map((link: any) => (
     <Text<'a'>
       component="a"
       className={classes.link}
-      href={link.link}
-      key={link.label}
+      href={link?.link}
+      key={link.id}
       onClick={(event) => event.preventDefault()}
     >
-      {link.label}
+      {link.menuName}
     </Text>
   ));
 
@@ -31,9 +31,9 @@ export function LinksGroup({ icon: Icon, label, initiallyOpened, links }: LinksG
         <Group justify="space-between" gap={0}>
           <Box style={{ display: 'flex', alignItems: 'center' }}>
             <ThemeIcon variant="light" size={30}>
-              <Icon style={{ width: rem(18), height: rem(18) }} />
+              <Icon2fa style={{ width: rem(18), height: rem(18) }} />
             </ThemeIcon>
-            <Box ml="md">{label}</Box>
+            <Box ml="md">{menuName}</Box>
           </Box>
           {hasLinks && (
             <IconChevronRight
@@ -50,23 +50,5 @@ export function LinksGroup({ icon: Icon, label, initiallyOpened, links }: LinksG
       </UnstyledButton>
       {hasLinks ? <Collapse in={opened}>{items}</Collapse> : null}
     </>
-  );
-}
-
-const mockdata = {
-  label: 'Releases',
-  icon: IconCalendarStats,
-  links: [
-    { label: 'Upcoming releases', link: '/' },
-    { label: 'Previous releases', link: '/' },
-    { label: 'Releases schedule', link: '/' },
-  ],
-};
-
-export function NavbarLinksGroup() {
-  return (
-    <Box mih={220} p="md">
-      <LinksGroup {...mockdata} />
-    </Box>
   );
 }
