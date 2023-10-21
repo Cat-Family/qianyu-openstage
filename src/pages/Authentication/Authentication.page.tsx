@@ -46,7 +46,19 @@ export function Authentication() {
           千渝掌柜开放平台!
         </Title>
         <Box style={{ flex: 1 }} />
-        <form onSubmit={form.onSubmit((values) => values && fetchLogin())}>
+        <form
+          onSubmit={form.onSubmit(
+            (values) =>
+              values &&
+              fetchLogin('/auth/user/login.action', {
+                method: 'POST',
+                body: JSON.stringify({
+                  userAccount: form.values.account,
+                  userPwd: 'e10adc3949ba59abbe56e057f20f883e' || form.values.password,
+                }),
+              })
+          )}
+        >
           <Stack>
             <TextInput
               required

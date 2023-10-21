@@ -8,22 +8,16 @@ const Oauth = () => {
   const authCode = params.get('auth_code');
   const scope = params.get('scope');
 
-  const { fetchData, data, error } = useFetch(
-    'third/auth/zfb/login.action',
-    {
-      method: 'POST',
-      body: JSON.stringify({
-        authCode,
-        scope,
-      }),
-    },
-    false,
-    false,
-    true
-  );
+  const { fetchData, data, error } = useFetch(false, false, true);
   useEffect(() => {
     if (authCode && scope) {
-      fetchData();
+      fetchData('third/auth/zfb/login.action', {
+        method: 'POST',
+        body: JSON.stringify({
+          authCode,
+          scope,
+        }),
+      });
     }
   }, [authCode, scope]);
   return <div>test</div>;

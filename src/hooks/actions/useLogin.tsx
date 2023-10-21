@@ -3,44 +3,20 @@ import useFetch from '../useFetch';
 import { Flex, Text, PinInput, Button } from '@mantine/core';
 import { Login } from '../../ts/types/interface/login.interface';
 import { useEffect, useState } from 'react';
+import { FetchDataParams } from '../../ts/types/types/fetchData.types';
 
 const useAuthentication = (
   account: string,
   password: string
-): { fetchLogin: () => void; loading: boolean } => {
+): {
+  fetchLogin: (url: string[0], options: FetchDataParams[1]) => Promise<void>;
+  loading: boolean;
+} => {
   const [code, setCode] = useState<string>('');
 
-  const {
-    fetchData: fetchLogin,
-    data: loginData,
-    loading,
-  } = useFetch<Login>(
-    'auth' + '/user/login.action',
-    {
-      method: 'POST',
-      body: JSON.stringify({
-        userAccount: account,
-        userPwd: 'e10adc3949ba59abbe56e057f20f883e' || password,
-      }),
-    },
-    false,
-    false,
-    true
-  );
+  const { fetchData: fetchLogin, data: loginData, loading } = useFetch<Login>(false, false, true);
 
-  const {
-    fetchData: twoFALogin,
-    data: twoFARes,
-    loading: towFALoading,
-  } = useFetch('auth/user/2faLogin.action', {
-    method: 'POST',
-    body: JSON.stringify({
-      code: code,
-    }),
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  });
+  const { fetchData: twoFALogin, data: twoFARes, loading: towFALoading } = useFetch();
 
   useEffect(() => {
     loginData?.data?.twoFA &&
@@ -65,6 +41,13 @@ const useAuthentication = (
                 placeholder=""
                 onComplete={async (e) => {
                   setCode(e);
+
+                  twoFALogin('auth/user/2faLogin.action', {
+                    method: 'POST',
+                    body: JSON.stringify({
+                      code: e,
+                    }),
+                  });
                 }}
               />
               <Text size="sm">
@@ -74,7 +57,12 @@ const useAuthentication = (
               <Button
                 fullWidth
                 onClick={() => {
-                  twoFALogin();
+                  twoFALogin('auth/user/2faLogin.action', {
+                    method: 'POST',
+                    body: JSON.stringify({
+                      code: code,
+                    }),
+                  });
                 }}
                 mt="md"
               >

@@ -1,3 +1,4 @@
+import { FetchData, FetchDataParams } from '../ts/types/types/fetchData.types';
 import { rem } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
 import { IconCheck, IconX } from '@tabler/icons-react';
@@ -6,7 +7,7 @@ import { useReducer, useRef } from 'react';
 const BASE_URL: string = '/qy/api/v1/os/';
 
 interface State<T> {
-  fetchData: () => Promise<void>;
+  fetchData: FetchData;
   data?: T;
   error?: Error;
   loading: boolean;
@@ -20,15 +21,7 @@ type Action<T> =
   | { type: 'fetched'; payload: T }
   | { type: 'error'; payload: Error };
 
-type MethodDirection = 'POST' | 'GET' | 'PUT' | 'DELETE';
-
-interface Options extends RequestInit {
-  method: MethodDirection;
-}
-
 function useFetch<T extends { code: number; message: string }>(
-  url: string,
-  options?: Options,
   showErrorNotification: boolean = true,
   showSuccessNotification: boolean = false,
   showAsyncNotification: boolean = false
@@ -60,7 +53,7 @@ function useFetch<T extends { code: number; message: string }>(
 
   const [state, dispatch] = useReducer(fetchReducer, initialState);
 
-  const fetchData = async () => {
+  const fetchData = async (url: FetchDataParams[0], options: FetchDataParams[1]) => {
     dispatch({ type: 'loading' });
 
     // If a cache exists for this url, return it
