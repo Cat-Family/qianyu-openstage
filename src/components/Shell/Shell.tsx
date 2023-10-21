@@ -1,8 +1,9 @@
 import { useDisclosure } from '@mantine/hooks';
-import { AppShell, Burger, Group, Skeleton, ScrollArea } from '@mantine/core';
+import { AppShell, Burger, Group } from '@mantine/core';
 import { useOutlet } from 'react-router-dom';
 import { Footer } from './Footer/Footer';
 import classes from './Shell.module.css';
+import Navbar from './Navbar/Navbar';
 
 export function Shell() {
   const [opened, { toggle }] = useDisclosure();
@@ -19,18 +20,7 @@ export function Shell() {
           <Burger opened={opened} onClick={toggle} size="sm" />
         </Group>
       </AppShell.Header>
-      <AppShell.Navbar p="md">
-        <AppShell.Section>Navbar header</AppShell.Section>
-        <AppShell.Section grow my="md" component={ScrollArea}>
-          60 links in a scrollable section
-          {Array(60)
-            .fill(0)
-            .map((_, index) => (
-              <Skeleton key={index} h={28} mt="sm" animate={false} />
-            ))}
-        </AppShell.Section>
-        <AppShell.Section>Navbar footer – always at the bottom</AppShell.Section>
-      </AppShell.Navbar>
+      <Navbar />
       <AppShell.Main
         className={classes.main}
         pt="var(--app-shell-header-offset, 0px)"
