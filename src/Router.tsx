@@ -3,6 +3,7 @@ import { Shell } from './components/Shell/Shell';
 import { Welcome } from './components/Welcome/Welcome';
 import { Authentication } from './pages/Authentication/Authentication.page';
 import Oauth from './pages/Oauth/Oauth.page';
+import TablePage from './pages/Table/Table.page';
 
 const router = createBrowserRouter([
   {
@@ -16,7 +17,7 @@ const router = createBrowserRouter([
   {
     path: '/',
     element: <Shell />,
-    children: [{ path: '/', element: <Welcome /> }],
+    children: [{ path: '/', element: <TablePage /> }],
   },
 ]);
 

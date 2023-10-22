@@ -10,10 +10,10 @@ type UseAuthentication = {
   loading: boolean;
 }
 
-const useAuthentication = (): UseAuthentication => {
+const useAuthentication = (toggle: () => void): UseAuthentication => {
   const [code, setCode] = useState<string>('');
 
-  const { fetchData: fetchLogin, data: loginData, loading } = useFetch<Login>(false, false, true);
+  const { fetchData: fetchLogin, data: loginData, loading } = useFetch<Login>(false);
 
   const { fetchData: twoFALogin, data: twoFARes, loading: towFALoading } = useFetch();
 
@@ -72,6 +72,13 @@ const useAuthentication = (): UseAuthentication => {
         ),
       });
   }, [loginData]);
+
+  useEffect(() => {
+    if(loading) {
+      toggle()
+    }
+    toggle()
+  },[loading])
 
   return { fetchLogin, loading };
 };

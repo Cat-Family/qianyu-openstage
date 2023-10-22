@@ -7,9 +7,8 @@ export default defineConfig({
   server: {
     proxy: {
       '/qy/api/v1/os/': {
-        target: 'https://3901174m26.picp.vip/',
+        target: 'http://192.168.0.131:7777',
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api/, '/api'), // 将 /api 重写
       },
     },
   },

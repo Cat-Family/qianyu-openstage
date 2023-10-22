@@ -1,0 +1,13 @@
+.header {
+  padding-left: 90px;
+  padding-top: 2rem;
+  height: rem(140);
+
+  @mixin light {
+    background-color: var(--mantine-color-gray-0);
+  }
+
+  @mixin dark {
+    background-color: var(--mantine-color-dark-6);
+  }
+}

@@ -20,7 +20,7 @@ $footer-breakpoint-mobile: 40em;
 .wrapper {
   position: fixed;
   bottom: 0;
-  left: calc(var(--app-shell-navbar-offset, 0px));
+  left: var(--app-shell-navbar-offset, 0px);
   right: 0;
   height: rem(350px);
 

@@ -10,11 +10,13 @@ import {
   Group,
   ActionIcon,
   Text,
+  LoadingOverlay,
 } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { IconBrandAlipay, IconBrandGithub } from '@tabler/icons-react';
 import classes from './Authentication.page.module.css';
 import useAuthentication from '../../hooks/actions/useLogin';
+import { useDisclosure } from '@mantine/hooks';
 
 const github_client_id = import.meta.env.VITE_GITHUB_CLIENT_ID;
 const redirect_uri = import.meta.env.VITE_REDIRECT_URI;
@@ -32,7 +34,8 @@ export function Authentication() {
     },
   });
 
-  const { fetchLogin, loading } = useAuthentication();
+  const [visible, { toggle }] = useDisclosure(true);
+  const { fetchLogin, loading } = useAuthentication(toggle);
 
   return (
     <div className={classes.wrapper}>
@@ -57,6 +60,11 @@ export function Authentication() {
               })
           )}
         >
+          <LoadingOverlay
+            visible={visible}
+            zIndex={1000}
+            overlayProps={{ radius: 'sm', blur: 2 }}
+          />
           <Stack>
             <TextInput
               required
