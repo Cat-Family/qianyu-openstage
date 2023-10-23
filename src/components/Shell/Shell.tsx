@@ -1,9 +1,10 @@
 import { useDisclosure } from '@mantine/hooks';
-import { AppShell, Burger, Group } from '@mantine/core';
+import { AppShell, Burger, Group, ScrollArea } from '@mantine/core';
 import { useOutlet } from 'react-router-dom';
 import { Footer } from './Footer/Footer';
 import Navbar from './Navbar/Navbar';
 import classes from './Shell.module.css';
+import Header from './Header/Header';
 
 export function Shell() {
   const [opened, { toggle }] = useDisclosure();
@@ -15,11 +16,7 @@ export function Shell() {
       navbar={{ width: 300, breakpoint: 'sm', collapsed: { mobile: !opened, desktop: !opened } }}
       padding="md"
     >
-      <AppShell.Header>
-        <Group h="100%" px="md">
-          <Burger opened={opened} onClick={toggle} size="sm" />
-        </Group>
-      </AppShell.Header>
+      <Header opened={opened} toggle={toggle} />
       <Navbar />
       <AppShell.Main
         className={classes.main}
@@ -28,7 +25,7 @@ export function Shell() {
         pb="var(--app-shell-footer-offset, 0px)"
         pl="var(--app-shell-navbar-offset, 0px)"
       >
-        <div className={classes.content}>{currentOutlet}</div>
+          <div className={classes.content}>{currentOutlet}</div>
         <Footer />
       </AppShell.Main>
     </AppShell>
