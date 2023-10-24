@@ -25,7 +25,7 @@ import classes from './Table.module.css';
 interface TableProps<T> {
   columns: {
     title: string;
-    sorted: boolean;
+    sorted?: boolean;
     dataIndex: keyof T;
     render?: (item: any) => ReactElement;
   }[];
@@ -177,7 +177,7 @@ function Table<T extends { id: string }>({ columns, data }: TableProps<T>) {
                   else
                     return (
                       <MantineTable.Td key={index}>
-                        {item[column.dataIndex]}
+                        {item[column.dataIndex] as ReactElement}
                       </MantineTable.Td>
                     );
                 })}

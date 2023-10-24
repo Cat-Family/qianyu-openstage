@@ -1,8 +1,17 @@
 import { Box, Container, Text, Title } from '@mantine/core';
 import { Table } from '../../components/Table';
 import classes from './Table.module.css';
+import { ReactElement } from 'react';
 
-const deviceColumns = [
+interface DataInterface {
+  id: string;
+  device: string;
+  status: number;
+  times: string;
+  operation?: string
+}
+
+const deviceColumns: {title: string, dataIndex: keyof DataInterface, sorted?: boolean, render?: any}[] = [
   {
     title: 'ID',
     sorted: false,
@@ -72,10 +81,7 @@ const TablePage = () => {
         <Text size="sm">This is a table page</Text>
       </Box>
       <Container p="md" size="lg">
-        <Table<{ id: string; device: string; status: number; times: string }>
-          columns={deviceColumns}
-          data={deviceData}
-        />
+        <Table<DataInterface> columns={deviceColumns} data={deviceData} />
       </Container>
     </>
   );
