@@ -1,20 +1,26 @@
-import { Box, Container, Text, Title } from '@mantine/core';
+import { ActionIcon, Box, Button, Container, Group, Text, Title, rem } from '@mantine/core';
 import { Table } from '../../components/Table';
 import classes from './Table.module.css';
 import { ReactElement } from 'react';
+import { IconPencil, IconTrash } from '@tabler/icons-react';
 
 interface DataInterface {
   id: string;
   device: string;
   status: number;
   times: string;
-  operation?: string
+  operation?: string;
 }
 
-const deviceColumns: {title: string, dataIndex: keyof DataInterface, sorted?: boolean, render?: any}[] = [
+const deviceColumns: {
+  title: string;
+  dataIndex: keyof DataInterface;
+  sorted?: boolean;
+  render?: any;
+}[] = [
   {
     title: 'ID',
-    sorted: false,
+    sorted: true,
     dataIndex: 'id',
   },
   {
@@ -45,10 +51,14 @@ const deviceColumns: {title: string, dataIndex: keyof DataInterface, sorted?: bo
     dataIndex: 'operation',
     sorted: false,
     render: () => (
-      <div className="flex justify-center align-middle gap-2">
-        <button>edit</button>
-        <button>delete</button>
-      </div>
+      <Group gap={0} justify="flex-end">
+        <ActionIcon variant="subtle" color="gray">
+          <IconPencil style={{ width: rem(16), height: rem(16) }} stroke={1.5} />
+        </ActionIcon>
+        <ActionIcon variant="subtle" color="red">
+          <IconTrash style={{ width: rem(16), height: rem(16) }} stroke={1.5} />
+        </ActionIcon>
+      </Group>
     ),
   },
 ];

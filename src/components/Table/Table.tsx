@@ -144,7 +144,7 @@ function Table<T extends { id: string }>({ columns, data }: TableProps<T>) {
               <>
                 <Th
                   key={index}
-                  isSorted={!item.sorted}
+                  isSorted={item.sorted}
                   sorted={sortBy === item.dataIndex}
                   reversed={reverseSortDirection}
                   onSort={() => setSorting(item.dataIndex)}
@@ -155,7 +155,7 @@ function Table<T extends { id: string }>({ columns, data }: TableProps<T>) {
             ))}
           </MantineTable.Tr>
         </MantineTable.Thead>
-        <MantineTable.Tbody className="text-one overflow-auto text-center">
+        <MantineTable.Tbody>
           {sortedData.length > 0 ? (
             sortedData.map((item, index) => (
               <MantineTable.Tr key={index}>
@@ -166,8 +166,6 @@ function Table<T extends { id: string }>({ columns, data }: TableProps<T>) {
                   />
                 </MantineTable.Td>
                 {columns.map((column, index) => {
-                  console.log(typeof item[column.dataIndex]);
-
                   if (column.render)
                     return (
                       <MantineTable.Td key={index}>
