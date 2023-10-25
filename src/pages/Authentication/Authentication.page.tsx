@@ -19,7 +19,8 @@ import useAuthentication from '../../hooks/actions/useLogin';
 import { useDisclosure } from '@mantine/hooks';
 
 const github_client_id = import.meta.env.VITE_GITHUB_CLIENT_ID;
-const redirect_uri = import.meta.env.VITE_REDIRECT_URI;
+const redirect_uri_github = import.meta.env.VITE_REDIRECT_URI_GITHUB;
+const redirect_uri_alipay = import.meta.env.VITE_REDIRECT_URI_ALIPAY;
 const alipay_app_id = import.meta.env.VITE_ALIPAY_APP_ID;
 const windowFeatures = 'left=600,top=200,width=500,height=500,scrollbars,status';
 
@@ -91,7 +92,7 @@ export function Authentication() {
             <ActionIcon
               onClick={() => {
                 window.open(
-                  `https://github.com/login/oauth/authorize?client_id=${github_client_id}&scope=user:email&redirect_uri=${redirect_uri}`,
+                  `https://github.com/login/oauth/authorize?client_id=${github_client_id}&scope=user:email&redirect_uri=${redirect_uri_github}`,
                   'Github',
                   windowFeatures
                 );
@@ -107,7 +108,7 @@ export function Authentication() {
                 console.log(alipay_app_id);
                 window.open(
                   `https://openauth.alipay.com/oauth2/publicAppAuthorize.htm?app_id=${alipay_app_id}&scope=auth_user&redirect_uri=
-${redirect_uri}&state=init`,
+${redirect_uri_alipay}&state=init`,
                   'Alipay',
                   windowFeatures
                 );
