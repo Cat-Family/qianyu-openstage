@@ -1,5 +1,5 @@
 import '@mantine/core/styles.css';
-import { DirectionProvider, MantineProvider } from '@mantine/core';
+import { DirectionProvider, MantineProvider, ScrollArea } from '@mantine/core';
 import { Notifications } from '@mantine/notifications';
 import { Router } from './Router';
 import { theme } from './theme';
@@ -14,10 +14,10 @@ export default function App() {
     <DirectionProvider initialDirection="ltr" detectDirection={false}>
       <MantineProvider theme={theme}>
         <ModalsProvider>
-          <Search />
-          <Notifications />
-          <HotKeysHandler />
-          <Router />
+            <Search />
+            <Notifications />
+            <HotKeysHandler />
+            <Router />
         </ModalsProvider>
       </MantineProvider>
     </DirectionProvider>
