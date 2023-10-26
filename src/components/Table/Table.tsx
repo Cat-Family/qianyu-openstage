@@ -1,4 +1,5 @@
-import { FC, ReactElement, ReactNode, useState } from 'react';
+import cx from 'clsx';
+import { ReactElement, ReactNode, useState } from 'react';
 import {
   Table as MantineTable,
   ScrollArea,
@@ -11,13 +12,6 @@ import {
   keys,
   Checkbox,
   Pagination,
-  Flex,
-  Avatar,
-  Menu,
-  ActionIcon,
-  Select,
-  Badge,
-  Anchor,
 } from '@mantine/core';
 import { IconChevronDown, IconChevronUp, IconSearch, IconSelector } from '@tabler/icons-react';
 import classes from './Table.module.css';
@@ -57,7 +51,7 @@ function Th({ children, reversed, sorted, onSort, isSorted }: ThProps) {
           </Group>
         </UnstyledButton>
       ) : (
-        <Text fw={500} fz="sm">
+        <Text fw={500} fz="sm" >
           {children}
         </Text>
       )}
@@ -100,6 +94,7 @@ function Table<T extends { id: string }>({ columns, data }: TableProps<T>) {
   const [sortBy, setSortBy] = useState<keyof T | null>(null);
   const [reverseSortDirection, setReverseSortDirection] = useState(false);
   const [selection, setSelection] = useState<string[]>([]);
+  const [scrolled, setScrolled] = useState(false);
 
   const toggleRow = (id: string) =>
     setSelection((current) =>
@@ -130,18 +125,18 @@ function Table<T extends { id: string }>({ columns, data }: TableProps<T>) {
         value={search}
         onChange={handleSearchChange}
       />
-      <MantineTable>
-        <MantineTable.Thead className="text-two">
-          <MantineTable.Tr>
-            <MantineTable.Td>
-              <Checkbox
-                onChange={toggleAll}
-                checked={selection.length === data.length}
-                indeterminate={selection.length > 0 && selection.length !== data.length}
-              />
-            </MantineTable.Td>
-            {columns.map((item, index) => (
-              <>
+      <ScrollArea h="69vh" p="lg" onScrollPositionChange={({ y }) => setScrolled(y !== 0)}>
+        <MantineTable highlightOnHover withTableBorder withRowBorders>
+          <MantineTable.Thead className={cx(classes.header, { [classes.scrolled]: scrolled })}>
+            <MantineTable.Tr key="head">
+              <MantineTable.Td key="check">
+                <Checkbox
+                  onChange={toggleAll}
+                  checked={selection.length === data.length}
+                  indeterminate={selection.length > 0 && selection.length !== data.length}
+                />
+              </MantineTable.Td>
+              {columns.map((item, index) => (
                 <Th
                   key={index}
                   isSorted={item.sorted}
@@ -151,47 +146,52 @@ function Table<T extends { id: string }>({ columns, data }: TableProps<T>) {
                 >
                   {item.title}
                 </Th>
-              </>
-            ))}
-          </MantineTable.Tr>
-        </MantineTable.Thead>
-        <MantineTable.Tbody>
-          {sortedData.length > 0 ? (
-            sortedData.map((item, index) => (
-              <MantineTable.Tr key={index}>
-                <MantineTable.Td>
-                  <Checkbox
-                    checked={selection.includes(item.id)}
-                    onChange={() => toggleRow(item.id)}
-                  />
-                </MantineTable.Td>
-                {columns.map((column, index) => {
-                  if (column.render)
-                    return (
-                      <MantineTable.Td key={index}>
-                        {column.render(item[column.dataIndex])}
-                      </MantineTable.Td>
-                    );
-                  else
-                    return (
-                      <MantineTable.Td key={index}>
-                        {item[column.dataIndex] as ReactElement}
-                      </MantineTable.Td>
-                    );
-                })}
-              </MantineTable.Tr>
-            ))
-          ) : (
-            <MantineTable.Tr>
-              <MantineTable.Td colSpan={Object.keys(data[0]).length}>
-                <Text fw={500} ta="center">
-                  Nothing found
-                </Text>
-              </MantineTable.Td>
+              ))}
             </MantineTable.Tr>
-          )}
-        </MantineTable.Tbody>
-      </MantineTable>
+          </MantineTable.Thead>
+          <MantineTable.Tbody>
+            {sortedData.length > 0 ? (
+              sortedData.map((item) => (
+                <MantineTable.Tr key={item.id}>
+                  <MantineTable.Td>
+                    <Checkbox
+                      checked={selection.includes(item.id)}
+                      onChange={() => toggleRow(item.id)}
+                    />
+                  </MantineTable.Td>
+                  {columns.map((column) => {
+                    if (column.render)
+                      return (
+                        <MantineTable.Td key={item.id + column.dataIndex.toString()}>
+                          {column.render(item[column.dataIndex])}
+                        </MantineTable.Td>
+                      );
+                    else
+                      return (
+                        <MantineTable.Td key={item.id + column.dataIndex.toString()}>
+                          <Text fw={400} fz="sm" >
+                            {item[column.dataIndex] as ReactElement}
+                          </Text>
+                        </MantineTable.Td>
+                      );
+                  })}
+                </MantineTable.Tr>
+              ))
+            ) : (
+              <MantineTable.Tr>
+                <MantineTable.Td colSpan={Object.keys(data[0]).length + 2}>
+                  <Text fw={500} ta="center">
+                    Nothing found
+                  </Text>
+                </MantineTable.Td>
+              </MantineTable.Tr>
+            )}
+          </MantineTable.Tbody>
+        </MantineTable>
+      </ScrollArea>
+      <Center>
+        <Pagination total={10} />
+      </Center>
     </>
   );
 }

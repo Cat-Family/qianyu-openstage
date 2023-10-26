@@ -3,8 +3,8 @@ import { AppShell, Burger, Group, ScrollArea } from '@mantine/core';
 import { useOutlet } from 'react-router-dom';
 import { Footer } from './Footer/Footer';
 import Navbar from './Navbar/Navbar';
-import classes from './Shell.module.css';
 import Header from './Header/Header';
+import classes from './Shell.module.css';
 
 export function Shell() {
   const [opened, { toggle }] = useDisclosure();
@@ -25,7 +25,7 @@ export function Shell() {
         pb="var(--app-shell-footer-offset, 0px)"
         pl="var(--app-shell-navbar-offset, 0px)"
       >
-          <div className={classes.content}>{currentOutlet}</div>
+        <div className={classes.content}>{currentOutlet}</div>
         <Footer />
       </AppShell.Main>
     </AppShell>

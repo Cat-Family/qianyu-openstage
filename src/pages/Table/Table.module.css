@@ -1,6 +1,9 @@
 .header {
-  padding-left: 90px;
-  padding-top: 2rem;
+  padding-left: 3rem;
+  padding-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
   height: rem(140);
 
   @mixin light {

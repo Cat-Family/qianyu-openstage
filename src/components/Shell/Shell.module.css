@@ -5,11 +5,13 @@
 }
 
 .content {
-  min-height: calc(100vh - rem(350px));
+  min-height: calc(100vh - var(--app-shell-header-offset, 0));
   position: relative;
   z-index: 1;
-  padding-bottom: rem(80px);
-
+  padding-bottom: rem(60px);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
   @mixin light {
     background-color: var(--mantine-color-white);
     box-shadow: var(--mantine-shadow-sm);
