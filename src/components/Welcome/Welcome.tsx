@@ -1,3 +1,4 @@
+import React from 'react';
 import { Title, Text, Anchor } from '@mantine/core';
 import classes from './Welcome.module.css';
 

@@ -1,7 +1,8 @@
+import React, { useState } from 'react';
 import cx from 'clsx';
-import { UserMenu } from '../../../components/UserMenu/UserMenu';
 import { AppShell, Box, Burger, Flex, Group, RemoveScroll, Title } from '@mantine/core';
 import classes from './Header.module.css';
+import { UserMenu } from '../../UserMenu';
 
 interface HeaderProps {
   opened: boolean;
@@ -9,6 +10,7 @@ interface HeaderProps {
 }
 
 const Header = ({ opened, toggle }: HeaderProps) => {
+  const [state, setState] = useState();
   return (
     <>
       <AppShell.Header

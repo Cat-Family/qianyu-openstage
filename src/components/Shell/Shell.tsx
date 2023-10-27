@@ -1,5 +1,6 @@
+import React from 'react';
 import { useDisclosure } from '@mantine/hooks';
-import { AppShell, Burger, Group, ScrollArea } from '@mantine/core';
+import { AppShell } from '@mantine/core';
 import { useOutlet } from 'react-router-dom';
 import { Footer } from './Footer/Footer';
 import Navbar from './Navbar/Navbar';

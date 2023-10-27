@@ -1,6 +1,6 @@
+import React from 'react';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { Shell } from './components/Shell/Shell';
-import { Welcome } from './components/Welcome/Welcome';
 import { Authentication } from './pages/Authentication/Authentication.page';
 import Oauth from './pages/Oauth/Oauth.page';
 import TablePage from './pages/Table/Table.page';

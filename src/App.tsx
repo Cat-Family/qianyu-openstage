@@ -1,12 +1,13 @@
-import '@mantine/core/styles.css';
-import { DirectionProvider, MantineProvider, ScrollArea } from '@mantine/core';
+import React from 'react';
+import { DirectionProvider, MantineProvider } from '@mantine/core';
 import { Notifications } from '@mantine/notifications';
-import { Router } from './Router';
-import { theme } from './theme';
-import { Search } from './components/Search';
-import { HotKeysHandler } from './components/HotKeysHandler';
 import { ModalsProvider } from '@mantine/modals';
+import { Router } from './Router';
+import { HotKeysHandler } from './components/HotKeysHandler';
+import { Search } from './components/Search';
+import { theme } from './theme';
 import '@mantine/notifications/styles.css';
+import '@mantine/core/styles.css';
 import '@mantine/spotlight/styles.css';
 
 export default function App() {
@@ -14,10 +15,10 @@ export default function App() {
     <DirectionProvider initialDirection="ltr" detectDirection={false}>
       <MantineProvider theme={theme}>
         <ModalsProvider>
-            <Search />
-            <Notifications />
-            <HotKeysHandler />
-            <Router />
+          <Search />
+          <Notifications />
+          <HotKeysHandler />
+          <Router />
         </ModalsProvider>
       </MantineProvider>
     </DirectionProvider>

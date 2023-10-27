@@ -1,5 +1,5 @@
+import React, { ReactElement, useState } from 'react';
 import cx from 'clsx';
-import { ReactElement, useState } from 'react';
 import {
   Table as MantineTable,
   ScrollArea,
@@ -8,11 +8,8 @@ import {
   Text,
   Center,
   rem,
-  keys,
   Checkbox,
   Pagination,
-  Box,
-  Flex,
 } from '@mantine/core';
 import { IconChevronDown, IconChevronUp, IconSelector } from '@tabler/icons-react';
 import classes from './Table.module.css';
@@ -120,22 +117,19 @@ function Table<T extends { id: string }>({ columns, data }: TableProps<T>) {
                       onChange={() => toggleRow(item.id)}
                     />
                   </MantineTable.Td>
-                  {columns.map((column) => {
-                    if (column.render)
-                      return (
-                        <MantineTable.Td key={item.id + column.dataIndex.toString()}>
-                          {column.render(item[column.dataIndex])}
-                        </MantineTable.Td>
-                      );
-                    else
-                      return (
-                        <MantineTable.Td key={item.id + column.dataIndex.toString()}>
-                          <Text fw={400} fz="sm">
-                            {item[column.dataIndex] as ReactElement}
-                          </Text>
-                        </MantineTable.Td>
-                      );
-                  })}
+                  {columns.map((column) =>
+                    column.render ? (
+                      <MantineTable.Td key={item.id + column.dataIndex.toString()}>
+                        {column.render(item[column.dataIndex])}
+                      </MantineTable.Td>
+                    ) : (
+                      <MantineTable.Td key={item.id + column.dataIndex.toString()}>
+                        <Text fw={400} fz="sm">
+                          {item[column.dataIndex] as ReactElement}
+                        </Text>
+                      </MantineTable.Td>
+                    )
+                  )}
                 </MantineTable.Tr>
               ))
             ) : (

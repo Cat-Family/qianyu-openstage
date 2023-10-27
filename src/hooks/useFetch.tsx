@@ -1,8 +1,8 @@
-import { FetchData, FetchDataParams } from '../ts/types/types/fetchData.types';
+import React, { useReducer, useRef } from 'react';
 import { rem } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
 import { IconCheck, IconX } from '@tabler/icons-react';
-import { useReducer, useRef } from 'react';
+import { FetchData, FetchDataParams } from '../ts/types/types/fetchData.types';
 
 const BASE_URL: string = '/qy/api/v1/os/';
 
@@ -87,10 +87,10 @@ function useFetch<T extends { code: number; message: string }>(
       const data = await response.json();
 
       if (data.code !== 200) {
-        throw {
+        throw Object({
           name: data.message,
           message: data.data,
-        };
+        });
       }
 
       cache.current[url] = data;

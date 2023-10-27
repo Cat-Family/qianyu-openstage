@@ -1,3 +1,4 @@
+import React from 'react';
 import { Container, Text } from '@mantine/core';
 import classes from './Footer.module.css';
 

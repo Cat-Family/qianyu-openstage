@@ -1,3 +1,4 @@
+import React, { useState } from 'react';
 import {
   ActionIcon,
   Anchor,
@@ -6,7 +7,6 @@ import {
   Breadcrumbs,
   Container,
   Drawer,
-  Flex,
   Group,
   NumberInput,
   SimpleGrid,
@@ -15,11 +15,10 @@ import {
   Title,
   rem,
 } from '@mantine/core';
-import { Table } from '../../components/Table';
 import { IconHome, IconPencil, IconTrash } from '@tabler/icons-react';
-import classes from './Table.module.css';
 import { useDisclosure } from '@mantine/hooks';
-import { useState } from 'react';
+import { Table } from '../../components/Table';
+import classes from './Table.module.css';
 
 interface DataInterface {
   id: string;
@@ -175,11 +174,11 @@ const TablePage = () => {
       sorted: false,
       render: (item: number) =>
         item === 1 ? (
-          <label style={{ color: 'rgb(0, 181, 101)' }}>作业中</label>
+          <Text style={{ color: 'rgb(0, 181, 101)' }}>作业中</Text>
         ) : item === 2 ? (
-          <label style={{ color: 'rgb(66, 160, 255)' }}>待机中</label>
+          <Text style={{ color: 'rgb(66, 160, 255)' }}>待机中</Text>
         ) : (
-          <label style={{ color: 'rgb(217, 35, 35)' }}>故障</label>
+          <Text style={{ color: 'rgb(217, 35, 35)' }}>故障</Text>
         ),
     },
     {
