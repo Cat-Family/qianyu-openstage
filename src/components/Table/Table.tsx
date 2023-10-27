@@ -1,5 +1,5 @@
 import cx from 'clsx';
-import { ReactElement, ReactNode, useState } from 'react';
+import { ReactElement, useState } from 'react';
 import {
   Table as MantineTable,
   ScrollArea,
@@ -7,13 +7,14 @@ import {
   Group,
   Text,
   Center,
-  TextInput,
   rem,
   keys,
   Checkbox,
   Pagination,
+  Box,
+  Flex,
 } from '@mantine/core';
-import { IconChevronDown, IconChevronUp, IconSearch, IconSelector } from '@tabler/icons-react';
+import { IconChevronDown, IconChevronUp, IconSelector } from '@tabler/icons-react';
 import classes from './Table.module.css';
 
 interface TableProps<T> {
@@ -51,7 +52,7 @@ function Th({ children, reversed, sorted, onSort, isSorted }: ThProps) {
           </Group>
         </UnstyledButton>
       ) : (
-        <Text fw={500} fz="sm" >
+        <Text fw={500} fz="sm">
           {children}
         </Text>
       )}
@@ -59,37 +60,7 @@ function Th({ children, reversed, sorted, onSort, isSorted }: ThProps) {
   );
 }
 
-function filterData<T extends { id: string }>(data: T[], search: string) {
-  const query = search.toLowerCase().trim();
-  return data.filter((item) =>
-    keys(data[0]).some((key) => String(item[key]).toLowerCase().includes(query))
-  );
-}
-
-function sortData<T extends { id: string }>(
-  data: T[],
-  payload: { sortBy: keyof T | null; reversed: boolean; search: string }
-) {
-  const { sortBy } = payload;
-
-  if (!sortBy) {
-    return filterData<T>(data, payload.search);
-  }
-
-  return filterData(
-    [...data].sort((a, b) => {
-      if (payload.reversed) {
-        return new String(b[sortBy]).localeCompare(String(a[sortBy]));
-      }
-
-      return String(a[sortBy]).localeCompare(String(b[sortBy]));
-    }),
-    payload.search
-  );
-}
-
 function Table<T extends { id: string }>({ columns, data }: TableProps<T>) {
-  const [search, setSearch] = useState('');
   const [sortedData, setSortedData] = useState(data);
   const [sortBy, setSortBy] = useState<keyof T | null>(null);
   const [reverseSortDirection, setReverseSortDirection] = useState(false);
@@ -107,25 +78,15 @@ function Table<T extends { id: string }>({ columns, data }: TableProps<T>) {
     const reversed = field === sortBy ? !reverseSortDirection : false;
     setReverseSortDirection(reversed);
     setSortBy(field);
-    setSortedData(sortData<T>(data, { sortBy: field, reversed, search }));
-  };
-
-  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { value } = event.currentTarget;
-    setSearch(value);
-    setSortedData(sortData(data, { sortBy, reversed: reverseSortDirection, search: value }));
   };
 
   return (
     <>
-      <TextInput
-        placeholder="Search by any field"
-        mb="md"
-        leftSection={<IconSearch style={{ width: rem(16), height: rem(16) }} stroke={1.5} />}
-        value={search}
-        onChange={handleSearchChange}
-      />
-      <ScrollArea h="69vh" p="lg" onScrollPositionChange={({ y }) => setScrolled(y !== 0)}>
+      <ScrollArea.Autosize
+        mah="65vh"
+        p="lg"
+        onScrollPositionChange={({ y }) => setScrolled(y !== 0)}
+      >
         <MantineTable highlightOnHover withTableBorder withRowBorders>
           <MantineTable.Thead className={cx(classes.header, { [classes.scrolled]: scrolled })}>
             <MantineTable.Tr key="head">
@@ -169,7 +130,7 @@ function Table<T extends { id: string }>({ columns, data }: TableProps<T>) {
                     else
                       return (
                         <MantineTable.Td key={item.id + column.dataIndex.toString()}>
-                          <Text fw={400} fz="sm" >
+                          <Text fw={400} fz="sm">
                             {item[column.dataIndex] as ReactElement}
                           </Text>
                         </MantineTable.Td>
@@ -188,10 +149,14 @@ function Table<T extends { id: string }>({ columns, data }: TableProps<T>) {
             )}
           </MantineTable.Tbody>
         </MantineTable>
-      </ScrollArea>
-      <Center>
-        <Pagination total={10} />
-      </Center>
+      </ScrollArea.Autosize>
+      <Pagination.Root total={10} px="lg" pt="lg">
+        <Group justify="center" wrap="nowrap">
+          <Pagination.Previous />
+          <Pagination.Items />
+          <Pagination.Next />
+        </Group>
+      </Pagination.Root>
     </>
   );
 }
