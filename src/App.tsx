@@ -6,8 +6,8 @@ import { Router } from './Router';
 import { HotKeysHandler } from './components/HotKeysHandler';
 import { Search } from './components/Search';
 import { theme } from './theme';
-import '@mantine/notifications/styles.css';
 import '@mantine/core/styles.css';
+import '@mantine/notifications/styles.css';
 import '@mantine/spotlight/styles.css';
 
 export default function App() {
