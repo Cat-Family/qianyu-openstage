@@ -80,11 +80,11 @@ function Table<T extends { id: string }>({ columns, data }: TableProps<T>) {
 
   return (
     <>
-      <MantineTable highlightOnHover withTableBorder withRowBorders>
-        <ScrollArea
-          classNames={scrollClasses}
-          onScrollPositionChange={({ y }) => setScrolled(y !== 0)}
-        >
+      <ScrollArea
+        classNames={scrollClasses}
+        onScrollPositionChange={({ y }) => setScrolled(y !== 0)}
+      >
+        <MantineTable highlightOnHover withRowBorders>
           <MantineTable.Thead className={cx(classes.header, { [classes.scrolled]: scrolled })}>
             <MantineTable.Tr key="head">
               <MantineTable.Td key="check">
@@ -142,8 +142,8 @@ function Table<T extends { id: string }>({ columns, data }: TableProps<T>) {
               </MantineTable.Tr>
             )}
           </MantineTable.Tbody>
-        </ScrollArea>
-      </MantineTable>
+        </MantineTable>
+      </ScrollArea>
       <Pagination.Root total={10} px="lg" pt="xs" size="sm">
         <Group justify="center" wrap="nowrap">
           <Pagination.Previous />
