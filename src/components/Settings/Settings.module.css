@@ -1,0 +1,28 @@
+.root {
+  height: 100vh;
+}
+
+.closeBtn {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+}
+
+.list {
+  padding: 1rem 0 1rem 1rem;
+}
+
+.panel {
+  padding: 1rem;
+}
+
+.groupTitleText {
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  text-align: center;
+  padding: 6px;
+  color: light-dark(var(--mantine-color-gray-6), var(--mantine-color-dark-3));
+}

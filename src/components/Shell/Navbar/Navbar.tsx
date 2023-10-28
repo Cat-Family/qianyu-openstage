@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { AppShell, ScrollArea } from '@mantine/core';
 
 import { LinksGroup } from '../../NavbarLinksGroup/NavbarLinksGroup';
-import classes from './Navbar.module.css';
 import useFetch from '../../../hooks/useFetch';
+import classes from './Navbar.module.css';
 
 const Navbar = () => {
   const [links, setLinks] = useState();

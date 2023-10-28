@@ -1,1 +1,1 @@
-export type MethodDirection = 'POST' | 'GET' | 'PUT' | 'DELETE';
+export type MethodDirection = 'POST' | 'GET' | 'PUT' | 'DELETEo';

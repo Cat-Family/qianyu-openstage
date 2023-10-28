@@ -7,6 +7,7 @@ import {
   IconChevronRight,
 } from '@tabler/icons-react';
 import { useNavigate } from 'react-router-dom';
+import { openContextModal } from '@mantine/modals';
 
 export function UserMenu() {
   const theme = useMantineTheme();
@@ -52,8 +53,18 @@ export function UserMenu() {
           <Menu.Label>Settings</Menu.Label>
           <Menu.Item
             leftSection={<IconSettings style={{ width: rem(16), height: rem(16) }} stroke={1.5} />}
+            onClick={() =>
+              openContextModal({
+                modal: 'settings',
+                withCloseButton: false,
+                fullScreen: true,
+                keepMounted: true,
+                padding: 0,
+                innerProps: {},
+              })
+            }
           >
-            Account settings
+            Settings
           </Menu.Item>
           <Menu.Item
             leftSection={
