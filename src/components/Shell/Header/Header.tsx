@@ -10,22 +10,15 @@ interface HeaderProps {
 }
 
 const Header = ({ opened, toggle }: HeaderProps) => {
-  const [state, setState] = useState();
   return (
     <>
-      <AppShell.Header
-        display="flex"
-        className={cx(classes.header, RemoveScroll.classNames.fullWidth)}
-        data-desktop
-      >
-        <Group h="100%">
+      <AppShell.Header className={cx(classes.header, RemoveScroll.classNames.fullWidth)}>
+        <Group gap="sm">
           <Burger size="sm" opened={opened} onClick={toggle} aria-label="Toggle navigation" />
           <Image src="/logo.png" radius="sm" h={36} aria-label="Qianyu openstage logo" />
         </Group>
         <Box style={{ flex: 1 }} />
-        <Group h="100%" px="md">
-          <UserMenu />
-        </Group>
+        <UserMenu />
       </AppShell.Header>
     </>
   );

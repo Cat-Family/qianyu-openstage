@@ -2,7 +2,7 @@ import React, { useReducer, useRef } from 'react';
 import { rem } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
 import { IconCheck, IconX } from '@tabler/icons-react';
-import { FetchData, FetchDataParams } from '../ts/types/types/fetchData.types';
+import { FetchData, FetchDataParams } from '../ts/types/types/fetchData.type';
 
 const BASE_URL: string = '/qy/api/v1/os/';
 

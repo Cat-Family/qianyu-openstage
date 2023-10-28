@@ -2,16 +2,11 @@ import React, { useState } from 'react';
 import {
   ActionIcon,
   Anchor,
-  Autocomplete,
   Box,
   Breadcrumbs,
-  Container,
   Drawer,
   Group,
-  NumberInput,
-  SimpleGrid,
   Text,
-  TextInput,
   Title,
   rem,
 } from '@mantine/core';
@@ -218,24 +213,7 @@ const TablePage = () => {
           TablePage
         </Title>
       </Box>
-      <Container size="lg">
-        <SimpleGrid
-          cols={{ base: 1, sm: 2, lg: 4 }}
-          spacing={{ base: 10, sm: 'xl' }}
-          verticalSpacing={{ base: 'md', sm: 'xl' }}
-        >
-          <TextInput label="ID" labelProps={{}} placeholder="Input placeholder" mb="md" />
-          <TextInput label="设备名称" placeholder="Search by any field" mb="md" />
-          <Autocomplete
-            placeholder="Search by any field"
-            label="设备状态"
-            mb="md"
-            data={['作业中', '待机中', '故障']}
-          />
-          <NumberInput label="作业次数" placeholder="Search by any field" mb="md" />
-        </SimpleGrid>
-      </Container>
-      <Box px={60}>
+      <Box px={39}>
         <Table<DataInterface>
           columns={deviceColumns}
           data={deviceData.map((item) => ({ ...item, operation: item }))}

@@ -1,23 +1,18 @@
-import { Box, Center, CloseButton, Container, Divider, Tabs, Text, rem } from '@mantine/core';
-import { IconPhoto, IconMessageCircle, IconSettings } from '@tabler/icons-react';
-import classes from './Settings.module.css';
 import { useState } from 'react';
-import { ContextModalProps, closeModal } from '@mantine/modals';
-import { SettingsTabsEnum } from '@/ts/types/enums/settingsTabs.enum';
+import { Box, CloseButton, Divider, Tabs, Text, rem } from '@mantine/core';
+import { IconPhoto } from '@tabler/icons-react';
+import { ContextModalProps } from '@mantine/modals';
 import Profile from './panel/Profile';
 import Security from './panel/Security';
+import { SettingsTabsEnum } from '@/ts/types/enums/settingsTabs.enum';
+import { TabsDataType } from '@/ts/types/types/tabsData.type';
+import classes from './Settings.module.css';
 
 const Settings = ({ context, id, innerProps }: ContextModalProps<{ modalBody: string }>) => {
   const iconStyle = { width: rem(12), height: rem(12) };
   const [activeTab, setActiveTab] = useState<SettingsTabsEnum>('profile');
 
-  let tabs: {
-    group?: boolean;
-    title: string;
-    value?: SettingsTabsEnum;
-    icon?: React.ReactNode;
-    element?: React.ReactNode;
-  }[] = [
+  let tabs: TabsDataType = [
     { group: true, title: '用户设置' },
     {
       title: '个人资料',

@@ -13,6 +13,7 @@ import {
 } from '@mantine/core';
 import { IconChevronDown, IconChevronUp, IconSelector } from '@tabler/icons-react';
 import classes from './Table.module.css';
+import scrollClasses from './Scroll.module.css';
 
 interface TableProps<T> {
   columns: {
@@ -79,12 +80,11 @@ function Table<T extends { id: string }>({ columns, data }: TableProps<T>) {
 
   return (
     <>
-      <ScrollArea.Autosize
-        mah="65vh"
-        p="lg"
-        onScrollPositionChange={({ y }) => setScrolled(y !== 0)}
-      >
-        <MantineTable highlightOnHover withTableBorder withRowBorders>
+      <MantineTable highlightOnHover withTableBorder withRowBorders>
+        <ScrollArea
+          classNames={scrollClasses}
+          onScrollPositionChange={({ y }) => setScrolled(y !== 0)}
+        >
           <MantineTable.Thead className={cx(classes.header, { [classes.scrolled]: scrolled })}>
             <MantineTable.Tr key="head">
               <MantineTable.Td key="check">
@@ -142,9 +142,9 @@ function Table<T extends { id: string }>({ columns, data }: TableProps<T>) {
               </MantineTable.Tr>
             )}
           </MantineTable.Tbody>
-        </MantineTable>
-      </ScrollArea.Autosize>
-      <Pagination.Root total={10} px="lg" pt="lg">
+        </ScrollArea>
+      </MantineTable>
+      <Pagination.Root total={10} px="lg" pt="xs" size="sm">
         <Group justify="center" wrap="nowrap">
           <Pagination.Previous />
           <Pagination.Items />

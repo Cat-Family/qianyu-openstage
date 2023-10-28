@@ -4,8 +4,8 @@
 
 .closeBtn {
   position: absolute;
-  top: 1rem;
-  right: 1rem;
+  top: .6rem;
+  right: .6rem;
 }
 
 .list {
@@ -13,16 +13,15 @@
 }
 
 .panel {
-  padding: 1rem;
+  padding: 2rem 2rem 1rem 1rem;
 }
 
 .groupTitleText {
+  padding: 6px;
   font-size: 12px;
-  line-height: 16px;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.02em;
   text-align: center;
-  padding: 6px;
   color: light-dark(var(--mantine-color-gray-6), var(--mantine-color-dark-3));
 }
