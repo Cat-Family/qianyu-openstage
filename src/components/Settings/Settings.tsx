@@ -1,5 +1,15 @@
 import { useState } from 'react';
-import { Box, Center, CloseButton, Container, Divider, Tabs, Text, rem } from '@mantine/core';
+import {
+  Box,
+  Center,
+  CloseButton,
+  Container,
+  Divider,
+  ScrollArea,
+  Tabs,
+  Text,
+  rem,
+} from '@mantine/core';
 import {
   IconBrush,
   IconDevicesCog,
@@ -90,7 +100,10 @@ const Settings = ({ context, id, innerProps }: ContextModalProps<{ modalBody: st
                 className={classes.panel}
                 value={item.value as string}
               >
-                {item.element}
+                <ScrollArea h="calc(100vh - 1rem)" offsetScrollbars scrollbarSize={6}>
+                  <Box h="2rem" />
+                  {item.element}
+                </ScrollArea>
               </Tabs.Panel>
             )
         )}

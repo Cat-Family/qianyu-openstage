@@ -145,7 +145,7 @@ function Table<T extends { id: string }>({ columns, data }: TableProps<T>) {
         </MantineTable>
       </ScrollArea>
       <Pagination.Root total={10} px="lg" pt="xs" size="sm">
-        <Group justify="center" wrap="nowrap">
+        <Group justify="center" wrap="nowrap" gap='xs'>
           <Pagination.Previous />
           <Pagination.Items />
           <Pagination.Next />

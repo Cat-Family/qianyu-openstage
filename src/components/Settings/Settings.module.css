@@ -4,8 +4,8 @@
 
 .closeBtn {
   position: absolute;
-  top: .6rem;
-  right: .6rem;
+  top: 0;
+  right: 0;
 }
 
 .list {
@@ -13,7 +13,7 @@
 }
 
 .panel {
-  padding: 2rem 1rem 1rem 1rem;
+  padding: 1rem;
 }
 
 .groupTitleText {
