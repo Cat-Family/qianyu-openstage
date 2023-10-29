@@ -73,7 +73,7 @@ const Settings = ({ context, id, innerProps }: ContextModalProps<{ modalBody: st
         onChange={(e) => setActiveTab(e as SettingsTabsEnum)}
       >
         <Tabs.List aria-label="Settings menu" className={classes.list}>
-          <ScrollArea h="100vh" type="never">
+          <ScrollArea h="100vh" p={0} type="never">
             {tabs.map((item, index) =>
               item.group ? (
                 index === 0 ? (
@@ -87,7 +87,7 @@ const Settings = ({ context, id, innerProps }: ContextModalProps<{ modalBody: st
                   </Box>
                 )
               ) : (
-                <Tabs.Tab key={item.value} value={item.value as string} leftSection={item.icon}>
+                <Tabs.Tab w="100%" key={item.value} value={item.value as string} leftSection={item.icon}>
                   {item.title}
                 </Tabs.Tab>
               )
