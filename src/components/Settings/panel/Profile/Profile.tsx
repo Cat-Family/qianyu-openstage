@@ -8,10 +8,8 @@ import {
   Stack,
   Modal,
   rem,
-  Input,
   TextInput,
   Stepper,
-  Divider,
 } from '@mantine/core';
 import classes from './Profile.module.css';
 import { useDisclosure, useInputState, useListState } from '@mantine/hooks';
@@ -23,11 +21,11 @@ export default function Profile() {
   const [opened, { open, close }] = useDisclosure(false);
   const [userNameOpened, { open: userNameOpen, close: userNameClose }] = useDisclosure(false);
   const [emailOpened, { open: emailOpen, close: emailClose }] = useDisclosure(false);
-  const [profileList, profileListHandlers] = useListState([
+  const profileList = [
     { title: '用户名', label: 'admin', handler: userNameOpen },
     { title: '电子邮件', label: 'is.lin.liu@outlook.com', handler: emailOpen },
     { title: '手机号', label: '15696665345' },
-  ]);
+  ];
 
   const [active, setActive] = useState(0);
   const nextStep = () => setActive((current) => (current < 2 ? current + 1 : current));
@@ -55,7 +53,7 @@ export default function Profile() {
         {profileList.map((item, index) => (
           <Group key={index} justify="space-between" align="center">
             <Flex direction="column">
-              <TextInput label={item.title} variant="unstyled" value={item.label} />
+              <TextInput readOnly label={item.title} variant="unstyled" value={item.label} />
             </Flex>
             <Button type="button" variant="outline" size="xs" onClick={item.handler}>
               编辑

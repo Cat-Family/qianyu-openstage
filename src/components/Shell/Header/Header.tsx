@@ -15,7 +15,7 @@ const Header = ({ opened, toggle }: HeaderProps) => {
       <AppShell.Header className={cx(classes.header, RemoveScroll.classNames.fullWidth)}>
         <Group gap="sm">
           <Burger size="sm" opened={opened} onClick={toggle} aria-label="Toggle navigation" />
-          <Image src="/logo.png" radius="sm" h={36} aria-label="Qianyu openstage logo" />
+          <Image src="/public/logo.png" radius="sm" h={36} aria-label="Qianyu openstage logo" />
         </Group>
         <Box style={{ flex: 1 }} />
         <UserMenu />

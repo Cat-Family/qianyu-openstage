@@ -3,7 +3,7 @@ import { modals } from '@mantine/modals';
 import { Flex, Text, PinInput, Button } from '@mantine/core';
 import useFetch from '../useFetch';
 import { Login } from '../../ts/types/interface/login.interface';
-import { FetchData } from '../../ts/types/types/fetchData.types';
+import { FetchData } from '../../ts/types/types/fetchData.type';
 
 type UseAuthentication = {
   fetchLogin: FetchData;

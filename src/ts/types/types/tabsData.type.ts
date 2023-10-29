@@ -1,4 +1,4 @@
-import { SettingsTabsEnum } from "../enums/settingsTabs.enum";
+import { SettingsTabsEnum } from '../enums/settingsTabs.enum';
 
 export type TabsDataType = {
   group?: boolean;

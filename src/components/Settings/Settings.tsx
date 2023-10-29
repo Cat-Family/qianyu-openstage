@@ -73,24 +73,26 @@ const Settings = ({ context, id, innerProps }: ContextModalProps<{ modalBody: st
         onChange={(e) => setActiveTab(e as SettingsTabsEnum)}
       >
         <Tabs.List aria-label="Settings menu" className={classes.list}>
-          {tabs.map((item, index) =>
-            item.group ? (
-              index === 0 ? (
-                <Text key={index} className={classes.groupTitleText}>
-                  {item.title}
-                </Text>
+          <ScrollArea h="100vh" type="never">
+            {tabs.map((item, index) =>
+              item.group ? (
+                index === 0 ? (
+                  <Text key={index} className={classes.groupTitleText}>
+                    {item.title}
+                  </Text>
+                ) : (
+                  <Box key={index}>
+                    <Divider my="xs" />
+                    <Text className={classes.groupTitleText}>{item.title}</Text>
+                  </Box>
+                )
               ) : (
-                <Box key={index}>
-                  <Divider my="xs" />
-                  <Text className={classes.groupTitleText}>{item.title}</Text>
-                </Box>
+                <Tabs.Tab key={item.value} value={item.value as string} leftSection={item.icon}>
+                  {item.title}
+                </Tabs.Tab>
               )
-            ) : (
-              <Tabs.Tab key={item.value} value={item.value as string} leftSection={item.icon}>
-                {item.title}
-              </Tabs.Tab>
-            )
-          )}
+            )}
+          </ScrollArea>
         </Tabs.List>
         {tabs.map(
           (item) =>

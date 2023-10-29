@@ -1,11 +1,7 @@
 import React from 'react';
 import { IconDashboard, IconFileText, IconHome, IconSearch } from '@tabler/icons-react';
 import { rem } from '@mantine/core';
-import {
-  Spotlight,
-  createSpotlight,
-  SpotlightActionData,
-} from '@mantine/spotlight';
+import { Spotlight, createSpotlight, SpotlightActionData } from '@mantine/spotlight';
 
 export const [searchStore, searchHandlers] = createSpotlight();
 
