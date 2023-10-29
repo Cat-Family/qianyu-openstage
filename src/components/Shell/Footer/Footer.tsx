@@ -66,7 +66,7 @@ export function Footer() {
       <footer className={classes.footer}>
         <Container size={1100} className={classes.inner}>
           <div className={classes.logo}>
-            <Image src="/public/logo.png" w="30%" radius="md" />
+            <Image src="/logo.png" w="30%" radius="md" />
             <Text size="xs" c="dimmed" className={classes.description}>
               A modern, proven open platform
             </Text>
