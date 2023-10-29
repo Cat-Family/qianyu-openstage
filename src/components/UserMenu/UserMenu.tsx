@@ -9,7 +9,7 @@ import {
 } from '@tabler/icons-react';
 import { useNavigate } from 'react-router-dom';
 import { openContextModal } from '@mantine/modals';
-import { spotlight } from '@mantine/spotlight';
+import { searchHandlers } from '../Search';
 
 export function UserMenu() {
   const navigate = useNavigate();
@@ -60,6 +60,8 @@ export function UserMenu() {
               fullScreen: true,
               keepMounted: true,
               padding: 0,
+              zIndex: 300,
+              closeOnEscape: false,
               innerProps: {},
             })
           }
@@ -67,7 +69,7 @@ export function UserMenu() {
           Settings
         </Menu.Item>
         <Menu.Item
-          onClick={spotlight.open}
+          onClick={searchHandlers.open}
           leftSection={<IconSearch style={{ width: rem(14), height: rem(14) }} />}
           rightSection={
             <Text size="xs" c="dimmed">

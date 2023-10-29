@@ -10,6 +10,7 @@ import { theme } from './theme';
 import '@mantine/core/styles.layer.css';
 import '@mantine/notifications/styles.css';
 import '@mantine/spotlight/styles.css';
+import '@mantine/dropzone/styles.css';
 
 export default function App() {
   return (

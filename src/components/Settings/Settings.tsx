@@ -1,9 +1,18 @@
 import { useState } from 'react';
-import { Box, CloseButton, Divider, Tabs, Text, rem } from '@mantine/core';
-import { IconPhoto } from '@tabler/icons-react';
+import { Box, Center, CloseButton, Container, Divider, Tabs, Text, rem } from '@mantine/core';
+import {
+  IconBrush,
+  IconDevicesCog,
+  IconKeyboard,
+  IconLanguage,
+  IconLinkPlus,
+  IconShieldLock,
+  IconUserEdit,
+} from '@tabler/icons-react';
 import { ContextModalProps } from '@mantine/modals';
-import Profile from './panel/Profile';
+import Profile from './panel/Profile/Profile';
 import Security from './panel/Security';
+import Links from './panel/Links/Links';
 import { SettingsTabsEnum } from '@/ts/types/enums/settingsTabs.enum';
 import { TabsDataType } from '@/ts/types/types/tabsData.type';
 import classes from './Settings.module.css';
@@ -17,25 +26,34 @@ const Settings = ({ context, id, innerProps }: ContextModalProps<{ modalBody: st
     {
       title: '个人资料',
       value: 'profile',
-      icon: <IconPhoto style={iconStyle} />,
+      icon: <IconUserEdit style={iconStyle} />,
       element: <Profile />,
     },
     {
       title: '账户安全',
       value: 'security',
-      icon: <IconPhoto style={iconStyle} />,
+      icon: <IconShieldLock style={iconStyle} />,
       element: <Security />,
     },
-    { title: '我的设备', value: 'devices', icon: <IconPhoto style={iconStyle} /> },
-    { title: '连接', value: 'links', icon: <IconPhoto style={iconStyle} /> },
+    {
+      title: '我的设备',
+      value: 'devices',
+      icon: <IconDevicesCog style={iconStyle} />,
+    },
+    {
+      title: '连接',
+      value: 'links',
+      icon: <IconLinkPlus style={iconStyle} />,
+      element: <Links />,
+    },
     { group: true, title: 'App设置' },
-    { title: '外观', value: 'appearance', icon: <IconPhoto style={iconStyle} /> },
-    { title: '快捷键', value: 'shortcut', icon: <IconPhoto style={iconStyle} /> },
-    { title: '语言', value: 'i18', icon: <IconPhoto style={iconStyle} /> },
+    { title: '外观', value: 'appearance', icon: <IconBrush style={iconStyle} /> },
+    { title: '快捷键', value: 'shortcut', icon: <IconKeyboard style={iconStyle} /> },
+    { title: '语言', value: 'i18', icon: <IconLanguage style={iconStyle} /> },
   ];
 
   return (
-    <>
+    <Container size="md" px="lg" pos="relative">
       <Tabs
         variant="outline"
         className={classes.root}
@@ -82,7 +100,7 @@ const Settings = ({ context, id, innerProps }: ContextModalProps<{ modalBody: st
         className={classes.closeBtn}
         onClick={() => context.closeContextModal(id)}
       />
-    </>
+    </Container>
   );
 };
 
