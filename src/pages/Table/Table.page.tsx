@@ -4,6 +4,8 @@ import {
   Anchor,
   Box,
   Breadcrumbs,
+  Center,
+  Container,
   Drawer,
   Group,
   Text,
@@ -213,7 +215,7 @@ const TablePage = () => {
           TablePage
         </Title>
       </Box>
-      <Box px={39}>
+      <Center style={{ flexDirection: 'column' }}>
         <Table<DataInterface>
           columns={deviceColumns}
           data={deviceData.map((item) => ({ ...item, operation: item }))}
@@ -230,7 +232,7 @@ const TablePage = () => {
           <Text>{selectItem?.status}</Text>
           <Text>{selectItem?.times}</Text>
         </Drawer>
-      </Box>
+      </Center>
     </>
   );
 };

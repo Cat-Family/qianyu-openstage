@@ -1,4 +1,4 @@
 .root {
   height: calc(100vh - rem(210) - var(--app-shell-header-offset));
-  width: calc(100vw - calc(2.4375rem * var(--mantine-scale) * 2));
+  width: calc(80vw - var(--app-shell-navbar-offset, 0px));
 }

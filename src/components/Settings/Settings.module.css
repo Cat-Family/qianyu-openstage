@@ -4,8 +4,12 @@
 
 .closeBtn {
   position: absolute;
-  top: 0;
-  right: 0;
+  top: 0.4rem;
+  right: 0.4rem;
+  flex-direction: column;
+  height: fit-content;
+  width: fit-content;
+  color: light-dark(var(--mantine-color-dark-3), var(--mantine-color-white-3));
 }
 
 .list {
@@ -13,7 +17,7 @@
 }
 
 .panel {
-  padding: 1rem;
+  padding: 1rem 2rem 1rem 1rem;
 }
 
 .groupTitleText {

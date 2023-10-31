@@ -1,11 +1,11 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import {
+  ActionIcon,
   Box,
-  Center,
-  CloseButton,
   Container,
   Divider,
   ScrollArea,
+  Space,
   Tabs,
   Text,
   rem,
@@ -17,6 +17,7 @@ import {
   IconLanguage,
   IconLinkPlus,
   IconShieldLock,
+  IconSquareRoundedX,
   IconUserEdit,
 } from '@tabler/icons-react';
 import { ContextModalProps } from '@mantine/modals';
@@ -31,7 +32,7 @@ const Settings = ({ context, id, innerProps }: ContextModalProps<{ modalBody: st
   const iconStyle = { width: rem(12), height: rem(12) };
   const [activeTab, setActiveTab] = useState<SettingsTabsEnum>('profile');
 
-  let tabs: TabsDataType = [
+  const tabs: TabsDataType = [
     { group: true, title: '用户设置' },
     {
       title: '个人资料',
@@ -87,7 +88,12 @@ const Settings = ({ context, id, innerProps }: ContextModalProps<{ modalBody: st
                   </Box>
                 )
               ) : (
-                <Tabs.Tab w="100%" key={item.value} value={item.value as string} leftSection={item.icon}>
+                <Tabs.Tab
+                  w="100%"
+                  key={item.value}
+                  value={item.value as string}
+                  leftSection={item.icon}
+                >
                   {item.title}
                 </Tabs.Tab>
               )
@@ -102,19 +108,25 @@ const Settings = ({ context, id, innerProps }: ContextModalProps<{ modalBody: st
                 className={classes.panel}
                 value={item.value as string}
               >
-                <ScrollArea h="calc(100vh - 1rem)" offsetScrollbars scrollbarSize={6}>
-                  <Box h="2rem" />
+                <ScrollArea h="calc(100vh - 1rem)" pl={6} offsetScrollbars scrollbarSize={3}>
+                  <Space h="xs" />
                   {item.element}
                 </ScrollArea>
               </Tabs.Panel>
             )
         )}
       </Tabs>
-      <CloseButton
+      <ActionIcon
+        variant="transparent"
         aria-label="Close settings modal"
         className={classes.closeBtn}
         onClick={() => context.closeContextModal(id)}
-      />
+      >
+        <IconSquareRoundedX />
+        <Text fz="16px" fw={600}>
+          ESC
+        </Text>
+      </ActionIcon>
     </Container>
   );
 };
