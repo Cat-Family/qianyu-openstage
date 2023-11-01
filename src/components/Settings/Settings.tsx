@@ -67,7 +67,7 @@ const Settings = ({ context, id, innerProps }: ContextModalProps<{ modalBody: st
   ];
 
   return (
-    <Container size={800} px="lg" pos="relative">
+    <Container size="md" px="lg" pos="relative">
       <Tabs
         variant="outline"
         className={classes.root}

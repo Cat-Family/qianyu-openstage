@@ -88,8 +88,8 @@ function useFetch<T extends { code: number; message: string }>(
 
       if (data.code !== 200) {
         throw Object({
-          name: data.message,
-          message: data.data,
+          name: data.code,
+          message: data.message,
         });
       }
 
