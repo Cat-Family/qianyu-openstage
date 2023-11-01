@@ -1,3 +1,4 @@
+import React, { useState } from 'react';
 import {
   Card,
   Avatar,
@@ -11,11 +12,10 @@ import {
   TextInput,
   Stepper,
 } from '@mantine/core';
+import { useDisclosure } from '@mantine/hooks';
+import { IconUpload, IconX, IconUserCircle, IconAt } from '@tabler/icons-react';
+import { Dropzone, IMAGE_MIME_TYPE } from '@mantine/dropzone';
 import classes from './Profile.module.css';
-import { useDisclosure, useInputState, useListState } from '@mantine/hooks';
-import { IconUpload, IconPhoto, IconX, IconUserCircle, IconAt } from '@tabler/icons-react';
-import { Dropzone, DropzoneProps, IMAGE_MIME_TYPE } from '@mantine/dropzone';
-import { useState } from 'react';
 
 export default function Profile() {
   const [opened, { open, close }] = useDisclosure(false);

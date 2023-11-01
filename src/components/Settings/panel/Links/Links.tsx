@@ -1,3 +1,4 @@
+import React from 'react';
 import {
   Card,
   Text,
@@ -6,7 +7,6 @@ import {
   Anchor,
   Group,
   useMantineTheme,
-  Container,
   Center,
   Stack,
   Flex,
@@ -25,7 +25,6 @@ import {
   IconBrandWindows,
   IconBrandDiscord,
   IconBrandFacebook,
-  IconSelect,
   IconSelector,
 } from '@tabler/icons-react';
 import classes from './Links.module.css';

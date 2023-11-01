@@ -9,7 +9,7 @@
   flex-direction: column;
   height: fit-content;
   width: fit-content;
-  color: light-dark(var(--mantine-color-dark-3), var(--mantine-color-white-3));
+  color: light-dark(#4e5058, var(--mantine-color-white-3));
 }
 
 .list {

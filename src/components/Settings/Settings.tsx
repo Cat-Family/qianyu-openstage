@@ -8,6 +8,7 @@ import {
   Space,
   Tabs,
   Text,
+  Title,
   rem,
 } from '@mantine/core';
 import {
@@ -27,6 +28,7 @@ import Links from './panel/Links/Links';
 import { SettingsTabsEnum } from '@/ts/types/enums/settingsTabs.enum';
 import { TabsDataType } from '@/ts/types/types/tabsData.type';
 import classes from './Settings.module.css';
+import Devices from './panel/Devices/Devices';
 
 const Settings = ({ context, id, innerProps }: ContextModalProps<{ modalBody: string }>) => {
   const iconStyle = { width: rem(12), height: rem(12) };
@@ -41,15 +43,16 @@ const Settings = ({ context, id, innerProps }: ContextModalProps<{ modalBody: st
       element: <Profile />,
     },
     {
-      title: '账户安全',
+      title: '安全',
       value: 'security',
       icon: <IconShieldLock style={iconStyle} />,
       element: <Security />,
     },
     {
-      title: '我的设备',
+      title: '设备',
       value: 'devices',
       icon: <IconDevicesCog style={iconStyle} />,
+      element: <Devices />,
     },
     {
       title: '连接',
@@ -64,7 +67,7 @@ const Settings = ({ context, id, innerProps }: ContextModalProps<{ modalBody: st
   ];
 
   return (
-    <Container size="md" px="lg" pos="relative">
+    <Container size={800} px="lg" pos="relative">
       <Tabs
         variant="outline"
         className={classes.root}
@@ -108,8 +111,11 @@ const Settings = ({ context, id, innerProps }: ContextModalProps<{ modalBody: st
                 className={classes.panel}
                 value={item.value as string}
               >
-                <ScrollArea h="calc(100vh - 1rem)" pl={6} offsetScrollbars scrollbarSize={3}>
-                  <Space h="xs" />
+                <ScrollArea type="never" h="calc(100vh - 1rem)" pl={6}>
+                  <Title fz="lg" fw={600} order={2}>
+                    {item.title}
+                  </Title>
+                  <Space h="md" />
                   {item.element}
                 </ScrollArea>
               </Tabs.Panel>
@@ -123,7 +129,7 @@ const Settings = ({ context, id, innerProps }: ContextModalProps<{ modalBody: st
         onClick={() => context.closeContextModal(id)}
       >
         <IconSquareRoundedX />
-        <Text fz="16px" fw={600}>
+        <Text fz="13px" fw={600}>
           ESC
         </Text>
       </ActionIcon>
