@@ -67,7 +67,7 @@ export default function Links() {
               w="75%"
               mt="md"
               cols={{ base: 1, sm: 3, lg: 4 }}
-              spacing={{ base: 10, sm: 'xl' }}
+              spacing={{ base: 10, sm: 'md' }}
               verticalSpacing={{ base: 'md', sm: 'xl' }}
             >
               {items}
@@ -93,11 +93,11 @@ export default function Links() {
           <Stack p="md" className={classes.list}>
             <Flex justify="space-between" wrap="wrap">
               <Text>快捷登陆</Text>
-              <Switch />
+              <Switch onLabel="ON" offLabel="OFF" className={classes.switch} size="lg" />
             </Flex>
             <Flex justify="space-between" wrap="wrap">
               <Text>公开资料</Text>
-              <Switch />
+              <Switch onLabel="ON" offLabel="OFF" className={classes.switch} size="lg" />
             </Flex>
           </Stack>
         </Card>
@@ -117,11 +117,11 @@ export default function Links() {
           <Stack p="md" className={classes.list}>
             <Flex justify="space-between" wrap="wrap">
               <Text>快捷登陆</Text>
-              <Switch />
+              <Switch onLabel="ON" offLabel="OFF" className={classes.switch} size="lg" />
             </Flex>
             <Flex justify="space-between" wrap="wrap">
               <Text>公开资料</Text>
-              <Switch />
+              <Switch onLabel="ON" offLabel="OFF" className={classes.switch} size="lg" />
             </Flex>
           </Stack>
         </Card>
@@ -141,11 +141,11 @@ export default function Links() {
           <Stack p="md" className={classes.list}>
             <Flex justify="space-between">
               <Text>快捷登陆</Text>
-              <Switch />
+              <Switch onLabel="ON" offLabel="OFF" className={classes.switch} size="lg" />
             </Flex>
             <Flex justify="space-between">
               <Text>公开资料</Text>
-              <Switch />
+              <Switch onLabel="ON" offLabel="OFF" className={classes.switch} size="lg" />
             </Flex>
           </Stack>
         </Card>

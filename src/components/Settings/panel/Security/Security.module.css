@@ -1,0 +1,44 @@
+.text {
+  font-size: 14px;
+  font-weight: 500;
+  white-space: pre-wrap;
+  user-select: none;
+  color: light-dark(#212121, #bababa);
+}
+
+.title {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  user-select: none;
+  color: light-dark(#313235, #cdcdcd);
+}
+
+.card {
+  background-color: var(--mantine-color-body);
+}
+
+.item {
+  & + & {
+    padding-top: var(--mantine-spacing-sm);
+    margin-top: var(--mantine-spacing-sm);
+    border-top: rem(1px) solid light-dark(var(--mantine-color-gray-2) var(--mantine-color-dark-4));
+  }
+
+  @media (max-width: $mantine-breakpoint-xs) {
+    flex-direction: column;
+    flex-wrap: wrap;
+  }
+}
+
+.switch {
+  & * {
+    cursor: pointer;
+  }
+}
+
+.flex {
+  @media (max-width: $mantine-breakpoint-xs) {
+    flex-wrap: wrap;
+  }
+}

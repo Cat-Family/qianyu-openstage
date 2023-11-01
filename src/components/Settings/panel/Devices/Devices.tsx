@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import {
   Avatar,
-  Box,
   Button,
   CloseButton,
   Divider,

@@ -3,9 +3,7 @@
 }
 
 .title {
-  font-family:
-    Greycliff CF,
-    var(--mantine-font-family);
+
   font-weight: 700;
 }
 
@@ -30,4 +28,10 @@
 
 .list {
   background-color: light-dark(var(--mantine-color-white), var(--mantine-color-dark-7));
+}
+
+.switch {
+  & * {
+    cursor: pointer;
+  }
 }
