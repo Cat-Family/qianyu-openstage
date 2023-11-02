@@ -1,22 +1,21 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
+import { Stack, Text } from '@mantine/core';
 import useFetch from '../../hooks/useFetch';
-
-const type_github = import.meta.env.VITE_THIRD_AUTH_TYPE_GITHUB;
-const type_alipay = import.meta.env.VITE_THIRD_AUTH_TYPE_ALIPAY;
 
 const Oauth = () => {
   const { search } = useLocation();
   const params = new URLSearchParams(search);
   const channel = params.get('channel');
-  let authCode: string | null = '';
-  if (type_alipay === channel) {
-    authCode = params.get('auth_code');
-  } else if (type_github === channel) {
-    authCode = params.get('code');
-  }
+  const authCode = params.get('auth_code') || params.get('code');
+  const [counter, setCounter] = useState(5);
+  const [startCounter, setStartCounter] = useState(false);
 
-  const { fetchData, data, error } = useFetch(false, false, true);
+  window.addEventListener('message', (e) => {
+    console.log(e.data);
+  });
+
+  const { fetchData, loading, error, data } = useFetch(true);
   useEffect(() => {
     if (authCode) {
       fetchData('third/sso/login.action', {
@@ -25,10 +24,44 @@ const Oauth = () => {
           authCode,
           channel,
         }),
-      }).then((r) => {});
+      });
     }
   }, [authCode]);
-  return <div>跳转中...</div>;
+
+  useEffect(() => {
+    if (data && !error) {
+      window.parent.postMessage(data, '*');
+      setStartCounter(true);
+    }
+    () => setStartCounter(false);
+  }, [data, error]);
+
+  useEffect(() => {
+    let counterMutable = counter;
+    let timer: NodeJS.Timeout;
+
+    if (startCounter) {
+      setInterval(() => {
+        counterMutable -= 1;
+        counterMutable >= 0 ? setCounter(counterMutable) : window.close();
+      }, 1000);
+    }
+    return () => clearInterval(timer);
+  }, [startCounter, counter]);
+  return (
+    <div>
+      {loading ? (
+        'loading'
+      ) : error ? (
+        'error'
+      ) : (
+        <Stack>
+          <Text>Login sccussfull</Text>
+          <Text>This window will closed by {counter} seconds automatically</Text>
+        </Stack>
+      )}
+    </div>
+  );
 };
 
 export default Oauth;

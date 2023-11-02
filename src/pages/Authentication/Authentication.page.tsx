@@ -25,6 +25,12 @@ const redirect_uri_alipay = import.meta.env.VITE_REDIRECT_URI_ALIPAY;
 const alipay_app_id = import.meta.env.VITE_ALIPAY_APP_ID;
 const windowFeatures = 'left=600,top=200,width=500,height=500,scrollbars,status';
 
+const OauthList = {
+  alipay: `https://openauth.alipay.com/oauth2/publicAppAuthorize.htm?app_id=${alipay_app_id}&scope=auth_user&redirect_uri=
+${redirect_uri_alipay}&state=init`,
+  github: `https://github.com/login/oauth/authorize?client_id=${github_client_id}&scope=user:email&redirect_uri=${redirect_uri_github}`,
+};
+
 export function Authentication() {
   const form = useForm({
     initialValues: {
@@ -38,6 +44,16 @@ export function Authentication() {
 
   const [visible, { toggle }] = useDisclosure(true);
   const { fetchLogin, loading } = useAuthentication(toggle);
+
+  const handleOauth = ({ type }: { type: 'github' | 'alipay' }) => {
+    const oauthWindow = window.open(OauthList[type], type, windowFeatures);
+
+    oauthWindow?.postMessage(type, '*');
+
+    oauthWindow?.addEventListener('message', (e) => {
+      console.log(e.data);
+    });
+  };
 
   return (
     <div className={classes.wrapper}>
@@ -91,13 +107,7 @@ export function Authentication() {
           <Divider label="Or continue with other" labelPosition="center" my="lg" />
           <Group grow mb="md" mt="md">
             <ActionIcon
-              onClick={() => {
-                window.open(
-                  `https://github.com/login/oauth/authorize?client_id=${github_client_id}&scope=user:email&redirect_uri=${redirect_uri_github}`,
-                  'Github',
-                  windowFeatures
-                );
-              }}
+              onClick={() => handleOauth({ type: 'github' })}
               variant="filled"
               color="dark"
               radius="xl"
@@ -105,15 +115,7 @@ export function Authentication() {
               <IconBrandGithub size="1rem" />
             </ActionIcon>
             <ActionIcon
-              onClick={async () => {
-                console.log(alipay_app_id);
-                window.open(
-                  `https://openauth.alipay.com/oauth2/publicAppAuthorize.htm?app_id=${alipay_app_id}&scope=auth_user&redirect_uri=
-${redirect_uri_alipay}&state=init`,
-                  'Alipay',
-                  windowFeatures
-                );
-              }}
+              onClick={async () => handleOauth({ type: 'alipay' })}
               variant="filled"
               radius="xl"
             >
