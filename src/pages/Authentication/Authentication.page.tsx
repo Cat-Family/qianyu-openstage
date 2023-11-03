@@ -23,7 +23,6 @@ const github_client_id = import.meta.env.VITE_GITHUB_CLIENT_ID;
 const redirect_uri_github = import.meta.env.VITE_REDIRECT_URI_GITHUB;
 const redirect_uri_alipay = import.meta.env.VITE_REDIRECT_URI_ALIPAY;
 const alipay_app_id = import.meta.env.VITE_ALIPAY_APP_ID;
-const windowFeatures = 'left=600,top=200,width=500,height=500,scrollbars,status';
 
 const OauthList = {
   alipay: `https://openauth.alipay.com/oauth2/publicAppAuthorize.htm?app_id=${alipay_app_id}&scope=auth_user&redirect_uri=
@@ -46,13 +45,7 @@ export function Authentication() {
   const { fetchLogin, loading } = useAuthentication(toggle);
 
   const handleOauth = ({ type }: { type: 'github' | 'alipay' }) => {
-    const oauthWindow = window.open(OauthList[type], type, windowFeatures);
-
-    oauthWindow?.postMessage(type, '*');
-
-    oauthWindow?.addEventListener('message', (e) => {
-      console.log(e.data);
-    });
+    window.location.href = OauthList[type];
   };
 
   return (

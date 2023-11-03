@@ -10,9 +10,11 @@ import {
 import { useNavigate } from 'react-router-dom';
 import { openContextModal } from '@mantine/modals';
 import { searchHandlers } from '../Search';
+import useCookie from '../../hooks/useCookie';
 
 export function UserMenu() {
   const navigate = useNavigate();
+  const [value, updateCookie, deleteCookie] = useCookie('qy');
 
   return (
     <Menu
@@ -90,7 +92,10 @@ export function UserMenu() {
         </Menu.Item>
         <Menu.Item
           leftSection={<IconLogout style={{ width: rem(16), height: rem(16) }} stroke={1.5} />}
-          onClick={() => navigate('/users/login')}
+          onClick={() => {
+            deleteCookie();
+            navigate('/users/login');
+          }}
         >
           Logout
         </Menu.Item>

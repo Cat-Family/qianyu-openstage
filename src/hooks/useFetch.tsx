@@ -13,8 +13,6 @@ interface State<T> {
   loading: boolean;
 }
 
-type Cache<T> = { [url: string]: T };
-
 // discriminated union type
 type Action<T> =
   | { type: 'loading' }
@@ -26,8 +24,6 @@ function useFetch<T extends { code: number; message: string }>(
   showSuccessNotification: boolean = false,
   showAsyncNotification: boolean = false
 ): State<T> {
-  const cache = useRef<Cache<T>>({});
-
   // Used to prevent state update if the component is unmounted
 
   const initialState: State<T> = {
@@ -56,11 +52,6 @@ function useFetch<T extends { code: number; message: string }>(
   const fetchData = async (url: FetchDataParams[0], options: FetchDataParams[1]) => {
     dispatch({ type: 'loading' });
 
-    // If a cache exists for this url, return it
-    // if (cache.current[url]) {
-    //   dispatch({ type: 'fetched', payload: cache.current[url] })
-    //   return
-    // }
     let id;
     if (showAsyncNotification) {
       id = notifications.show({
@@ -93,7 +84,6 @@ function useFetch<T extends { code: number; message: string }>(
         });
       }
 
-      cache.current[url] = data;
       showSuccessNotification &&
         notifications.show({
           withCloseButton: true,

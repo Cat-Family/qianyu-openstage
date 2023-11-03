@@ -10,6 +10,7 @@ interface HeaderProps {
 }
 
 const Header = ({ opened, toggle }: HeaderProps) => {
+  let Data;
   return (
     <>
       <AppShell.Header className={cx(classes.header, RemoveScroll.classNames.fullWidth)}>

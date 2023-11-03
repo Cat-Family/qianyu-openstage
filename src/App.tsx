@@ -2,6 +2,7 @@ import React from 'react';
 import { DirectionProvider, MantineProvider } from '@mantine/core';
 import { Notifications } from '@mantine/notifications';
 import { ModalsProvider } from '@mantine/modals';
+import { RecoilRoot } from 'recoil';
 import SettingsModal from './context/SettingsModalContext';
 import { Router } from './Router';
 import { HotKeysHandler } from './components/HotKeysHandler';
@@ -14,15 +15,17 @@ import '@mantine/dropzone/styles.css';
 
 export default function App() {
   return (
-    <DirectionProvider initialDirection="ltr" detectDirection={false}>
-      <MantineProvider theme={theme}>
-        <ModalsProvider modals={{ settings: SettingsModal }}>
-          <Search />
-          <Notifications />
-          <HotKeysHandler />
-          <Router />
-        </ModalsProvider>
-      </MantineProvider>
-    </DirectionProvider>
+    <RecoilRoot>
+      <DirectionProvider initialDirection="ltr" detectDirection={false}>
+        <MantineProvider theme={theme}>
+          <ModalsProvider modals={{ settings: SettingsModal }}>
+            <Search />
+            <Notifications />
+            <HotKeysHandler />
+            <Router />
+          </ModalsProvider>
+        </MantineProvider>
+      </DirectionProvider>
+    </RecoilRoot>
   );
 }
