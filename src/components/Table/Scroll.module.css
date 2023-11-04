@@ -1,4 +1,4 @@
 .root {
-  height: calc(100vh - rem(210) - var(--app-shell-header-offset));
-  width: calc(80vw - var(--app-shell-navbar-offset, 0px));
+  height: calc(100vh - rem(325) - var(--app-shell-header-offset));
+  width: calc(90vw - var(--app-shell-navbar-offset, 0px));
 }

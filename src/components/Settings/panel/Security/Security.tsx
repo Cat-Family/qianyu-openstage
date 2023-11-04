@@ -136,9 +136,16 @@ const Security = () => {
         Change password
       </Title>
       <Divider />
-      <PasswordInput size="xs" label="Old password" placeholder="Your password" required />
+      <PasswordInput
+        maw={540}
+        size="xs"
+        label="Old password"
+        placeholder="Your password"
+        required
+      />
       <PasswordInput
         size="xs"
+        maw={540}
         value={value}
         onChange={setValue}
         placeholder="Your password"
@@ -146,8 +153,14 @@ const Security = () => {
         required
       />
 
-      <PasswordInput size="xs" placeholder="Your password" label="Confirm new password" required />
-      <Box>
+      <PasswordInput
+        maw={540}
+        size="xs"
+        placeholder="Your password"
+        label="Confirm new password"
+        required
+      />
+      <Box maw={540}>
         <Group gap={5} grow mt="xs" mb="md">
           {bars}
         </Group>
@@ -156,7 +169,9 @@ const Security = () => {
         {checks}
       </Box>
 
-      <Button variant="outline">Update password</Button>
+      <Button maw={300} variant="outline">
+        Update password
+      </Button>
 
       <Flex justify="space-between" align="center">
         <Title className={classes.title} order={3}>

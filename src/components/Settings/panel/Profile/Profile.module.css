@@ -27,3 +27,11 @@
   left: calc(50% - rem(125px));
   bottom: rem(-30px);
 }
+
+.email {
+  flex-wrap: nowrap;
+
+  @media (max-width: $mantine-breakpoint-md) {
+    flex-wrap: wrap;
+  }
+}

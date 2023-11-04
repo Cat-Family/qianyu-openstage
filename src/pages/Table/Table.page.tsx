@@ -5,7 +5,6 @@ import {
   Box,
   Breadcrumbs,
   Center,
-  Container,
   Drawer,
   Group,
   Text,
@@ -192,14 +191,21 @@ const TablePage = () => {
           <ActionIcon
             variant="subtle"
             color="gray"
-            onClick={() => {
+            onClick={(e) => {
+              e.stopPropagation();
               open();
               setSelectItem(item);
             }}
           >
             <IconPencil style={{ width: rem(16), height: rem(16) }} stroke={1.5} />
           </ActionIcon>
-          <ActionIcon variant="subtle" color="red">
+          <ActionIcon
+            variant="subtle"
+            color="red"
+            onClick={(e) => {
+              e.stopPropagation();
+            }}
+          >
             <IconTrash style={{ width: rem(16), height: rem(16) }} stroke={1.5} />
           </ActionIcon>
         </Group>
@@ -215,24 +221,24 @@ const TablePage = () => {
           TablePage
         </Title>
       </Box>
-      <Center style={{ flexDirection: 'column' }}>
+      <Center mx="5vw" pt="lg">
         <Table<DataInterface>
           columns={deviceColumns}
           data={deviceData.map((item) => ({ ...item, operation: item }))}
         />
-        <Drawer
-          position="right"
-          opened={opened}
-          onClose={close}
-          withCloseButton={false}
-          overlayProps={{ backgroundOpacity: 0.5, blur: 4 }}
-        >
-          <Text>{selectItem?.id}</Text>
-          <Text>{selectItem?.device}</Text>
-          <Text>{selectItem?.status}</Text>
-          <Text>{selectItem?.times}</Text>
-        </Drawer>
       </Center>
+      <Drawer
+        position="right"
+        opened={opened}
+        onClose={close}
+        withCloseButton={false}
+        overlayProps={{ backgroundOpacity: 0.5, blur: 4 }}
+      >
+        <Text>{selectItem?.id}</Text>
+        <Text>{selectItem?.device}</Text>
+        <Text>{selectItem?.status}</Text>
+        <Text>{selectItem?.times}</Text>
+      </Drawer>
     </>
   );
 };

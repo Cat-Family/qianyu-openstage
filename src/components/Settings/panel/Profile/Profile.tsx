@@ -66,17 +66,20 @@ export default function Profile() {
       </Card>
 
       <Title order={3}>Email</Title>
-      <FocusTrap active={active}>
-        <TextInput
-          type="email"
-          leftSection={<IconAt size={16} />}
-          style={{ flex: 1 }}
-          label="添加电子邮件"
-        />
-      </FocusTrap>
-      <Button style={{ alignSelf: 'end' }} w={80}>
-        Add
-      </Button>
+      <Flex className={classes.email} gap="lg">
+        <FocusTrap active={active}>
+          <TextInput
+            miw={120}
+            type="email"
+            leftSection={<IconAt size={16} />}
+            style={{ flex: 1 }}
+            label="添加电子邮件"
+          />
+        </FocusTrap>
+        <Button style={{ alignSelf: 'end' }} w={80}>
+          Add
+        </Button>
+      </Flex>
       <Modal
         opened={opened}
         onClose={close}
