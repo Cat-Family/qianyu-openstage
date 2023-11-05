@@ -18,15 +18,20 @@ export function Router() {
 
       {/* store front routes */}
       <Route path="/" element={<Shell />}>
-        <Route element={<RequireAuth allowedRoles={[29999]} />}>
-          <Route
-            index
-            element={
-              <React.Suspense fallback={<div>loading</div>}>
-                <TablePage />
-              </React.Suspense>
-            }
-          />
+        <Route element={<RequireAuth allowedRoles={['1719573728377450498']} />}>
+          <Route index element={<TablePage />} />
+        </Route>
+
+        <Route element={<RequireAuth allowedRoles={['1719575552065024002']} />}>
+          <Route path="/resources/menuResource" element={<Box>menuResource</Box>} />
+        </Route>
+
+        <Route element={<RequireAuth allowedRoles={['1719578100662546434']} />}>
+          <Route path="/resources/linkResource" element={<Box>linkResource</Box>} />
+        </Route>
+
+        <Route element={<RequireAuth allowedRoles={['1719579906985701377']} />}>
+          <Route path="/resources/URLResource" element={<Box>URLResource</Box>} />
         </Route>
       </Route>
 

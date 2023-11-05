@@ -94,7 +94,7 @@ export function UserMenu() {
           leftSection={<IconLogout style={{ width: rem(16), height: rem(16) }} stroke={1.5} />}
           onClick={() => {
             deleteCookie();
-            navigate('/users/login');
+            navigate('/users/auth');
           }}
         >
           Logout

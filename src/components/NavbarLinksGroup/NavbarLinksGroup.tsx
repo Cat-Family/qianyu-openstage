@@ -1,37 +1,50 @@
 import React, { useState } from 'react';
 import { Group, Box, Collapse, ThemeIcon, Text, UnstyledButton, rem } from '@mantine/core';
-import { Icon2fa, IconChevronRight } from '@tabler/icons-react';
+import { IconCategory2, IconChevronRight, IconDashboard } from '@tabler/icons-react';
+import { Link, useNavigate } from 'react-router-dom';
 import classes from './NavbarLinksGroup.module.css';
 
+const IconMap = {
+  IconDashboard: <IconDashboard style={{ width: rem(18), height: rem(18) }} />,
+  IconCategory2: <IconCategory2 style={{ width: rem(18), height: rem(18) }} />,
+};
 interface LinksGroupProps {
-  icon: React.FC<any>;
+  id: string;
+  icon: keyof typeof IconMap;
   menuName: string;
+  path?: string;
   initiallyOpened?: boolean;
-  children?: { label: string; link: string }[];
+  children?: { menuName: string; path: string; id: string }[];
 }
 
-export function LinksGroup({ icon: Icon, menuName, initiallyOpened, children }: LinksGroupProps) {
-  const hasLinks = Array.isArray(children);
+export function LinksGroup({
+  id,
+  icon,
+  path,
+  menuName,
+  initiallyOpened,
+  children,
+}: LinksGroupProps) {
+  const hasLinks = children?.length && children?.length > 0;
   const [opened, setOpened] = useState(initiallyOpened || false);
+  const navigate = useNavigate();
   const items = (hasLinks ? children : []).map((link: any) => (
-    <Text<'a'>
-      component="a"
-      className={classes.link}
-      href={link?.link}
-      key={link.id}
-      onClick={(event) => event.preventDefault()}
-    >
+    <Text<typeof Link> component={Link} className={classes.link} to={link?.path} key={link.id}>
       {link.menuName}
     </Text>
   ));
 
   return (
     <>
-      <UnstyledButton onClick={() => setOpened((o) => !o)} className={classes.control}>
+      <UnstyledButton
+        key={id}
+        onClick={() => (path ? navigate(path) : setOpened((o) => !o))}
+        className={classes.control}
+      >
         <Group justify="space-between" gap={0}>
           <Box style={{ display: 'flex', alignItems: 'center' }}>
             <ThemeIcon variant="light" size={30}>
-              <Icon2fa style={{ width: rem(18), height: rem(18) }} />
+              {IconMap[icon]}
             </ThemeIcon>
             <Box ml="md">{menuName}</Box>
           </Box>

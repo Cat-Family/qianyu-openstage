@@ -2,6 +2,7 @@ import React, { useReducer, useRef } from 'react';
 import { rem } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
 import { IconCheck, IconX } from '@tabler/icons-react';
+import { useNavigate } from 'react-router-dom';
 import { FetchData, FetchDataParams } from '../ts/types/types/fetchData.type';
 
 const BASE_URL: string = '/qy/api/v1/os/';
@@ -43,10 +44,11 @@ function useFetch<T extends { code: number; message: string }>(
       case 'error':
         return { ...initialState, loading: false, error: action.payload };
       default:
-        return state;
+        return initialState;
     }
   };
 
+  const navigate = useNavigate();
   const [state, dispatch] = useReducer(fetchReducer, initialState);
 
   const fetchData = async (url: FetchDataParams[0], options: FetchDataParams[1]) => {
@@ -78,6 +80,10 @@ function useFetch<T extends { code: number; message: string }>(
       const data = await response.json();
 
       if (data.code !== 200) {
+        if (data.code === 401) {
+          navigate('/users/auth');
+        }
+
         throw Object({
           name: data.code,
           message: data.message,

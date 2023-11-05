@@ -14,8 +14,8 @@ import {
   LoadingOverlay,
 } from '@mantine/core';
 import { useForm } from '@mantine/form';
+import md5 from 'md5';
 import { IconBrandAlipay, IconBrandGithub } from '@tabler/icons-react';
-import { useDisclosure } from '@mantine/hooks';
 import useAuthentication from '../../hooks/actions/useLogin';
 import classes from './Authentication.page.module.css';
 
@@ -41,8 +41,7 @@ export function Authentication() {
     },
   });
 
-  const [visible, { toggle }] = useDisclosure(true);
-  const { fetchLogin, loading } = useAuthentication(toggle);
+  const { fetchLogin, loading } = useAuthentication();
 
   const handleOauth = ({ type }: { type: 'github' | 'alipay' }) => {
     window.location.href = OauthList[type];
@@ -66,13 +65,13 @@ export function Authentication() {
                 method: 'POST',
                 body: JSON.stringify({
                   userAccount: form.values.account,
-                  userPwd: 'e10adc3949ba59abbe56e057f20f883e' || form.values.password,
+                  userPwd: md5(form.values.password),
                 }),
               })
           )}
         >
           <LoadingOverlay
-            visible={visible}
+            visible={loading}
             zIndex={1000}
             overlayProps={{ radius: 'sm', blur: 2 }}
           />

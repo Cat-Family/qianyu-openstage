@@ -1,16 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { AppShell, ScrollArea } from '@mantine/core';
-
+import useCookie from '../../../hooks/useCookie';
 import { LinksGroup } from '../../NavbarLinksGroup/NavbarLinksGroup';
 import useFetch from '../../../hooks/useFetch';
 import classes from './Navbar.module.css';
 
 const Navbar = () => {
   const [links, setLinks] = useState();
-  const { fetchData, data } = useFetch<any>();
+  const { fetchData, data } = useFetch<any>(false, false, false);
+  const [value] = useCookie('qy');
 
   useEffect(() => {
-    fetchData('/menu/loadMenuTree', { method: 'POST' });
+    value && fetchData('/menu/loadMenuTree', { method: 'POST' });
   }, []);
 
   useEffect(() => {

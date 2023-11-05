@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { modals } from '@mantine/modals';
 import { Flex, Text, PinInput, Button } from '@mantine/core';
+import { useNavigate } from 'react-router-dom';
 import useFetch from '../useFetch';
 import { Login } from '../../ts/types/interface/login.interface';
 import { FetchData } from '../../ts/types/types/fetchData.type';
@@ -10,15 +11,16 @@ type UseAuthentication = {
   loading: boolean;
 };
 
-const useAuthentication = (toggle: () => void): UseAuthentication => {
+const useAuthentication = (): UseAuthentication => {
   const [code, setCode] = useState<string>('');
+  const navigate = useNavigate();
 
   const { fetchData: fetchLogin, data: loginData, loading } = useFetch<Login>(true);
 
   const { fetchData: twoFALogin, data: twoFARes, loading: towFALoading } = useFetch();
 
   useEffect(() => {
-    loginData?.data?.twoFA &&
+    if (loginData?.data?.twoFA) {
       modals.open({
         id: '2FA-modal',
         title: 'Two-factor authentication',
@@ -71,14 +73,12 @@ const useAuthentication = (toggle: () => void): UseAuthentication => {
           </>
         ),
       });
-  }, [loginData]);
-
-  useEffect(() => {
-    if (loading) {
-      toggle();
     }
-    toggle();
-  }, [loading]);
+
+    if (loginData?.code === 201) {
+      navigate('/');
+    }
+  }, [loginData]);
 
   return { fetchLogin, loading };
 };
