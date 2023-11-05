@@ -34,9 +34,11 @@ import multiSelectClasses from './multiSelectClasses.module.css';
 
 interface TableProps<T> {
   columns: {
-    title: string;
-    sorted?: boolean;
-    dataIndex: keyof T;
+    name: string;
+    sortable?: boolean;
+    searchable?: boolean;
+    defaultShow?: boolean;
+    uid: keyof T;
     render?: (item: any) => ReactElement;
   }[];
   data: T[];
@@ -45,17 +47,17 @@ interface TableProps<T> {
 interface ThProps {
   children: React.ReactNode;
   reversed?: boolean;
-  sorted: boolean;
+  sortable: boolean;
   onSort?(): void;
-  isSorted?: boolean;
+  isSortable?: boolean;
 }
 
-function Th({ children, reversed, sorted, onSort, isSorted }: ThProps) {
-  const Icon = sorted ? (reversed ? IconChevronUp : IconChevronDown) : IconSelector;
+function Th({ children, reversed, sortable, onSort, isSortable }: ThProps) {
+  const Icon = sortable ? (reversed ? IconChevronUp : IconChevronDown) : IconSelector;
 
   return (
     <MantineTable.Th>
-      {isSorted ? (
+      {isSortable ? (
         <UnstyledButton onClick={onSort} className={classes.control}>
           <Group justify="space-between">
             <Text fw={500} fz="sm">
@@ -75,16 +77,18 @@ function Th({ children, reversed, sorted, onSort, isSorted }: ThProps) {
   );
 }
 
-function Table<T extends { id: string }>({ columns, data }: TableProps<T>) {
+function Table<T extends { id: number }>({ columns, data }: TableProps<T>) {
   const [sortedData, setSortedData] = useState(data);
-  const [searchDataIndex, setSearchDataIndex] = useState<string>(columns[0].title);
-  const [renderColumns, setRenderColumns] = useState(columns.map((item) => item.title));
+  const [searchDataIndex, setSearchDataIndex] = useState<string>(columns[0].name);
+  const [renderColumns, setRenderColumns] = useState(
+    columns.filter((item) => item.defaultShow).map((item) => item.name)
+  );
   const [sortBy, setSortBy] = useState<keyof T | null>(null);
   const [reverseSortDirection, setReverseSortDirection] = useState(false);
-  const [selection, setSelection] = useState<string[]>([]);
+  const [selection, setSelection] = useState<number[]>([]);
   const [scrolled, setScrolled] = useState(false);
 
-  const toggleRow = (id: string) =>
+  const toggleRow = (id: number) =>
     setSelection((current) =>
       current.includes(id) ? current.filter((item) => item !== id) : [...current, id]
     );
@@ -99,10 +103,10 @@ function Table<T extends { id: string }>({ columns, data }: TableProps<T>) {
 
   return (
     <Stack gap="sm">
-      <Flex gap="lg" w="100%" align="center">
+      <Flex visibleFrom="md" gap="lg" w="100%" align="center" wrap="wrap">
         <Select
           w={150}
-          data={columns.filter((item) => !item.render).map((item) => item.title)}
+          data={columns.filter((item) => item.searchable).map((item) => item.name)}
           defaultValue={searchDataIndex}
           checkIconPosition="right"
           allowDeselect={false}
@@ -126,7 +130,7 @@ function Table<T extends { id: string }>({ columns, data }: TableProps<T>) {
             w={150}
             classNames={multiSelectClasses}
             checkIconPosition="right"
-            data={columns.map((item) => item.title)}
+            data={columns.map((item) => item.name)}
             placeholder="Columns"
             defaultValue={renderColumns}
             onChange={setRenderColumns}
@@ -177,15 +181,15 @@ function Table<T extends { id: string }>({ columns, data }: TableProps<T>) {
               </MantineTable.Td>
               {columns.map(
                 (item, index) =>
-                  renderColumns.includes(item.title) && (
+                  renderColumns.includes(item.name) && (
                     <Th
                       key={index}
-                      isSorted={item.sorted}
-                      sorted={sortBy === item.dataIndex}
+                      isSortable={item.sortable}
+                      sortable={sortBy === item.uid}
                       reversed={reverseSortDirection}
-                      onSort={() => setSorting(item.dataIndex)}
+                      onSort={() => setSorting(item.uid)}
                     >
-                      {item.title}
+                      {item.name}
                     </Th>
                   )
               )}
@@ -207,15 +211,15 @@ function Table<T extends { id: string }>({ columns, data }: TableProps<T>) {
                   </MantineTable.Td>
                   {columns.map(
                     (column) =>
-                      renderColumns.includes(column.title) &&
+                      renderColumns.includes(column.name) &&
                       (column.render ? (
-                        <MantineTable.Td key={item.id + column.dataIndex.toString()}>
-                          {column.render(item[column.dataIndex])}
+                        <MantineTable.Td key={item.id + column.uid.toString()}>
+                          {column.render(item[column.uid])}
                         </MantineTable.Td>
                       ) : (
-                        <MantineTable.Td key={item.id + column.dataIndex.toString()}>
+                        <MantineTable.Td key={item.id + column.uid.toString()}>
                           <Text fw={400} fz="sm">
-                            {item[column.dataIndex] as ReactElement}
+                            {item[column.uid] as ReactElement}
                           </Text>
                         </MantineTable.Td>
                       ))

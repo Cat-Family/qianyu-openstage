@@ -2,10 +2,13 @@ import React, { useState } from 'react';
 import {
   ActionIcon,
   Anchor,
+  Avatar,
+  Badge,
   Box,
   Breadcrumbs,
   Center,
   Drawer,
+  Flex,
   Group,
   Text,
   Title,
@@ -13,127 +16,21 @@ import {
 } from '@mantine/core';
 import { IconHome, IconPencil, IconTrash } from '@tabler/icons-react';
 import { useDisclosure } from '@mantine/hooks';
+import { users, statusOptions } from './data';
 import { Table } from '../../components/Table';
 import classes from './Table.module.css';
 
 interface DataInterface {
-  id: string;
-  device: string;
-  status: number;
-  times: string;
-  operation: Object;
+  id: number;
+  name: string;
+  role: string;
+  team: string;
+  status: string;
+  age: string;
+  avatar: string;
+  email: string;
+  actions: any;
 }
-
-const deviceData = [
-  {
-    id: '1',
-    device: '无人巡航机',
-    status: 1,
-    times: '1次',
-  },
-  {
-    id: '2',
-    device: '无人巡航机',
-    status: 2,
-    times: '1次',
-  },
-  {
-    id: '3',
-    device: '无人巡航机',
-    status: 3,
-    times: '1次',
-  },
-  {
-    id: '4',
-    device: '无人巡航机',
-    status: 1,
-    times: '1次',
-  },
-  {
-    id: '5',
-    device: '无人巡航机',
-    status: 2,
-    times: '1次',
-  },
-  {
-    id: '6',
-    device: '无人巡航机',
-    status: 3,
-    times: '1次',
-  },
-  {
-    id: '7',
-    device: '无人巡航机',
-    status: 1,
-    times: '1次',
-  },
-  {
-    id: '8',
-    device: '无人巡航机',
-    status: 2,
-    times: '1次',
-  },
-  {
-    id: '9',
-    device: '无人巡航机',
-    status: 3,
-    times: '1次',
-  },
-  {
-    id: '10',
-    device: '无人巡航机',
-    status: 1,
-    times: '1次',
-  },
-  {
-    id: '11',
-    device: '无人巡航机',
-    status: 2,
-    times: '1次',
-  },
-  {
-    id: '12',
-    device: '无人巡航机',
-    status: 3,
-    times: '1次',
-  },
-  {
-    id: '13',
-    device: '无人巡航机',
-    status: 1,
-    times: '1次',
-  },
-  {
-    id: '14',
-    device: '无人巡航机',
-    status: 2,
-    times: '1次',
-  },
-  {
-    id: '15',
-    device: '无人巡航机',
-    status: 3,
-    times: '1次',
-  },
-  {
-    id: '16',
-    device: '无人巡航机',
-    status: 1,
-    times: '1次',
-  },
-  {
-    id: '17',
-    device: '无人巡航机',
-    status: 2,
-    times: '1次',
-  },
-  {
-    id: '18',
-    device: '无人巡航机',
-    status: 3,
-    times: '1次',
-  },
-];
 
 const items = [
   <Anchor href="#" size="sm" key="home">
@@ -148,44 +45,79 @@ const TablePage = () => {
   const [opened, { open, close }] = useDisclosure(false);
   const [selectItem, setSelectItem] = useState<DataInterface | undefined>();
 
-  const deviceColumns: {
-    title: string;
-    dataIndex: keyof DataInterface;
-    sorted?: boolean;
+  const usersColumns: {
+    name: string;
+    uid: keyof DataInterface;
+    sortable?: boolean;
+    searchable?: boolean;
+    defaultShow?: boolean;
     render?: any;
   }[] = [
+    { name: 'ID', uid: 'id', sortable: true, searchable: true, defaultShow: false },
     {
-      title: 'ID',
-      sorted: true,
-      dataIndex: 'id',
+      name: 'NAME',
+      uid: 'name',
+      sortable: true,
+      searchable: true,
+      defaultShow: true,
+      render: (item: string) => {
+        const index = users.findLastIndex((user) => user.name === item);
+        return (
+          <Group>
+            <Avatar src={users[index].avatar} />
+            <Flex direction="column">
+              <Text size="sm">{users[index].name}</Text>
+              <Text size="xs">{users[index].email}</Text>
+            </Flex>
+          </Group>
+        );
+      },
+    },
+    { name: 'AGE', uid: 'age', sortable: true, searchable: true, defaultShow: false },
+    {
+      name: 'ROLE',
+      uid: 'role',
+      sortable: true,
+      searchable: true,
+      defaultShow: true,
+      render: (item: string) => {
+        const index = users.findLastIndex((user) => user.role === item);
+        return (
+          <Flex direction="column">
+            <Text size="sm">{users[index].role}</Text>
+            <Text size="xs">{users[index].team}</Text>
+          </Flex>
+        );
+      },
+    },
+    { name: 'TEAM', uid: 'team', searchable: true, defaultShow: false },
+    { name: 'EMAIL', uid: 'email', searchable: true, defaultShow: false },
+    {
+      name: 'STATUS',
+      uid: 'status',
+      sortable: true,
+      searchable: false,
+      defaultShow: true,
+      render: (item: string) => (
+        <Group>
+          <Badge
+            size="xs"
+            radius="xl"
+            w={12}
+            h={12}
+            style={{ border: 'none' }}
+            color={item === 'active' ? 'green' : item === 'paused' ? 'red' : 'yellow'}
+          />
+          <Text size="xs">{statusOptions.findLast((status) => status.uid === item)?.name}</Text>
+        </Group>
+      ),
     },
     {
-      title: '设备名称',
-      sorted: false,
-      dataIndex: 'device',
-    },
-    {
-      title: '设备状态',
-      dataIndex: 'status',
-      sorted: false,
-      render: (item: number) =>
-        item === 1 ? (
-          <Text style={{ color: 'rgb(0, 181, 101)' }}>作业中</Text>
-        ) : item === 2 ? (
-          <Text style={{ color: 'rgb(66, 160, 255)' }}>待机中</Text>
-        ) : (
-          <Text style={{ color: 'rgb(217, 35, 35)' }}>故障</Text>
-        ),
-    },
-    {
-      title: '作业次数',
-      dataIndex: 'times',
-      sorted: false,
-    },
-    {
-      title: '操作',
-      dataIndex: 'operation',
-      sorted: false,
+      name: 'ACTIONS',
+      uid: 'actions',
+      sortable: false,
+      searchable: false,
+      defaultShow: true,
       render: (item: DataInterface) => (
         <Group>
           <ActionIcon
@@ -223,8 +155,8 @@ const TablePage = () => {
       </Box>
       <Center mx="5vw" pt="lg">
         <Table<DataInterface>
-          columns={deviceColumns}
-          data={deviceData.map((item) => ({ ...item, operation: item }))}
+          columns={usersColumns}
+          data={users.map((item) => ({ ...item, actions: item }))}
         />
       </Center>
       <Drawer
@@ -234,10 +166,7 @@ const TablePage = () => {
         withCloseButton={false}
         overlayProps={{ backgroundOpacity: 0.5, blur: 4 }}
       >
-        <Text>{selectItem?.id}</Text>
-        <Text>{selectItem?.device}</Text>
-        <Text>{selectItem?.status}</Text>
-        <Text>{selectItem?.times}</Text>
+        <Text>test</Text>
       </Drawer>
     </>
   );
