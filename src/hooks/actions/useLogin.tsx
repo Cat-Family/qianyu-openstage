@@ -74,10 +74,6 @@ const useAuthentication = (): UseAuthentication => {
         ),
       });
     }
-
-    if (loginData?.code === 201) {
-      navigate('/');
-    }
   }, [loginData]);
 
   return { fetchLogin, loading };

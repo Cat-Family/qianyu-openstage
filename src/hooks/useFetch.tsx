@@ -78,41 +78,47 @@ function useFetch<T extends { code: number; message: string }>(
       }
 
       const data = await response.json();
+      if (data.code === 200) {
+        showSuccessNotification &&
+          notifications.show({
+            withCloseButton: true,
+            autoClose: 3000,
+            title: '成功',
+            message: '操作成功',
+            color: 'green',
+            icon: <IconCheck />,
+            radius: 'lg',
+            loading: false,
+          });
 
-      if (data.code !== 200) {
-        if (data.code === 401) {
-          navigate('/users/auth');
-        }
-
-        throw Object({
-          name: data.code,
-          message: data.message,
-        });
+        showAsyncNotification &&
+          notifications.update({
+            id,
+            color: 'teal',
+            title: '成功',
+            message: '操作成功',
+            icon: <IconCheck style={{ width: rem(18), height: rem(18) }} />,
+            loading: false,
+            autoClose: 2000,
+          });
+        dispatch({ type: 'fetched', payload: data });
+        return;
       }
 
-      showSuccessNotification &&
-        notifications.show({
-          withCloseButton: true,
-          autoClose: 3000,
-          title: '成功',
-          message: '操作成功',
-          color: 'green',
-          icon: <IconCheck />,
-          radius: 'lg',
-          loading: false,
-        });
+      if (data.code === 201) {
+        navigate('/');
+        dispatch({ type: 'fetched', payload: data });
+        return;
+      }
 
-      showAsyncNotification &&
-        notifications.update({
-          id,
-          color: 'teal',
-          title: '成功',
-          message: '操作成功',
-          icon: <IconCheck style={{ width: rem(18), height: rem(18) }} />,
-          loading: false,
-          autoClose: 2000,
-        });
-      dispatch({ type: 'fetched', payload: data });
+      if (data.code === 401) {
+        navigate('/users/auth');
+      }
+
+      throw Object({
+        name: data.code,
+        message: data.message,
+      });
     } catch (error: any) {
       notifications.update({
         id,
