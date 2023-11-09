@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { ReactElement, useState } from 'react';
 import {
   ActionIcon,
   Anchor,
@@ -51,7 +51,7 @@ const TablePage = () => {
     sortable?: boolean;
     searchable?: boolean;
     defaultShow?: boolean;
-    render?: any;
+    render?: (item: DataInterface) => ReactElement;
   }[] = [
     { name: 'ID', uid: 'id', sortable: true, searchable: true, defaultShow: false },
     {
@@ -60,18 +60,15 @@ const TablePage = () => {
       sortable: true,
       searchable: true,
       defaultShow: true,
-      render: (item: string) => {
-        const index = users.findLastIndex((user) => user.name === item);
-        return (
-          <Group>
-            <Avatar src={users[index].avatar} />
-            <Flex direction="column">
-              <Text size="sm">{users[index].name}</Text>
-              <Text size="xs">{users[index].email}</Text>
-            </Flex>
-          </Group>
-        );
-      },
+      render: (item: DataInterface) => (
+        <Group>
+          <Avatar src={item.avatar} />
+          <Flex direction="column">
+            <Text size="sm">{item.name}</Text>
+            <Text size="xs">{item.email}</Text>
+          </Flex>
+        </Group>
+      ),
     },
     { name: 'AGE', uid: 'age', sortable: true, searchable: true, defaultShow: false },
     {
@@ -80,25 +77,27 @@ const TablePage = () => {
       sortable: true,
       searchable: true,
       defaultShow: true,
-      render: (item: string) => {
-        const index = users.findLastIndex((user) => user.role === item);
-        return (
-          <Flex direction="column">
-            <Text size="sm">{users[index].role}</Text>
-            <Text size="xs">{users[index].team}</Text>
-          </Flex>
-        );
-      },
+      render: (item: DataInterface) => (
+        <Flex direction="column">
+          <Text size="sm">{item.role}</Text>
+          <Text size="xs">{item.team}</Text>
+        </Flex>
+      ),
     },
     { name: 'TEAM', uid: 'team', searchable: true, defaultShow: false },
-    { name: 'EMAIL', uid: 'email', searchable: true, defaultShow: false },
+    {
+      name: 'EMAIL',
+      uid: 'email',
+      searchable: true,
+      defaultShow: false,
+    },
     {
       name: 'STATUS',
       uid: 'status',
       sortable: true,
       searchable: false,
       defaultShow: true,
-      render: (item: string) => (
+      render: (item: DataInterface) => (
         <Group>
           <Badge
             size="xs"
@@ -106,9 +105,11 @@ const TablePage = () => {
             w={12}
             h={12}
             style={{ border: 'none' }}
-            color={item === 'active' ? 'green' : item === 'paused' ? 'red' : 'yellow'}
+            color={item.status === 'active' ? 'green' : item.status === 'paused' ? 'red' : 'yellow'}
           />
-          <Text size="xs">{statusOptions.findLast((status) => status.uid === item)?.name}</Text>
+          <Text size="xs">
+            {statusOptions.findLast((status) => status.uid === item.status)?.name}
+          </Text>
         </Group>
       ),
     },
@@ -166,7 +167,7 @@ const TablePage = () => {
         withCloseButton={false}
         overlayProps={{ backgroundOpacity: 0.5, blur: 4 }}
       >
-        <Text>test</Text>
+        <Text>{JSON.stringify(selectItem)}</Text>
       </Drawer>
     </>
   );

@@ -9,7 +9,7 @@ type TableRowCellProps<T> = {
     searchable?: boolean;
     defaultShow?: boolean;
     uid: keyof T;
-    render?: (item: any) => ReactElement;
+    render?: (item: T) => ReactElement;
   };
 };
 
@@ -17,7 +17,7 @@ function TableRowCell<T>({ column, item }: TableRowCellProps<T>) {
   return (
     <TableTd>
       {column.render ? (
-        column.render(item[column.uid])
+        column.render(item)
       ) : (
         <Text fw={400} fz="sm">
           {item[column.uid] as ReactElement}
