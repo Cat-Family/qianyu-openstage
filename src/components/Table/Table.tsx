@@ -30,7 +30,7 @@ interface TableProps<T> {
     searchable?: boolean;
     defaultShow?: boolean;
     uid: keyof T;
-    render?: (item: any) => ReactElement;
+    render?: (item: any) => ReactElement | void;
   }[];
   data: T[];
 }
@@ -128,7 +128,7 @@ function Table<T extends { id: number }>({ columns, data }: TableProps<T>) {
         onScrollPositionChange={({ y }) => setScrolled(y !== 0)}
       >
         <MantineTable highlightOnHover withRowBorders>
-          <TableHeader
+          <TableHeader<T>
             data={data}
             columns={columns}
             toggleAll={toggleAll}

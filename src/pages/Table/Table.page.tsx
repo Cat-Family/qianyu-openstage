@@ -51,9 +51,15 @@ const TablePage = () => {
     sortable?: boolean;
     searchable?: boolean;
     defaultShow?: boolean;
-    render?: (item: DataInterface) => ReactElement;
+    render?: (item: DataInterface) => ReactElement | void;
   }[] = [
-    { name: 'ID', uid: 'id', sortable: true, searchable: true, defaultShow: false },
+    {
+      name: 'ID',
+      uid: 'id',
+      sortable: true,
+      searchable: true,
+      defaultShow: true,
+    },
     {
       name: 'NAME',
       uid: 'name',

@@ -11,7 +11,7 @@ type TableRowProps<T> = {
     searchable?: boolean;
     defaultShow?: boolean;
     uid: keyof T;
-    render?: (item: T) => ReactElement;
+    render?: (item: T) => ReactElement | void;
   }[];
   renderColumns: string[];
   selection: number[];

@@ -12,7 +12,7 @@ interface ThProps<T> {
     searchable?: boolean;
     defaultShow?: boolean;
     uid: keyof T;
-    render?: (item: T) => ReactElement;
+    render?: (item: T) => ReactElement | void;
   }[];
   data: T[];
   scrolled: boolean;
