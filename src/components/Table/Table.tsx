@@ -1,14 +1,9 @@
 import React, { ReactElement, useState } from 'react';
-import cx from 'clsx';
 import {
   Table as MantineTable,
   ScrollArea,
-  UnstyledButton,
   Group,
   Text,
-  Center,
-  rem,
-  Checkbox,
   Pagination,
   Flex,
   Input,
@@ -21,16 +16,12 @@ import {
   MultiSelect,
   Select,
 } from '@mantine/core';
-import {
-  IconChevronDown,
-  IconChevronUp,
-  IconPlus,
-  IconSearch,
-  IconSelector,
-} from '@tabler/icons-react';
-import classes from './Table.module.css';
+import { IconPlus, IconSearch } from '@tabler/icons-react';
+import { TableHeader } from './TableHeader';
+import { TableRow } from './TableRow';
 import scrollClasses from './Scroll.module.css';
 import multiSelectClasses from './multiSelectClasses.module.css';
+import { TableEmpty } from './TableEmpty';
 
 interface TableProps<T> {
   columns: {
@@ -42,39 +33,6 @@ interface TableProps<T> {
     render?: (item: any) => ReactElement;
   }[];
   data: T[];
-}
-
-interface ThProps {
-  children: React.ReactNode;
-  reversed?: boolean;
-  sortable: boolean;
-  onSort?(): void;
-  isSortable?: boolean;
-}
-
-function Th({ children, reversed, sortable, onSort, isSortable }: ThProps) {
-  const Icon = sortable ? (reversed ? IconChevronUp : IconChevronDown) : IconSelector;
-
-  return (
-    <MantineTable.Th>
-      {isSortable ? (
-        <UnstyledButton onClick={onSort} className={classes.control}>
-          <Group justify="space-between">
-            <Text fw={500} fz="sm">
-              {children}
-            </Text>
-            <Center className={classes.icon}>
-              <Icon style={{ width: rem(16), height: rem(16) }} stroke={1.5} />
-            </Center>
-          </Group>
-        </UnstyledButton>
-      ) : (
-        <Text fw={500} fz="sm">
-          {children}
-        </Text>
-      )}
-    </MantineTable.Th>
-  );
 }
 
 function Table<T extends { id: number }>({ columns, data }: TableProps<T>) {
@@ -103,7 +61,7 @@ function Table<T extends { id: number }>({ columns, data }: TableProps<T>) {
 
   return (
     <Stack gap="sm">
-      <Flex visibleFrom="md" gap="lg" w="100%" align="center" wrap="wrap">
+      <Flex gap="lg" w="100%" align="center" wrap="wrap">
         <Select
           w={150}
           data={columns.filter((item) => item.searchable).map((item) => item.name)}
@@ -170,70 +128,32 @@ function Table<T extends { id: number }>({ columns, data }: TableProps<T>) {
         onScrollPositionChange={({ y }) => setScrolled(y !== 0)}
       >
         <MantineTable highlightOnHover withRowBorders>
-          <MantineTable.Thead className={cx(classes.header, { [classes.scrolled]: scrolled })}>
-            <MantineTable.Tr key="head">
-              <MantineTable.Td key="check">
-                <Checkbox
-                  onChange={toggleAll}
-                  checked={selection.length === data.length}
-                  indeterminate={selection.length > 0 && selection.length !== data.length}
-                />
-              </MantineTable.Td>
-              {columns.map(
-                (item, index) =>
-                  renderColumns.includes(item.name) && (
-                    <Th
-                      key={index}
-                      isSortable={item.sortable}
-                      sortable={sortBy === item.uid}
-                      reversed={reverseSortDirection}
-                      onSort={() => setSorting(item.uid)}
-                    >
-                      {item.name}
-                    </Th>
-                  )
-              )}
-            </MantineTable.Tr>
-          </MantineTable.Thead>
+          <TableHeader
+            data={data}
+            columns={columns}
+            toggleAll={toggleAll}
+            scrolled={scrolled}
+            selection={selection}
+            renderColumns={renderColumns}
+            sortBy={sortBy}
+            reverseSortDirection={reverseSortDirection}
+            setSorting={setSorting}
+          />
           <MantineTable.Tbody>
             {sortedData.length > 0 ? (
               sortedData.map((item) => (
-                <MantineTable.Tr
+                <TableRow<T>
                   key={item.id}
-                  onClick={() => toggleRow(item.id)}
-                  style={{ cursor: 'pointer' }}
-                >
-                  <MantineTable.Td>
-                    <Checkbox
-                      checked={selection.includes(item.id)}
-                      onChange={() => toggleRow(item.id)}
-                    />
-                  </MantineTable.Td>
-                  {columns.map(
-                    (column) =>
-                      renderColumns.includes(column.name) &&
-                      (column.render ? (
-                        <MantineTable.Td key={item.id + column.uid.toString()}>
-                          {column.render(item[column.uid])}
-                        </MantineTable.Td>
-                      ) : (
-                        <MantineTable.Td key={item.id + column.uid.toString()}>
-                          <Text fw={400} fz="sm">
-                            {item[column.uid] as ReactElement}
-                          </Text>
-                        </MantineTable.Td>
-                      ))
-                  )}
-                </MantineTable.Tr>
+                  id={item.id}
+                  item={item}
+                  toggleRow={toggleRow}
+                  columns={columns}
+                  renderColumns={renderColumns}
+                  selection={selection}
+                />
               ))
             ) : (
-              <MantineTable.Tr>
-                <MantineTable.Td colSpan={Object.keys(data[0]).length + 2}>
-                  <Text fw={500} ta="center">
-                    Nothing found
-                  </Text>
-                </MantineTable.Td>
-              </MantineTable.Tr>
+              <TableEmpty length={renderColumns.length} />
             )}
           </MantineTable.Tbody>
         </MantineTable>
