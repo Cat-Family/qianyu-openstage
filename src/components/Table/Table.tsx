@@ -6,22 +6,18 @@ import {
   Text,
   Pagination,
   Flex,
-  Input,
   Button,
   Menu,
   MenuTarget,
   MenuDropdown,
   MenuItem,
   Stack,
-  MultiSelect,
-  Select,
 } from '@mantine/core';
-import { IconPlus, IconSearch } from '@tabler/icons-react';
 import { TableHeader } from './TableHeader';
 import { TableRow } from './TableRow';
 import scrollClasses from './Scroll.module.css';
-import multiSelectClasses from './multiSelectClasses.module.css';
 import { TableEmpty } from './TableEmpty';
+import { TableSearch } from './TableSearch';
 
 interface TableProps<T> {
   columns: {
@@ -37,7 +33,6 @@ interface TableProps<T> {
 
 function Table<T extends { id: number }>({ columns, data }: TableProps<T>) {
   const [sortedData, setSortedData] = useState(data);
-  const [searchDataIndex, setSearchDataIndex] = useState<string>(columns[0].name);
   const [renderColumns, setRenderColumns] = useState(
     columns.filter((item) => item.defaultShow).map((item) => item.name)
   );
@@ -61,66 +56,23 @@ function Table<T extends { id: number }>({ columns, data }: TableProps<T>) {
 
   return (
     <Stack gap="sm">
-      <Flex gap="lg" w="100%" align="center" wrap="wrap">
-        <Select
-          w={150}
-          data={columns.filter((item) => item.searchable).map((item) => item.name)}
-          defaultValue={searchDataIndex}
-          checkIconPosition="right"
-          allowDeselect={false}
-          onChange={(e) => setSearchDataIndex(e as string)}
-        />
-        <Input
-          style={{ flex: 1 }}
-          placeholder={`Search by ${searchDataIndex}...`}
-          leftSection={<IconSearch size={16} />}
-        />
-        <Flex gap="lg" align="center">
-          <MultiSelect
-            classNames={multiSelectClasses}
-            placeholder="Status"
-            w={150}
-            checkIconPosition="right"
-            defaultValue={['a', 'b', 'c']}
-            data={['a', 'b', 'c']}
-          />
-          <MultiSelect
-            w={150}
-            classNames={multiSelectClasses}
-            checkIconPosition="right"
-            data={columns.map((item) => item.name)}
-            placeholder="Columns"
-            defaultValue={renderColumns}
-            onChange={setRenderColumns}
-          />
-          <Button style={{ alignSelf: 'end' }} rightSection={<IconPlus />}>
-            Add New
-          </Button>
-        </Flex>
-      </Flex>
+      <TableSearch
+        columns={columns}
+        renderColumns={renderColumns}
+        setRenderColumns={setRenderColumns}
+      />
       <Flex justify="space-between" align="center" w="100%">
         <Text size="xs">Total {data.length} users</Text>
-        <Menu shadow="md" width={100}>
-          <MenuTarget>
-            <Text size="xs" style={{ cursor: 'pointer' }}>
-              Row per page: 5
-            </Text>
-          </MenuTarget>
-          <MenuDropdown>
-            <MenuItem>
-              <Text>5</Text>
-            </MenuItem>
-            <MenuItem>
-              <Text>10</Text>
-            </MenuItem>
-            <MenuItem>
-              <Text>15</Text>
-            </MenuItem>
-            <MenuItem>
-              <Text>20</Text>
-            </MenuItem>
-          </MenuDropdown>
-        </Menu>
+        <Flex h="1rem" justify="center" align="center" gap="md">
+          {selection.length > 0 && (
+            <Button ta="center" color="red" size="xs">
+              Delete select data
+            </Button>
+          )}
+          <Text ta="center" size="xs">
+            {data.length} of {selection.length} selected
+          </Text>
+        </Flex>
       </Flex>
       <ScrollArea
         offsetScrollbars
@@ -168,16 +120,27 @@ function Table<T extends { id: number }>({ columns, data }: TableProps<T>) {
           </Group>
         </Pagination.Root>
 
-        <Flex h="1rem" justify="center" align="center" gap="md">
-          {selection.length > 0 && (
-            <Button ta="center" color="red" size="xs">
-              Delete select data
-            </Button>
-          )}
-          <Text ta="center" size="xs">
-            {data.length} of {selection.length} selected
-          </Text>
-        </Flex>
+        <Menu shadow="md" width={100}>
+          <MenuTarget>
+            <Text size="xs" style={{ cursor: 'pointer' }}>
+              Row per page: 5
+            </Text>
+          </MenuTarget>
+          <MenuDropdown>
+            <MenuItem>
+              <Text>5</Text>
+            </MenuItem>
+            <MenuItem>
+              <Text>10</Text>
+            </MenuItem>
+            <MenuItem>
+              <Text>15</Text>
+            </MenuItem>
+            <MenuItem>
+              <Text>20</Text>
+            </MenuItem>
+          </MenuDropdown>
+        </Menu>
       </Flex>
     </Stack>
   );
