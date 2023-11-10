@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { Group, Box, Collapse, ThemeIcon, Text, UnstyledButton, rem } from '@mantine/core';
 import { IconCategory2, IconChevronRight, IconDashboard } from '@tabler/icons-react';
 import { Link, useNavigate } from 'react-router-dom';
-import classes from './NavbarLinksGroup.module.css';
 import { MenuTree } from '@/ts/types/interface/menu.res.interface';
+import classes from './NavbarLinksGroup.module.css';
 
 export const IconMap = {
   IconDashboard: <IconDashboard style={{ width: rem(18), height: rem(18) }} />,
