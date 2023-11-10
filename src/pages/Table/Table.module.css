@@ -1,10 +1,8 @@
 .header {
-  padding-left: 3rem;
-  padding-top: 1rem;
-  display: flex;
-  flex-direction: column;
+  padding: 1rem;
   gap: 1rem;
   height: rem(112);
+  justify-content: space-between;
 
   @mixin light {
     background-color: var(--mantine-color-gray-0);

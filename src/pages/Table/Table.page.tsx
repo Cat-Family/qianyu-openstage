@@ -4,15 +4,17 @@ import {
   Anchor,
   Box,
   Breadcrumbs,
+  Button,
   Center,
   Drawer,
+  Flex,
   Group,
   Text,
   ThemeIcon,
   Title,
   rem,
 } from '@mantine/core';
-import { IconHome, IconPencil, IconTrash } from '@tabler/icons-react';
+import { IconHome, IconPencil, IconPlus, IconTrash } from '@tabler/icons-react';
 import { useDisclosure } from '@mantine/hooks';
 import { Table } from '../../components/Table';
 import classes from './Table.module.css';
@@ -26,7 +28,6 @@ interface DataInterface {
   level: number;
   actions: DataInterface;
 }
-
 export interface ListRes {
   code: number;
   data: {
@@ -53,9 +54,9 @@ const items = [
 const TablePage = () => {
   const [opened, { open, close }] = useDisclosure(false);
   const [selectItem, setSelectItem] = useState<DataInterface | undefined>();
-  const { fetchData, data, loading, error } = useFetch<ListRes>(false);
+  const { fetchData, data, loading, error } = useFetch<ListRes>(true);
 
-  const usersColumns: {
+  const columns: {
     name: string;
     uid: keyof DataInterface;
     sortable?: boolean;
@@ -103,7 +104,7 @@ const TablePage = () => {
       searchable: false,
       defaultShow: true,
       render: (item: DataInterface) => (
-        <Group>
+        <Group wrap="nowrap">
           <ActionIcon
             variant="subtle"
             color="gray"
@@ -131,12 +132,21 @@ const TablePage = () => {
 
   return (
     <>
-      <Box className={classes.header}>
-        <Breadcrumbs mt="xs">{items}</Breadcrumbs>
-        <Title order={2} fz={30}>
-          TablePage
-        </Title>
-      </Box>
+      <Flex className={classes.header}>
+        <Flex direction="column" gap="sm">
+          <Breadcrumbs mt="xs">{items}</Breadcrumbs>
+          <Title order={2} fz={30}>
+            TablePage
+          </Title>
+        </Flex>
+
+        <Button
+          rightSection={<IconPlus style={{ width: rem(18), height: rem(18) }} stroke={1.8} />}
+          style={{ alignSelf: 'end' }}
+        >
+          Add
+        </Button>
+      </Flex>
       <Center mx="5vw" pt="lg">
         <Table<DataInterface>
           fetchData={fetchData}
@@ -146,7 +156,7 @@ const TablePage = () => {
           pageNum={data?.data.pageBean.pageNum}
           total={data?.data.pageBean.total}
           pages={data?.data.pageBean.total}
-          columns={usersColumns}
+          columns={columns}
           data={data?.data?.pageBean.list.map((item) => ({ ...item, actions: item }))}
         />
       </Center>

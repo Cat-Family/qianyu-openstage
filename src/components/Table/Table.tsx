@@ -13,6 +13,7 @@ import {
   MenuItem,
   Stack,
   rem,
+  LoadingOverlay,
 } from '@mantine/core';
 import { IconChecks, IconDownload, IconTrash } from '@tabler/icons-react';
 import { TableHeader } from './TableHeader';
@@ -21,7 +22,6 @@ import scrollClasses from './Scroll.module.css';
 import { TableEmpty } from './TableEmpty';
 import { TableSearch } from './TableSearch';
 import { FetchData } from '../../ts/types/types/fetchData.type';
-import { TableLoader } from './TableLoader';
 
 interface TableProps<T> {
   columns: {
@@ -81,7 +81,7 @@ function Table<T extends { id: string }>({
   }, []);
 
   return (
-    <Stack gap="sm">
+    <Stack gap="sm" pos="relative">
       <TableSearch
         fetchData={fetchData}
         columns={columns}
@@ -129,10 +129,8 @@ function Table<T extends { id: string }>({
             setSorting={setSorting}
           />
           <MantineTable.Tbody>
-            {loading || !data ? (
-              <TableLoader loading={loading} length={renderColumns.length} />
-            ) : data.length > 0 ? (
-              data?.map((item) => (
+            {data && data.length > 0 ? (
+              data.map((item) => (
                 <TableRow<T>
                   key={item.id}
                   id={item.id}
@@ -151,14 +149,6 @@ function Table<T extends { id: string }>({
       </ScrollArea>
 
       <Flex w="100%" align="center" justify="space-between">
-        <Pagination.Root total={pages ?? 0} value={pageNum} size="sm" radius="md" siblings={0}>
-          <Group wrap="nowrap" gap="xs">
-            <Pagination.Previous />
-            <Pagination.Items />
-            <Pagination.Next />
-          </Group>
-        </Pagination.Root>
-
         <Menu shadow="md" width={100}>
           <MenuTarget>
             <Text size="xs" style={{ cursor: 'pointer' }}>
@@ -180,7 +170,16 @@ function Table<T extends { id: string }>({
             </MenuItem>
           </MenuDropdown>
         </Menu>
+
+        <Pagination.Root total={pages ?? 0} value={pageNum} size="sm" radius="md" siblings={0}>
+          <Group wrap="nowrap" gap="xs">
+            <Pagination.Previous />
+            <Pagination.Items />
+            <Pagination.Next />
+          </Group>
+        </Pagination.Root>
       </Flex>
+      <LoadingOverlay visible={loading} zIndex={800} overlayProps={{ radius: 'sm', blur: 2 }} />
     </Stack>
   );
 }

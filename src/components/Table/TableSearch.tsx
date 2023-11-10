@@ -12,10 +12,11 @@ import {
   UnstyledButton,
   rem,
 } from '@mantine/core';
-import { IconArrowRight, IconDotsVertical, IconRefresh } from '@tabler/icons-react';
+import { IconArrowRight, IconDotsVertical, IconRefresh, IconSearch } from '@tabler/icons-react';
 import { useDisclosure } from '@mantine/hooks';
 import multiSelectClasses from './multiSelectClasses.module.css';
 import { FetchData } from '../../ts/types/types/fetchData.type';
+import classes from './TableSearch.module.css';
 
 interface TableSearchProps<T> {
   columns: {
@@ -44,8 +45,8 @@ function TableSearch<T>({
 
   return (
     <>
-      <Flex wrap="wrap" gap="md">
-        <Group style={{ flex: 1 }} wrap="nowrap">
+      <Flex wrap="wrap" gap="md" justify="center">
+        <Group wrap="nowrap" visibleFrom="sm">
           <Select
             w={120}
             value={searchItem}
@@ -53,10 +54,10 @@ function TableSearch<T>({
             allowDeselect={false}
             data={columns.filter((item) => item.searchable).map((item) => item.name)}
           />
-          <TextInput style={{ flex: 1 }} miw={200} placeholder={`Search by ${searchItem}...`} />
+          <TextInput className={classes.search} placeholder={`Search by ${searchItem}...`} />
         </Group>
         <MultiSelect
-          w={189}
+          w={150}
           classNames={multiSelectClasses}
           checkIconPosition="right"
           data={columns.map((item) => item.name)}
@@ -65,7 +66,12 @@ function TableSearch<T>({
           onChange={setRenderColumns}
         />
         <Group>
-          <Button>Search</Button>
+          <Button
+            variant="outline"
+            rightSection={<IconSearch style={{ width: rem(18), height: rem(18) }} stroke={1.8} />}
+          >
+            Search
+          </Button>
           <UnstyledButton onClick={() => fetchData('/catalog/list', { method: 'POST' })}>
             <IconRefresh
               style={{ width: rem(16), height: rem(16), lineHeight: rem(16) }}
@@ -93,7 +99,7 @@ function TableSearch<T>({
           {columns
             .filter((item) => item.searchable)
             .map((item) => (
-              <Input key={item.name} placeholder={item.name} />
+              <TextInput label={item.name} key={item.name} placeholder={item.name} />
             ))}
           <Group style={{ alignSelf: 'end' }}>
             <Button variant="outline">Reset</Button>

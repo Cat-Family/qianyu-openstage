@@ -11,7 +11,7 @@ interface ThProps<T> {
     sortable?: boolean;
     searchable?: boolean;
     defaultShow?: boolean;
-    uid: keyof T | 'actions';
+    uid: keyof T;
     render?: (item: T) => ReactElement | void;
   }[];
   data: T[] | undefined;

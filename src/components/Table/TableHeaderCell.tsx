@@ -1,12 +1,5 @@
 import React, { FC } from 'react';
-import {
-  Center,
-  Group,
-  TableTh,
-  Text,
-  UnstyledButton,
-  rem,
-} from '@mantine/core';
+import { Center, Group, TableTh, Text, UnstyledButton, rem } from '@mantine/core';
 import { IconChevronDown, IconChevronUp, IconSelector } from '@tabler/icons-react';
 import classes from './Table.module.css';
 
@@ -24,7 +17,7 @@ const TableHeaderCell: FC<ThProps> = ({ children, reversed, sortable, onSort, is
   return (
     <TableTh>
       {isSortable ? (
-        <UnstyledButton onClick={onSort} className={classes.control}>
+        <UnstyledButton onClick={onSort} className={classes.control} w={200}>
           <Group justify="space-between" wrap="nowrap">
             <Text fw={500} fz="sm">
               {children}

@@ -1,0 +1,6 @@
+.search {
+	width: 350px;
+  @media (max-width: $mantine-breakpoint-xs) {
+    width: 200px;
+  }
+}
