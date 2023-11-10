@@ -1,10 +1,10 @@
 import React, { ReactElement } from 'react';
-import { Checkbox, Table as MantineTable } from '@mantine/core';
+import { Checkbox, TableTd, TableTr } from '@mantine/core';
 import { TableRowCell } from './TableRowCell';
 
 type TableRowProps<T> = {
   item: T;
-  toggleRow: (id: number) => void;
+  toggleRow: (id: string) => void;
   columns: {
     name: string;
     sortable?: boolean;
@@ -14,8 +14,8 @@ type TableRowProps<T> = {
     render?: (item: T) => ReactElement | void;
   }[];
   renderColumns: string[];
-  selection: number[];
-  id: number;
+  selection: string[];
+  id: string;
 };
 
 export function TableRow<T>({
@@ -28,17 +28,17 @@ export function TableRow<T>({
 }: TableRowProps<T>) {
   return (
     <>
-      <MantineTable.Tr onClick={() => toggleRow(id)} style={{ cursor: 'pointer' }}>
-        <MantineTable.Td>
+      <TableTr>
+        <TableTd>
           <Checkbox checked={selection.includes(id)} onChange={() => toggleRow(id)} />
-        </MantineTable.Td>
+        </TableTd>
         {columns.map(
           (column) =>
             renderColumns.includes(column.name) && (
               <TableRowCell<T> key={column.uid as React.Key} column={column} item={item} />
             )
         )}
-      </MantineTable.Tr>
+      </TableTr>
     </>
   );
 }

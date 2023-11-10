@@ -4,16 +4,18 @@ import {
   Flex,
   Group,
   Input,
+  Modal,
   MultiSelect,
   Select,
-  SimpleGrid,
+  Stack,
+  TextInput,
   UnstyledButton,
-  em,
   rem,
 } from '@mantine/core';
-import { IconChevronDown, IconPlus, IconSearch, IconZoomReset } from '@tabler/icons-react';
-import { useMediaQuery } from '@mantine/hooks';
+import { IconArrowRight, IconDotsVertical, IconRefresh } from '@tabler/icons-react';
+import { useDisclosure } from '@mantine/hooks';
 import multiSelectClasses from './multiSelectClasses.module.css';
+import { FetchData } from '../../ts/types/types/fetchData.type';
 
 interface TableSearchProps<T> {
   columns: {
@@ -21,31 +23,40 @@ interface TableSearchProps<T> {
     sortable?: boolean;
     searchable?: boolean;
     defaultShow?: boolean;
-    uid: keyof T;
+    uid: keyof T | 'actions';
     render?: (item: any) => ReactElement | void;
   }[];
+  fetchData: FetchData;
   renderColumns: string[];
   setRenderColumns: React.Dispatch<React.SetStateAction<string[]>>;
 }
 
-function TableSearch<T>({ columns, renderColumns, setRenderColumns }: TableSearchProps<T>) {
-  const isXs = useMediaQuery(`(max-width: ${'36em'})`);
-  const isSm = useMediaQuery(`(max-width: ${'48em'})`);
-  const isLg = useMediaQuery(`(max-width: ${'75em'})`);
+function TableSearch<T>({
+  columns,
+  renderColumns,
+  setRenderColumns,
+  fetchData,
+}: TableSearchProps<T>) {
+  const [searchItem, setSearchItem] = useState<string | null>(
+    columns.filter((item) => item.searchable)[0].name
+  );
+  const [opened, { open, close }] = useDisclosure(false);
 
   return (
     <>
-      <SimpleGrid cols={{ xs: 1, sm: 2, lg: 4, xl: 4 }}>
-        {columns
-          .filter((item) => item.searchable)
-          .map((column) => (
-            <Input
-              key={column.uid as React.Key}
-              placeholder={`Search by ${column.name}`}
-              leftSection={<IconSearch size={16} />}
-            />
-          ))}
+      <Flex wrap="wrap" gap="md">
+        <Group style={{ flex: 1 }} wrap="nowrap">
+          <Select
+            w={120}
+            value={searchItem}
+            onChange={setSearchItem}
+            allowDeselect={false}
+            data={columns.filter((item) => item.searchable).map((item) => item.name)}
+          />
+          <TextInput style={{ flex: 1 }} miw={200} placeholder={`Search by ${searchItem}...`} />
+        </Group>
         <MultiSelect
+          w={189}
           classNames={multiSelectClasses}
           checkIconPosition="right"
           data={columns.map((item) => item.name)}
@@ -53,14 +64,43 @@ function TableSearch<T>({ columns, renderColumns, setRenderColumns }: TableSearc
           defaultValue={renderColumns}
           onChange={setRenderColumns}
         />
-        <Group style={{ alignSelf: 'end', justifySelf: 'end' }}>
-          <Button variant="outline">Reset</Button>
+        <Group>
           <Button>Search</Button>
-          <UnstyledButton>
-            <IconChevronDown style={{ width: rem(16), height: rem(16) }} stroke={1.5} />
+          <UnstyledButton onClick={() => fetchData('/catalog/list', { method: 'POST' })}>
+            <IconRefresh
+              style={{ width: rem(16), height: rem(16), lineHeight: rem(16) }}
+              stroke={1.5}
+            />
+          </UnstyledButton>
+          <UnstyledButton onClick={open}>
+            <IconDotsVertical
+              style={{ width: rem(16), height: rem(16), lineHeight: rem(16) }}
+              stroke={1.5}
+            />
           </UnstyledButton>
         </Group>
-      </SimpleGrid>
+      </Flex>
+      <Modal
+        opened={opened}
+        onClose={close}
+        title="Advanced search"
+        overlayProps={{
+          backgroundOpacity: 0.55,
+          blur: 3,
+        }}
+      >
+        <Stack>
+          {columns
+            .filter((item) => item.searchable)
+            .map((item) => (
+              <Input key={item.name} placeholder={item.name} />
+            ))}
+          <Group style={{ alignSelf: 'end' }}>
+            <Button variant="outline">Reset</Button>
+            <Button rightSection={<IconArrowRight size={14} />}>Submit</Button>
+          </Group>
+        </Stack>
+      </Modal>
     </>
   );
 }

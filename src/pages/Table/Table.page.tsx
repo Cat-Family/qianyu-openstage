@@ -2,34 +2,43 @@ import React, { ReactElement, useState } from 'react';
 import {
   ActionIcon,
   Anchor,
-  Avatar,
-  Badge,
   Box,
   Breadcrumbs,
   Center,
   Drawer,
-  Flex,
   Group,
   Text,
+  ThemeIcon,
   Title,
   rem,
 } from '@mantine/core';
 import { IconHome, IconPencil, IconTrash } from '@tabler/icons-react';
 import { useDisclosure } from '@mantine/hooks';
-import { users, statusOptions } from './data';
 import { Table } from '../../components/Table';
 import classes from './Table.module.css';
+import useFetch from '../../hooks/useFetch';
+import { IconMap, IconMapKey } from '../../components/NavbarLinksGroup/NavbarLinksGroup';
 
 interface DataInterface {
-  id: number;
-  name: string;
-  role: string;
-  team: string;
-  status: string;
-  age: string;
-  avatar: string;
-  email: string;
-  actions: any;
+  catalogName: string;
+  icon: IconMapKey;
+  id: string;
+  level: number;
+  actions: DataInterface;
+}
+
+export interface ListRes {
+  code: number;
+  data: {
+    pageBean: {
+      list: DataInterface[];
+      pageNum: number;
+      pageSize: number;
+      pages: number;
+      total: number;
+    };
+  };
+  message: string;
 }
 
 const items = [
@@ -44,6 +53,7 @@ const items = [
 const TablePage = () => {
   const [opened, { open, close }] = useDisclosure(false);
   const [selectItem, setSelectItem] = useState<DataInterface | undefined>();
+  const { fetchData, data, loading, error } = useFetch<ListRes>(false);
 
   const usersColumns: {
     name: string;
@@ -61,63 +71,30 @@ const TablePage = () => {
       defaultShow: true,
     },
     {
-      name: 'NAME',
-      uid: 'name',
+      name: 'catalogName',
+      uid: 'catalogName',
       sortable: true,
       searchable: true,
       defaultShow: true,
-      render: (item: DataInterface) => (
-        <Group>
-          <Avatar src={item.avatar} />
-          <Flex direction="column">
-            <Text size="sm">{item.name}</Text>
-            <Text size="xs">{item.email}</Text>
-          </Flex>
-        </Group>
-      ),
     },
-    { name: 'AGE', uid: 'age', sortable: true, searchable: true, defaultShow: false },
     {
-      name: 'ROLE',
-      uid: 'role',
+      name: 'icon',
+      uid: 'icon',
       sortable: true,
-      searchable: true,
-      defaultShow: true,
-      render: (item: DataInterface) => (
-        <Flex direction="column">
-          <Text size="sm">{item.role}</Text>
-          <Text size="xs">{item.team}</Text>
-        </Flex>
-      ),
-    },
-    { name: 'TEAM', uid: 'team', searchable: true, defaultShow: false },
-    {
-      name: 'EMAIL',
-      uid: 'email',
       searchable: true,
       defaultShow: false,
+      render: (item) => (
+        <ThemeIcon variant="light" size={30}>
+          {IconMap[item.icon]}
+        </ThemeIcon>
+      ),
     },
     {
-      name: 'STATUS',
-      uid: 'status',
+      name: 'level',
+      uid: 'level',
       sortable: true,
-      searchable: false,
+      searchable: true,
       defaultShow: true,
-      render: (item: DataInterface) => (
-        <Group>
-          <Badge
-            size="xs"
-            radius="xl"
-            w={12}
-            h={12}
-            style={{ border: 'none' }}
-            color={item.status === 'active' ? 'green' : item.status === 'paused' ? 'red' : 'yellow'}
-          />
-          <Text size="xs">
-            {statusOptions.findLast((status) => status.uid === item.status)?.name}
-          </Text>
-        </Group>
-      ),
     },
     {
       name: 'ACTIONS',
@@ -162,8 +139,15 @@ const TablePage = () => {
       </Box>
       <Center mx="5vw" pt="lg">
         <Table<DataInterface>
+          fetchData={fetchData}
+          loading={loading}
+          error={error}
+          pageSize={data?.data.pageBean.pages}
+          pageNum={data?.data.pageBean.pageNum}
+          total={data?.data.pageBean.total}
+          pages={data?.data.pageBean.total}
           columns={usersColumns}
-          data={users.map((item) => ({ ...item, actions: item }))}
+          data={data?.data?.pageBean.list.map((item) => ({ ...item, actions: item }))}
         />
       </Center>
       <Drawer

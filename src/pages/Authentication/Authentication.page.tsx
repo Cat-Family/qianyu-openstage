@@ -58,17 +58,16 @@ export function Authentication() {
         </Title>
         <Box style={{ flex: 1 }} />
         <form
-          onSubmit={form.onSubmit(
-            (values) =>
-              values &&
+          onSubmit={form.onSubmit((values) => {
+            const formData = new FormData();
+            formData.append('userAccount', form.values.account);
+            formData.append('userPwd', md5(form.values.password));
+            values &&
               fetchLogin('auth/user/login.action', {
                 method: 'POST',
-                body: JSON.stringify({
-                  userAccount: form.values.account,
-                  userPwd: md5(form.values.password),
-                }),
-              })
-          )}
+                body: formData,
+              });
+          })}
         >
           <LoadingOverlay
             visible={loading}

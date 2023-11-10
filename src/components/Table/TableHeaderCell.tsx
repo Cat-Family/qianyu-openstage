@@ -1,5 +1,12 @@
 import React, { FC } from 'react';
-import { Center, Group, Table as MantineTable, Text, UnstyledButton, rem } from '@mantine/core';
+import {
+  Center,
+  Group,
+  TableTh,
+  Text,
+  UnstyledButton,
+  rem,
+} from '@mantine/core';
 import { IconChevronDown, IconChevronUp, IconSelector } from '@tabler/icons-react';
 import classes from './Table.module.css';
 
@@ -15,7 +22,7 @@ const TableHeaderCell: FC<ThProps> = ({ children, reversed, sortable, onSort, is
   const Icon = sortable ? (reversed ? IconChevronUp : IconChevronDown) : IconSelector;
 
   return (
-    <MantineTable.Th>
+    <TableTh>
       {isSortable ? (
         <UnstyledButton onClick={onSort} className={classes.control}>
           <Group justify="space-between" wrap="nowrap">
@@ -32,7 +39,7 @@ const TableHeaderCell: FC<ThProps> = ({ children, reversed, sortable, onSort, is
           {children}
         </Text>
       )}
-    </MantineTable.Th>
+    </TableTh>
   );
 };
 

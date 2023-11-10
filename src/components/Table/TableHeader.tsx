@@ -11,12 +11,12 @@ interface ThProps<T> {
     sortable?: boolean;
     searchable?: boolean;
     defaultShow?: boolean;
-    uid: keyof T;
+    uid: keyof T | 'actions';
     render?: (item: T) => ReactElement | void;
   }[];
-  data: T[];
+  data: T[] | undefined;
   scrolled: boolean;
-  selection: number[];
+  selection: string[];
   renderColumns: string[];
   sortBy: keyof T | null;
   reverseSortDirection: boolean;
@@ -40,8 +40,8 @@ function TableHeader<T>({
         <MantineTable.Td key="check">
           <Checkbox
             onChange={toggleAll}
-            checked={selection.length === data.length}
-            indeterminate={selection.length > 0 && selection.length !== data.length}
+            checked={selection.length === data?.length}
+            indeterminate={selection.length > 0 && selection.length !== data?.length}
           />
         </MantineTable.Td>
         {columns.map(

@@ -4,18 +4,19 @@ import useCookie from '../../../hooks/useCookie';
 import { LinksGroup } from '../../NavbarLinksGroup/NavbarLinksGroup';
 import useFetch from '../../../hooks/useFetch';
 import classes from './Navbar.module.css';
+import { LoadMenuTreeRes } from '@/ts/types/interface/menu.res.interface';
 
 const Navbar = () => {
-  const [links, setLinks] = useState();
-  const { fetchData, data } = useFetch<any>(false, false, false);
+  const [links, setLinks] = useState<any>();
+  const { fetchData, data } = useFetch<LoadMenuTreeRes>(false);
   const [value] = useCookie('qy');
 
   useEffect(() => {
-    value && fetchData('/menu/loadMenuTree', { method: 'POST' });
+    value && fetchData('/router/loadMenuTree', { method: 'POST' });
   }, []);
 
   useEffect(() => {
-    data?.data && setLinks(data.data.map((item: any) => <LinksGroup {...item} key={item.id} />));
+    data?.data && setLinks(data.data.map((item, index) => <LinksGroup {...item} key={index} />));
   }, [data]);
   return (
     <AppShell.Navbar>

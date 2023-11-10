@@ -2,7 +2,7 @@ import React, { useReducer, useRef } from 'react';
 import { rem } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
 import { IconCheck, IconX } from '@tabler/icons-react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { FetchData, FetchDataParams } from '../ts/types/types/fetchData.type';
 
 const BASE_URL: string = '/qy/api/v1/os/';
@@ -50,6 +50,7 @@ function useFetch<T extends { code: number; message: string }>(
 
   const navigate = useNavigate();
   const [state, dispatch] = useReducer(fetchReducer, initialState);
+  const location = useLocation();
 
   const fetchData = async (url: FetchDataParams[0], options: FetchDataParams[1]) => {
     dispatch({ type: 'loading' });
@@ -68,7 +69,7 @@ function useFetch<T extends { code: number; message: string }>(
     try {
       const response = await fetch(BASE_URL + url, {
         headers: {
-          'Content-Type': 'application/json',
+          'request-origin-path': location.pathname,
         },
         mode: 'cors',
         ...options,
