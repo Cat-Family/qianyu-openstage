@@ -11,6 +11,7 @@ interface ThProps<T> {
     sortable?: boolean;
     searchable?: boolean;
     defaultShow?: boolean;
+    width?: string | number;
     uid: keyof T;
     render?: (item: T) => ReactElement | void;
   }[];
@@ -49,6 +50,7 @@ function TableHeader<T>({
             renderColumns.includes(item.name) && (
               <TableHeaderCell
                 key={index}
+                width={item.width}
                 isSortable={item.sortable}
                 sortable={sortBy === item.uid}
                 reversed={reverseSortDirection}

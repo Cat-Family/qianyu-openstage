@@ -6,18 +6,26 @@ import classes from './Table.module.css';
 interface ThProps {
   children: React.ReactNode;
   reversed?: boolean;
+  width?: string | number;
   sortable: boolean;
   onSort?(): void;
   isSortable?: boolean;
 }
 
-const TableHeaderCell: FC<ThProps> = ({ children, reversed, sortable, onSort, isSortable }) => {
+const TableHeaderCell: FC<ThProps> = ({
+  children,
+  reversed,
+  sortable,
+  onSort,
+  isSortable,
+  width,
+}) => {
   const Icon = sortable ? (reversed ? IconChevronUp : IconChevronDown) : IconSelector;
 
   return (
-    <TableTh>
+    <TableTh w={width}>
       {isSortable ? (
-        <UnstyledButton onClick={onSort} className={classes.control} w={200}>
+        <UnstyledButton onClick={onSort} className={classes.control}>
           <Group justify="space-between" wrap="nowrap">
             <Text fw={500} fz="sm">
               {children}

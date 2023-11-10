@@ -62,6 +62,7 @@ const TablePage = () => {
     sortable?: boolean;
     searchable?: boolean;
     defaultShow?: boolean;
+    width?: string | number;
     render?: (item: DataInterface) => ReactElement | void;
   }[] = [
     {

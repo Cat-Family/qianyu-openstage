@@ -29,6 +29,7 @@ interface TableProps<T> {
     sortable?: boolean;
     searchable?: boolean;
     defaultShow?: boolean;
+    width?: string | number;
     uid: keyof T;
     render?: (item: any) => ReactElement | void;
   }[];
