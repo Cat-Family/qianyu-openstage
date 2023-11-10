@@ -15,11 +15,16 @@ import {
   rem,
   LoadingOverlay,
 } from '@mantine/core';
-import { IconChecks, IconDownload, IconTrash } from '@tabler/icons-react';
+import {
+  IconChecks,
+  IconDatabaseOff,
+  IconDownload,
+  IconExclamationCircle,
+  IconTrash,
+} from '@tabler/icons-react';
 import { TableHeader } from './TableHeader';
 import { TableRow } from './TableRow';
 import scrollClasses from './Scroll.module.css';
-import { TableEmpty } from './TableEmpty';
 import { TableSearch } from './TableSearch';
 import { FetchData } from '../../ts/types/types/fetchData.type';
 
@@ -114,6 +119,7 @@ function Table<T extends { id: string }>({
         </Menu>
       </Flex>
       <ScrollArea
+        pos="relative"
         classNames={scrollClasses}
         onScrollPositionChange={({ y }) => setScrolled(y !== 0)}
       >
@@ -130,7 +136,7 @@ function Table<T extends { id: string }>({
             setSorting={setSorting}
           />
           <MantineTable.Tbody>
-            {data && data.length > 0 ? (
+            {data &&
               data.map((item) => (
                 <TableRow<T>
                   key={item.id}
@@ -141,12 +147,29 @@ function Table<T extends { id: string }>({
                   renderColumns={renderColumns}
                   selection={selection}
                 />
-              ))
-            ) : (
-              <TableEmpty length={renderColumns.length} />
-            )}
+              ))}
           </MantineTable.Tbody>
         </MantineTable>
+        <LoadingOverlay visible={loading} zIndex={800} overlayProps={{ radius: 'sm', blur: 2 }} />
+        <LoadingOverlay
+          visible={!loading && data?.length === 0}
+          zIndex={800}
+          overlayProps={{ radius: 'sm', blur: 2 }}
+          loaderProps={{ children: <IconDatabaseOff scale={2} height={35} width={35} /> }}
+        />
+        <LoadingOverlay
+          visible={Boolean(error)}
+          zIndex={800}
+          overlayProps={{ radius: 'sm', blur: 2 }}
+          loaderProps={{
+            children: (
+              <Stack gap="xs" justify="center" align="center">
+                <IconExclamationCircle color="red" scale={2} height={35} width={35} />
+                <Text>{error?.message}</Text>
+              </Stack>
+            ),
+          }}
+        />
       </ScrollArea>
 
       <Flex w="100%" align="center" justify="space-between">
@@ -180,7 +203,6 @@ function Table<T extends { id: string }>({
           </Group>
         </Pagination.Root>
       </Flex>
-      <LoadingOverlay visible={loading} zIndex={800} overlayProps={{ radius: 'sm', blur: 2 }} />
     </Stack>
   );
 }

@@ -2,7 +2,6 @@ import React, { ReactElement, useState } from 'react';
 import {
   ActionIcon,
   Anchor,
-  Box,
   Breadcrumbs,
   Button,
   Center,
@@ -85,6 +84,7 @@ const TablePage = () => {
       sortable: true,
       searchable: true,
       defaultShow: false,
+      width: 50,
       render: (item) => (
         <ThemeIcon variant="light" size={30}>
           {IconMap[item.icon]}
@@ -97,6 +97,7 @@ const TablePage = () => {
       sortable: true,
       searchable: true,
       defaultShow: true,
+      width: 50,
     },
     {
       name: 'ACTIONS',
@@ -136,7 +137,7 @@ const TablePage = () => {
       <Flex className={classes.header}>
         <Flex direction="column" gap="sm">
           <Breadcrumbs mt="xs">{items}</Breadcrumbs>
-          <Title order={2} fz={30}>
+          <Title order={2} fz={27}>
             TablePage
           </Title>
         </Flex>
