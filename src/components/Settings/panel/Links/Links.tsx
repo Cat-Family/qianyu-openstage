@@ -6,7 +6,6 @@ import {
   UnstyledButton,
   Anchor,
   Group,
-  useMantineTheme,
   Center,
   Stack,
   Flex,
@@ -42,8 +41,6 @@ const mockdata = [
 ];
 
 export default function Links() {
-  const theme = useMantineTheme();
-
   const items = mockdata.map((item) => (
     <UnstyledButton key={item.title} className={classes.item}>
       <item.icon color={item.color} size="2rem" />

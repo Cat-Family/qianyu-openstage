@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import cx from 'clsx';
 import { AppShell, Box, Burger, Group, Image, RemoveScroll } from '@mantine/core';
 import { UserMenu } from '../../UserMenu';

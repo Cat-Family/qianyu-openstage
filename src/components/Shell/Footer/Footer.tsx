@@ -1,11 +1,6 @@
 import React from 'react';
 import { ActionIcon, Container, Group, Image, Text, rem } from '@mantine/core';
-import {
-  IconBrandGithub,
-  IconBrandInstagram,
-  IconBrandTwitter,
-  IconBrandYoutube,
-} from '@tabler/icons-react';
+import { IconBrandGithub } from '@tabler/icons-react';
 import classes from './Footer.module.css';
 
 const data = [

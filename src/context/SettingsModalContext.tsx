@@ -1,3 +1,4 @@
+import React from 'react';
 import { ContextModalProps } from '@mantine/modals';
 import Settings from '../components/Settings/Settings';
 

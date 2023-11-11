@@ -30,7 +30,7 @@ import { TabsDataType } from '@/ts/types/types/tabsData.type';
 import Devices from './panel/Devices/Devices';
 import classes from './Settings.module.css';
 
-const Settings = ({ context, id, innerProps }: ContextModalProps<{ modalBody: string }>) => {
+const Settings = ({ context, id }: ContextModalProps<{ modalBody: string }>) => {
   const iconStyle = { width: rem(12), height: rem(12) };
   const [activeTab, setActiveTab] = useState<SettingsTabsEnum>('profile');
 

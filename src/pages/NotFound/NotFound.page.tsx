@@ -1,7 +1,7 @@
 import React from 'react';
 import { Container, Title, Text, Button, Group } from '@mantine/core';
 import { useNavigate } from 'react-router-dom';
-import { Illustration } from './Illustration.tsx';
+import { Illustration } from './Illustration';
 import classes from './NotFound.module.css';
 
 export function NotFound() {

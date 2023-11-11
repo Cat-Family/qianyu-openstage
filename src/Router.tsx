@@ -5,7 +5,6 @@ import { Shell } from './components/Shell/Shell';
 import { Authentication } from './pages/Authentication/Authentication.page';
 import Oauth from './pages/Oauth/Oauth.page';
 import TablePage from './pages/Table/Table.page';
-import RequireAuth from './components/RequireAuth/RequireAuth';
 import { NotFound } from './pages/NotFound/NotFound.page';
 
 export function Router() {

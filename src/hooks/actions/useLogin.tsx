@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { modals } from '@mantine/modals';
 import { Flex, Text, PinInput, Button } from '@mantine/core';
-import { useNavigate } from 'react-router-dom';
 import useFetch from '../useFetch';
 import { Login } from '../../ts/types/interface/login.interface';
 import { FetchData } from '../../ts/types/types/fetchData.type';
@@ -13,11 +12,10 @@ type UseAuthentication = {
 
 const useAuthentication = (): UseAuthentication => {
   const [code, setCode] = useState<string>('');
-  const navigate = useNavigate();
 
   const { fetchData: fetchLogin, data: loginData, loading } = useFetch<Login>(true);
 
-  const { fetchData: twoFALogin, data: twoFARes, loading: towFALoading } = useFetch();
+  const { fetchData: twoFALogin, loading: towFALoading } = useFetch();
 
   useEffect(() => {
     if (loginData?.data?.twoFA) {

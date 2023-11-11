@@ -1,5 +1,5 @@
 import React from 'react';
-import { Menu, Group, Text, Avatar, useMantineTheme, rem } from '@mantine/core';
+import { Menu, Group, Text, Avatar, rem } from '@mantine/core';
 import {
   IconLogout,
   IconSettings,
@@ -14,7 +14,7 @@ import useCookie from '../../hooks/useCookie';
 
 export function UserMenu() {
   const navigate = useNavigate();
-  const [value, updateCookie, deleteCookie] = useCookie('qy');
+  const [, , deleteCookie] = useCookie('qy');
 
   return (
     <Menu
