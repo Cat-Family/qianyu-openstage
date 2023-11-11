@@ -5,7 +5,7 @@ import { IconCheck, IconX } from '@tabler/icons-react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { FetchData, FetchDataParams } from '../ts/types/types/fetchData.type';
 
-const BASE_URL: string = '/qy/api/v1/os/';
+const BASE_URL: string = '/qy/api/v1/os';
 
 interface State<T> {
   fetchData: FetchData;
@@ -21,6 +21,7 @@ type Action<T> =
   | { type: 'error'; payload: Error };
 
 function useFetch<T extends { code: number; message: string }>(
+  path?: string,
   showErrorNotification: boolean = true,
   showSuccessNotification: boolean = false,
   showAsyncNotification: boolean = false
@@ -67,7 +68,7 @@ function useFetch<T extends { code: number; message: string }>(
     }
 
     try {
-      const response = await fetch(BASE_URL + url, {
+      const response = await fetch(BASE_URL + (url || path), {
         headers: {
           'request-origin-path': location.pathname,
         },

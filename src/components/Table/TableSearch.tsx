@@ -26,6 +26,8 @@ interface TableSearchProps<T> {
     uid: keyof T | 'actions';
     render?: (item: any) => ReactElement | void;
   }[];
+  pageNum: number;
+  pageSize: number;
   fetchData: FetchData;
   renderColumns: string[];
   setRenderColumns: React.Dispatch<React.SetStateAction<string[]>>;
@@ -36,6 +38,8 @@ function TableSearch<T>({
   renderColumns,
   setRenderColumns,
   fetchData,
+  pageSize,
+  pageNum,
 }: TableSearchProps<T>) {
   const [searchItem, setSearchItem] = useState<string | null>(
     columns.filter((item) => item.searchable)[0].name
@@ -66,12 +70,20 @@ function TableSearch<T>({
         />
         <Group>
           <Button
+            visibleFrom="sm"
             variant="outline"
             rightSection={<IconSearch style={{ width: rem(18), height: rem(18) }} stroke={1.8} />}
           >
             Search
           </Button>
-          <UnstyledButton onClick={() => fetchData('/catalog/list', { method: 'POST' })}>
+          <UnstyledButton
+            onClick={() => {
+              const formData = new FormData();
+              formData.append('pageSize', pageSize.toString());
+              formData.append('pageNum', pageNum.toString());
+              fetchData('', { method: 'POST', body: formData });
+            }}
+          >
             <IconRefresh
               style={{ width: rem(16), height: rem(16), lineHeight: rem(16) }}
               stroke={1.5}

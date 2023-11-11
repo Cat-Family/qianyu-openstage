@@ -41,8 +41,6 @@ interface TableProps<T> {
   data?: T[];
   loading?: boolean;
   fetchData: FetchData;
-  pageNum?: number;
-  pageSize?: number;
   pages?: number;
   total?: number;
   error?: Error;
@@ -53,8 +51,6 @@ function Table<T extends { id: string }>({
   data,
   fetchData,
   loading,
-  pageNum,
-  pageSize,
   pages,
   total,
   error,
@@ -66,6 +62,8 @@ function Table<T extends { id: string }>({
   const [reverseSortDirection, setReverseSortDirection] = useState(false);
   const [selection, setSelection] = useState<string[]>([]);
   const [scrolled, setScrolled] = useState(false);
+  const [pageSize, setPageSize] = useState<number>(10);
+  const [pageNum, setPageNum] = useState<number>(1);
 
   const toggleRow = (id: string) =>
     setSelection((current) =>
@@ -83,12 +81,17 @@ function Table<T extends { id: string }>({
   };
 
   useLayoutEffect(() => {
-    fetchData('/catalog/list', { method: 'POST' });
+    const formData = new FormData();
+    formData.append('pageSize', pageSize.toString());
+    formData.append('pageNum', pageNum.toString());
+    fetchData('', { method: 'POST', body: formData });
   }, []);
 
   return (
     <Stack gap="sm" pos="relative">
       <TableSearch
+        pageNum={pageNum}
+        pageSize={pageSize}
         fetchData={fetchData}
         columns={columns}
         renderColumns={renderColumns}
@@ -180,22 +183,26 @@ function Table<T extends { id: string }>({
             </Text>
           </MenuTarget>
           <MenuDropdown>
-            <MenuItem>
-              <Text>5</Text>
-            </MenuItem>
-            <MenuItem>
+            <MenuItem onClick={() => setPageSize(10)}>
               <Text>10</Text>
             </MenuItem>
-            <MenuItem>
+            <MenuItem onClick={() => setPageSize(15)}>
               <Text>15</Text>
             </MenuItem>
-            <MenuItem>
+            <MenuItem onClick={() => setPageSize(20)}>
               <Text>20</Text>
             </MenuItem>
           </MenuDropdown>
         </Menu>
 
-        <Pagination.Root total={pages ?? 0} value={pageNum} size="sm" radius="md" siblings={0}>
+        <Pagination.Root
+          total={pages ?? 0}
+          value={pageNum}
+          onChange={setPageNum}
+          size="sm"
+          radius="md"
+          siblings={0}
+        >
           <Group wrap="nowrap" gap="xs">
             <Pagination.Previous />
             <Pagination.Items />

@@ -53,7 +53,7 @@ const items = [
 const TablePage = () => {
   const [opened, { open, close }] = useDisclosure(false);
   const [selectItem, setSelectItem] = useState<DataInterface | undefined>();
-  const { fetchData, data, loading, error } = useFetch<ListRes>(true);
+  const { fetchData, data, loading, error } = useFetch<ListRes>('/catalog/list', true);
 
   const columns: {
     name: string;
@@ -154,8 +154,6 @@ const TablePage = () => {
           fetchData={fetchData}
           loading={loading}
           error={error}
-          pageSize={data?.data.pageBean.pages}
-          pageNum={data?.data.pageBean.pageNum}
           total={data?.data.pageBean.total}
           pages={data?.data.pageBean.total}
           columns={columns}
