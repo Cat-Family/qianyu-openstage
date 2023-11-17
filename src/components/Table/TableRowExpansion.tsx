@@ -17,7 +17,7 @@ export function TableRowExpansion<T>({ open, colSpan, content, item }: TableRowE
     <>
       <TableTr />
       <TableTr className={classes.expansion}>
-        <TableTd colSpan={colSpan}>
+        <TableTd colSpan={colSpan} p={0}>
           <Collapse in={expanded}>{content?.(item)}</Collapse>
         </TableTd>
       </TableTr>

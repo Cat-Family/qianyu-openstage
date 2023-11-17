@@ -35,7 +35,7 @@ interface TableProps<T> {
     sortable?: boolean;
     searchable?: boolean;
     defaultShow?: boolean;
-    width?: string | number;
+    w?: StyleProp<React.CSSProperties['width']> | undefined;
     uid: keyof T;
     render?: (item: any) => ReactElement | void;
   }[];

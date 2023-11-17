@@ -1,92 +1,14 @@
-import React, { ReactElement, useEffect, useState } from 'react';
-import {
-  ActionIcon,
-  Anchor,
-  Box,
-  Breadcrumbs,
-  Button,
-  Center,
-  Flex,
-  Group,
-  ThemeIcon,
-  Title,
-  rem,
-} from '@mantine/core';
-import { IconHome, IconPencil, IconPlus, IconTrash } from '@tabler/icons-react';
+import React, { useEffect } from 'react';
+import { Anchor, Breadcrumbs, Button, Center, Flex, Title, rem } from '@mantine/core';
+import { IconHome, IconPlus } from '@tabler/icons-react';
 import useFetch from '../../hooks/useFetch';
 import classes from './MenuResource.module.css';
-import {
-  ResourceResponse,
-  ResourceInterface,
-  ResourceTable,
-} from '../../ts/types/interface/menu.res.interface';
+import { ResourceResponse, ResourceTable } from '../../ts/types/interface/menu.res.interface';
 import { Table } from '../../components/Table/Table';
-import { IconMap, IconMapKey } from '../../utils/icon';
+import columns from './ResourceColumns';
 
 const MenuResourcePage = () => {
   const { fetchData, loading, error, data } = useFetch<ResourceResponse>('/resource/list', false);
-
-  const columns: {
-    name: string;
-    uid: keyof ResourceTable;
-    sortable?: boolean;
-    searchable?: boolean;
-    defaultShow?: boolean;
-    width?: string | number;
-    render?: (item: ResourceInterface) => ReactElement | void;
-  }[] = [
-    {
-      name: 'ID',
-      uid: 'resourceId',
-      sortable: true,
-      searchable: true,
-      defaultShow: true,
-    },
-    {
-      name: 'Name',
-      uid: 'resourceName',
-      sortable: true,
-      searchable: true,
-      defaultShow: true,
-      render: (item) => (
-        <Box style={{ display: 'flex', alignItems: 'center' }}>
-          <ThemeIcon variant="light" size={30}>
-            {IconMap[item.resourceIcon as IconMapKey]}
-          </ThemeIcon>
-          <Box ml="md">{item.resourceName}</Box>
-        </Box>
-      ),
-    },
-    {
-      name: 'ACTIONS',
-      uid: 'actions',
-      sortable: false,
-      searchable: false,
-      defaultShow: true,
-      render: (item: ResourceInterface) => (
-        <Group wrap="nowrap">
-          <ActionIcon
-            variant="subtle"
-            color="gray"
-            onClick={(e) => {
-              e.stopPropagation();
-            }}
-          >
-            <IconPencil style={{ width: rem(16), height: rem(16) }} stroke={1.5} />
-          </ActionIcon>
-          <ActionIcon
-            variant="subtle"
-            color="red"
-            onClick={(e) => {
-              e.stopPropagation();
-            }}
-          >
-            <IconTrash style={{ width: rem(16), height: rem(16) }} stroke={1.5} />
-          </ActionIcon>
-        </Group>
-      ),
-    },
-  ];
 
   const items = [
     <Anchor href="#" size="sm" key="home">

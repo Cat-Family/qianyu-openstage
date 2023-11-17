@@ -1,5 +1,11 @@
 import React, { ReactElement, useState } from 'react';
-import { Box, Checkbox, Collapse, TableTd, TableTr, UnstyledButton, rem } from '@mantine/core';
+import {
+  ActionIcon,
+  Checkbox,
+  TableTd,
+  TableTr,
+  rem,
+} from '@mantine/core';
 import { IconChevronDown, IconChevronRight } from '@tabler/icons-react';
 import { TableRowCell } from './TableRowCell';
 import { TableRowExpansion } from './TableRowExpansion';
@@ -41,25 +47,29 @@ export function TableRow<T>({
             <Checkbox checked={selection.includes(id)} onChange={() => toggleRow(id)} />
           </TableTd>
         )}
-        {expansion && (
-          <TableTd w={20}>
-            {expansion?.content?.(item) && open ? (
-              <UnstyledButton onClick={() => setOpen(!open)}>
+        <TableTd w={50}>
+          {expansion ? (
+            expansion?.content?.(item) && open ? (
+              <ActionIcon variant="light" onClick={() => setOpen(!open)}>
                 <IconChevronDown
                   style={{ width: rem(16), height: rem(16), lineHeight: rem(16) }}
                   stroke={1.5}
                 />
-              </UnstyledButton>
+              </ActionIcon>
             ) : (
-              <UnstyledButton onClick={() => setOpen(!open)} disabled={!expansion?.content?.(item)}>
+              <ActionIcon
+                variant="light"
+                onClick={() => setOpen(!open)}
+                disabled={!expansion?.content?.(item)}
+              >
                 <IconChevronRight
                   style={{ width: rem(16), height: rem(16), lineHeight: rem(16) }}
                   stroke={1.5}
                 />
-              </UnstyledButton>
-            )}
-          </TableTd>
-        )}
+              </ActionIcon>
+            )
+          ) : null}
+        </TableTd>
         {columns.map(
           (column) =>
             renderColumns.includes(column.name) && (
