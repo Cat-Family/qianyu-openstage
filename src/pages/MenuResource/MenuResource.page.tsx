@@ -53,14 +53,34 @@ const MenuResourcePage = () => {
           }))}
           noSelector
           rowExpansion={{
+            level: 1,
             content: ({ children }: ResourceTable) =>
               children.length > 0 ? (
                 <Table<ResourceTable>
                   w="100%"
                   columns={columns}
+                  level={1}
                   noHeader
                   noSelector
                   data={children.map((item) => ({ ...item, actions: item, id: item.resourceId }))}
+                  rowExpansion={{
+                    level: 2,
+                    content: ({ children }: ResourceTable) =>
+                      children.length > 0 ? (
+                        <Table<ResourceTable>
+                          w="100%"
+                          level={2}
+                          columns={columns}
+                          noHeader
+                          noSelector
+                          data={children.map((item) => ({
+                            ...item,
+                            actions: item,
+                            id: item.resourceId,
+                          }))}
+                        />
+                      ) : null,
+                  }}
                 />
               ) : null,
           }}

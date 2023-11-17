@@ -1,11 +1,5 @@
 import React, { ReactElement, useState } from 'react';
-import {
-  ActionIcon,
-  Checkbox,
-  TableTd,
-  TableTr,
-  rem,
-} from '@mantine/core';
+import { ActionIcon, Checkbox, Space, TableTd, TableTr, rem } from '@mantine/core';
 import { IconChevronDown, IconChevronRight } from '@tabler/icons-react';
 import { TableRowCell } from './TableRowCell';
 import { TableRowExpansion } from './TableRowExpansion';
@@ -26,6 +20,7 @@ type TableRowProps<T> = {
   id: string;
   expansion?: any;
   noSelector?: boolean;
+  level?: number;
 };
 
 export function TableRow<T>({
@@ -37,8 +32,9 @@ export function TableRow<T>({
   id,
   expansion,
   noSelector,
+  level,
 }: TableRowProps<T>) {
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(false);
   return (
     <>
       <TableTr>
@@ -47,7 +43,7 @@ export function TableRow<T>({
             <Checkbox checked={selection.includes(id)} onChange={() => toggleRow(id)} />
           </TableTd>
         )}
-        <TableTd w={50}>
+        <TableTd w={50} pl={(level || 0) * 15}>
           {expansion ? (
             expansion?.content?.(item) && open ? (
               <ActionIcon variant="light" onClick={() => setOpen(!open)}>

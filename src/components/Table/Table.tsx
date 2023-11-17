@@ -50,6 +50,7 @@ interface TableProps<T> {
   noFooter?: boolean;
   noSelector?: boolean;
   w?: StyleProp<React.CSSProperties['width']> | undefined;
+  level?: number;
 }
 
 function Table<T extends { id: string }>({
@@ -65,6 +66,7 @@ function Table<T extends { id: string }>({
   noFooter,
   noSelector,
   w,
+  level,
 }: TableProps<T>) {
   const [renderColumns, setRenderColumns] = useState(
     columns.filter((item) => item.defaultShow).map((item) => item.name)
@@ -173,6 +175,7 @@ function Table<T extends { id: string }>({
                   selection={selection}
                   expansion={rowExpansion}
                   noSelector={noSelector}
+                  level={level}
                 />
               ))}
           </MantineTable.Tbody>
