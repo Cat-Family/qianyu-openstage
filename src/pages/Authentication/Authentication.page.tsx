@@ -63,7 +63,7 @@ export function Authentication() {
             formData.append('userAccount', form.values.account);
             formData.append('userPwd', md5(form.values.password));
             values &&
-              fetchLogin('auth/user/login.action', {
+              fetchLogin('/auth/user/login.action', {
                 method: 'POST',
                 body: formData,
               });

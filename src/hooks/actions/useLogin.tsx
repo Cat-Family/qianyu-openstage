@@ -13,7 +13,7 @@ type UseAuthentication = {
 const useAuthentication = (): UseAuthentication => {
   const [code, setCode] = useState<string>('');
 
-  const { fetchData: fetchLogin, data: loginData, loading } = useFetch<Login>(true);
+  const { fetchData: fetchLogin, data: loginData, loading } = useFetch<Login>(undefined, true);
 
   const { fetchData: twoFALogin, loading: towFALoading } = useFetch();
 

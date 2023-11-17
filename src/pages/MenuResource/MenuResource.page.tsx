@@ -1,98 +1,61 @@
-import React, { ReactElement, useState } from 'react';
+import React, { ReactElement, useEffect, useState } from 'react';
 import {
   ActionIcon,
   Anchor,
+  Box,
   Breadcrumbs,
   Button,
   Center,
-  Drawer,
   Flex,
   Group,
-  Text,
   ThemeIcon,
   Title,
   rem,
 } from '@mantine/core';
 import { IconHome, IconPencil, IconPlus, IconTrash } from '@tabler/icons-react';
-import { useDisclosure } from '@mantine/hooks';
-import { Table } from '../../components/Table';
-import classes from './Table.module.css';
 import useFetch from '../../hooks/useFetch';
+import classes from './MenuResource.module.css';
+import {
+  ResourceResponse,
+  ResourceInterface,
+  ResourceTable,
+} from '../../ts/types/interface/menu.res.interface';
+import { Table } from '../../components/Table/Table';
 import { IconMap, IconMapKey } from '../../utils/icon';
 
-interface DataInterface {
-  id: string;
-  isCatalog: boolean;
-  resourceIcon: IconMapKey;
-  resourceId: string;
-  resourceLevel: number;
-  resourceName: string;
-  resourcePath: string;
-  actions: DataInterface;
-}
-export interface ListRes {
-  code: number;
-  data: DataInterface[];
-  message: string;
-}
-
-const items = [
-  <Anchor href="#" size="sm" key="home">
-    <IconHome size={12} />
-  </Anchor>,
-  <Anchor href="#" size="12" key="tablePage">
-    Table Page
-  </Anchor>,
-];
-
-const TablePage = () => {
-  const [opened, { open, close }] = useDisclosure(false);
-  const [selectItem, setSelectItem] = useState<DataInterface | undefined>();
-  const { fetchData, data, loading, error } = useFetch<ListRes>('/router/getMenuTree', true);
+const MenuResourcePage = () => {
+  const { fetchData, loading, error, data } = useFetch<ResourceResponse>('/resource/list', false);
 
   const columns: {
     name: string;
-    uid: keyof DataInterface;
+    uid: keyof ResourceTable;
     sortable?: boolean;
     searchable?: boolean;
     defaultShow?: boolean;
     width?: string | number;
-    render?: (item: DataInterface) => ReactElement | void;
+    render?: (item: ResourceInterface) => ReactElement | void;
   }[] = [
     {
-      name: 'id',
+      name: 'ID',
       uid: 'resourceId',
       sortable: true,
       searchable: true,
       defaultShow: true,
     },
     {
-      name: 'resourceName',
+      name: 'Name',
       uid: 'resourceName',
       sortable: true,
       searchable: true,
       defaultShow: true,
-    },
-    {
-      name: 'icon',
-      uid: 'resourceIcon',
-      sortable: true,
-      searchable: true,
-      defaultShow: false,
-      width: 50,
       render: (item) => (
-        <ThemeIcon variant="light" size={30}>
-          {IconMap[item.icon]}
-        </ThemeIcon>
+        <Box style={{ display: 'flex', alignItems: 'center' }}>
+          <ThemeIcon variant="light" size={30}>
+            {IconMap[item.resourceIcon as IconMapKey]}
+          </ThemeIcon>
+          <Box ml="md">{item.resourceName}</Box>
+        </Box>
       ),
-    },
-    {
-      name: 'level',
-      uid: 'resourceLevel',
-      sortable: true,
-      searchable: true,
-      defaultShow: true,
-      width: 50,
     },
     {
       name: 'ACTIONS',
@@ -100,15 +63,13 @@ const TablePage = () => {
       sortable: false,
       searchable: false,
       defaultShow: true,
-      render: (item: DataInterface) => (
+      render: (item: ResourceInterface) => (
         <Group wrap="nowrap">
           <ActionIcon
             variant="subtle"
             color="gray"
             onClick={(e) => {
               e.stopPropagation();
-              open();
-              setSelectItem(item);
             }}
           >
             <IconPencil style={{ width: rem(16), height: rem(16) }} stroke={1.5} />
@@ -127,13 +88,26 @@ const TablePage = () => {
     },
   ];
 
+  const items = [
+    <Anchor href="#" size="sm" key="home">
+      <IconHome size={12} />
+    </Anchor>,
+    <Anchor href="#" size="12" key="tablePage">
+      资源配置
+    </Anchor>,
+  ];
+
+  useEffect(() => {
+    fetchData('', { method: 'POST' });
+  }, []);
+
   return (
     <>
       <Flex className={classes.header}>
         <Flex direction="column" gap="sm">
           <Breadcrumbs mt="xs">{items}</Breadcrumbs>
           <Title order={2} fz={27}>
-            TablePage
+            资源配置
           </Title>
         </Flex>
 
@@ -145,7 +119,7 @@ const TablePage = () => {
         </Button>
       </Flex>
       <Center mx="5vw" pt="lg">
-        <Table<DataInterface>
+        <Table<ResourceTable>
           fetchData={fetchData}
           loading={loading}
           error={error}
@@ -155,19 +129,23 @@ const TablePage = () => {
             actions: item,
             id: item.resourceId,
           }))}
+          noSelector
+          rowExpansion={{
+            content: ({ children }: ResourceTable) =>
+              children.length > 0 ? (
+                <Table<ResourceTable>
+                  w="100%"
+                  columns={columns}
+                  noHeader
+                  noSelector
+                  data={children.map((item) => ({ ...item, actions: item, id: item.resourceId }))}
+                />
+              ) : null,
+          }}
         />
       </Center>
-      <Drawer
-        position="right"
-        opened={opened}
-        onClose={close}
-        withCloseButton={false}
-        overlayProps={{ backgroundOpacity: 0.5, blur: 4 }}
-      >
-        <Text>{JSON.stringify(selectItem)}</Text>
-      </Drawer>
     </>
   );
 };
 
-export default TablePage;
+export default MenuResourcePage;

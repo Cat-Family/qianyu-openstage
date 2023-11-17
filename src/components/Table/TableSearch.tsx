@@ -28,7 +28,7 @@ interface TableSearchProps<T> {
   }[];
   pageNum: number;
   pageSize: number;
-  fetchData: FetchData;
+  fetchData?: FetchData;
   renderColumns: string[];
   setRenderColumns: React.Dispatch<React.SetStateAction<string[]>>;
 }
@@ -81,7 +81,7 @@ function TableSearch<T>({
               const formData = new FormData();
               formData.append('pageSize', pageSize.toString());
               formData.append('pageNum', pageNum.toString());
-              fetchData('', { method: 'POST', body: formData });
+              fetchData?.('', { method: 'POST', body: formData });
             }}
           >
             <IconRefresh

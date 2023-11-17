@@ -1,50 +1,51 @@
 import React, { useState } from 'react';
 import { Group, Box, Collapse, ThemeIcon, Text, UnstyledButton, rem } from '@mantine/core';
-import { IconCategory2, IconChevronRight, IconDashboard } from '@tabler/icons-react';
+import { IconChevronRight } from '@tabler/icons-react';
 import { Link, useNavigate } from 'react-router-dom';
-import { MenuTree } from '@/ts/types/interface/menu.res.interface';
+import { ResourceInterface } from '@/ts/types/interface/menu.res.interface';
+import { IconMap, IconMapKey } from '../../utils/icon';
 import classes from './NavbarLinksGroup.module.css';
 
-export const IconMap = {
-  IconDashboard: <IconDashboard style={{ width: rem(18), height: rem(18) }} />,
-  IconCategory2: <IconCategory2 style={{ width: rem(18), height: rem(18) }} />,
-};
-
-export type IconMapKey = keyof typeof IconMap;
-
-interface LinkGroupProps extends MenuTree {
+interface LinkGroupProps extends ResourceInterface {
   initiallyOpened?: boolean;
 }
 
-export function LinksGroup({ routerItem, menuItem, initiallyOpened }: LinkGroupProps) {
+export function LinksGroup({
+  initiallyOpened,
+  resourceId,
+  resourcePath,
+  resourceName,
+  children,
+  resourceIcon,
+}: LinkGroupProps) {
   const [opened, setOpened] = useState(initiallyOpened || false);
   const navigate = useNavigate();
-  const items = menuItem?.routers.map((link) => (
+  const items = children?.map((link) => (
     <Text<typeof Link>
+      key={link.resourceId}
       component={Link}
       className={classes.link}
-      to={link?.path}
-      key={link.routerId}
+      to={link?.resourcePath || '#'}
     >
-      {link.routerName}
+      {link.resourceName}
     </Text>
   ));
 
   return (
     <>
       <UnstyledButton
-        key={menuItem?.catalogId || routerItem?.routerId}
-        onClick={() => (routerItem?.path ? navigate(routerItem.path) : setOpened((o) => !o))}
+        key={resourceId}
+        onClick={() => (resourcePath ? navigate(resourcePath) : setOpened((o) => !o))}
         className={classes.control}
       >
         <Group justify="space-between" gap={0}>
           <Box style={{ display: 'flex', alignItems: 'center' }}>
             <ThemeIcon variant="light" size={30}>
-              {IconMap[menuItem?.catalogIcon || (routerItem?.routerIcon as IconMapKey)]}
+              {IconMap[resourceIcon as IconMapKey]}
             </ThemeIcon>
-            <Box ml="md">{menuItem?.catalogName || routerItem?.routerName}</Box>
+            <Box ml="md">{resourceName}</Box>
           </Box>
-          {menuItem?.routers && (
+          {children.length > 0 && (
             <IconChevronRight
               className={classes.chevron}
               stroke={1.5}
@@ -57,7 +58,7 @@ export function LinksGroup({ routerItem, menuItem, initiallyOpened }: LinkGroupP
           )}
         </Group>
       </UnstyledButton>
-      {menuItem?.routers ? <Collapse in={opened}>{items}</Collapse> : null}
+      {children.length > 0 ? <Collapse in={opened}>{items}</Collapse> : null}
     </>
   );
 }

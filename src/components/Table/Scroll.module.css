@@ -1,13 +1,13 @@
 .root {
-  height: calc(100vh - rem(290) - var(--app-shell-header-offset));
-  min-height: 200px;
+  /* height: calc(100vh - rem(290) - var(--app-shell-header-offset)); */
+  /* min-height: 200px; */
   width: calc(90vw - var(--app-shell-navbar-offset, 0px));
 
-  @media (max-width: $mantine-breakpoint-lg) {
+  /* @media (max-width: $mantine-breakpoint-lg) {
     height: calc(100vh - rem(350) - var(--app-shell-header-offset));
   }
 
   @media (max-width: $mantine-breakpoint-sm) {
     height: calc(100vh - rem(290) - var(--app-shell-header-offset));
-  }
+  } */
 }

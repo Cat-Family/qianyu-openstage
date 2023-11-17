@@ -1,30 +1,28 @@
 import { IconMapKey } from '../../../components/NavbarLinksGroup/NavbarLinksGroup';
 
-export interface MenuTree {
-  menuItem?: {
-    catalogIcon: IconMapKey;
-    catalogId: string;
-    catalogLevel: number;
-    catalogName: string;
-    routers: {
-      path: string;
-      routeLevel: number;
-      routerIcon: string;
-      routerId: string;
-      routerName: string;
-    }[];
-  };
-  routerItem?: {
-    path: string;
-    routeLevel: number;
-    routerIcon: IconMapKey;
-    routerId: string;
-    routerName: string;
-  };
+export type ResourceType = 'C' | 'R' | 'F';
+
+export interface ResourceTable extends ResourceInterface {
+  id: string;
+  actions: ResourceInterface;
 }
 
-export interface LoadMenuTreeRes {
+export interface ResourceInterface {
+  resourceId: string;
+  resourceName: string;
+  resourcePerms?: string;
+  parentId: string;
+  resourceLevel: number;
+  resourcePath?: string;
+  resourceParams?: string;
+  resourceType: ResourceType;
+  resourceIcon?: string;
+  effective: number;
+  children: ResourceInterface[];
+}
+
+export interface ResourceResponse {
   code: number;
-  data: MenuTree[];
+  data: ResourceInterface[];
   message: string;
 }

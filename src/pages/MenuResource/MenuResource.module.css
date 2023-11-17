@@ -1,0 +1,14 @@
+.header {
+  padding: 1rem;
+  gap: 1rem;
+  height: rem(112);
+  justify-content: space-between;
+
+  @mixin light {
+    background-color: var(--mantine-color-gray-0);
+  }
+
+  @mixin dark {
+    background-color: var(--mantine-color-dark-6);
+  }
+}

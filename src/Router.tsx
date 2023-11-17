@@ -6,6 +6,7 @@ import { Authentication } from './pages/Authentication/Authentication.page';
 import Oauth from './pages/Oauth/Oauth.page';
 import TablePage from './pages/Table/Table.page';
 import { NotFound } from './pages/NotFound/NotFound.page';
+import MenuResourcePage from './pages/MenuResource/MenuResource.page';
 
 export function Router() {
   return (
@@ -19,7 +20,7 @@ export function Router() {
       <Route path="/" element={<Shell />}>
         <Route index element={<TablePage />} />
 
-        <Route path="/resources/menuResource" element={<Box>menuResource</Box>} />
+        <Route path="/resources/menuResource" element={<MenuResourcePage />} />
 
         <Route path="/resources/linkResource" element={<Box>linkResource</Box>} />
 
