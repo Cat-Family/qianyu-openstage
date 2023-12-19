@@ -44,6 +44,9 @@ function TableSearch<T>({
   const [searchItem, setSearchItem] = useState<string | null>(
     columns.filter((item) => item.searchable)[0].name
   );
+  const [searchItemUid, setSearchItemUid] = useState<keyof T | 'actions'>(
+      columns.filter((item) => item.searchable)[0].uid
+  );
   const [opened, { open, close }] = useDisclosure(false);
 
   return (
@@ -59,23 +62,24 @@ function TableSearch<T>({
           />
           <TextInput className={classes.search} placeholder={`Search by ${searchItem}...`} />
         </Group>
-        <MultiSelect
-          w={150}
-          classNames={multiSelectClasses}
-          checkIconPosition="right"
-          data={columns.map((item) => item.name)}
-          placeholder="Columns"
-          defaultValue={renderColumns}
-          onChange={setRenderColumns}
-        />
         <Group>
           <Button
             visibleFrom="sm"
             variant="outline"
+            onClick={() => sigleSearch()}
             rightSection={<IconSearch style={{ width: rem(18), height: rem(18) }} stroke={1.8} />}
           >
             Search
           </Button>
+          <MultiSelect
+            w={150}
+            classNames={multiSelectClasses}
+            checkIconPosition="right"
+            data={columns.map((item) => item.name)}
+            placeholder="Columns"
+            defaultValue={renderColumns}
+            onChange={setRenderColumns}
+          />
           <UnstyledButton
             onClick={() => {
               const formData = new FormData();

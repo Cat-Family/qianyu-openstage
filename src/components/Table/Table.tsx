@@ -112,6 +112,7 @@ function Table<T extends { id: string }>({
             renderColumns={renderColumns}
             setRenderColumns={setRenderColumns}
           />
+          {!noSelector &&
           <Flex justify="space-between" align="center" w="100%" mt="xs">
             <Text size="xs">Total {total} users</Text>
             <Menu shadow="lg" width={180}>
@@ -137,7 +138,7 @@ function Table<T extends { id: string }>({
                 </Menu.Item>
               </MenuDropdown>
             </Menu>
-          </Flex>
+          </Flex>}
         </>
       )}
       <ScrollArea
