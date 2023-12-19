@@ -1,3 +1,4 @@
+import React from 'react';
 import {
   Paper,
   TextInput,
@@ -13,16 +14,21 @@ import {
   LoadingOverlay,
 } from '@mantine/core';
 import { useForm } from '@mantine/form';
+import md5 from 'md5';
 import { IconBrandAlipay, IconBrandGithub } from '@tabler/icons-react';
-import classes from './Authentication.page.module.css';
 import useAuthentication from '../../hooks/actions/useLogin';
-import { useDisclosure } from '@mantine/hooks';
+import classes from './Authentication.page.module.css';
 
 const github_client_id = import.meta.env.VITE_GITHUB_CLIENT_ID;
 const redirect_uri_github = import.meta.env.VITE_REDIRECT_URI_GITHUB;
 const redirect_uri_alipay = import.meta.env.VITE_REDIRECT_URI_ALIPAY;
 const alipay_app_id = import.meta.env.VITE_ALIPAY_APP_ID;
-const windowFeatures = 'left=600,top=200,width=500,height=500,scrollbars,status';
+
+const OauthList = {
+  alipay: `https://openauth.alipay.com/oauth2/publicAppAuthorize.htm?app_id=${alipay_app_id}&scope=auth_user&redirect_uri=
+${redirect_uri_alipay}&state=init`,
+  github: `https://github.com/login/oauth/authorize?client_id=${github_client_id}&scope=user:email&redirect_uri=${redirect_uri_github}`,
+};
 
 export function Authentication() {
   const form = useForm({
@@ -35,8 +41,11 @@ export function Authentication() {
     },
   });
 
-  const [visible, { toggle }] = useDisclosure(true);
-  const { fetchLogin, loading } = useAuthentication(toggle);
+  const { fetchLogin, loading } = useAuthentication();
+
+  const handleOauth = ({ type }: { type: 'github' | 'alipay' }) => {
+    window.location.href = OauthList[type];
+  };
 
   return (
     <div className={classes.wrapper}>
@@ -49,20 +58,19 @@ export function Authentication() {
         </Title>
         <Box style={{ flex: 1 }} />
         <form
-          onSubmit={form.onSubmit(
-            (values) =>
-              values &&
-              fetchLogin('auth/user/login.action', {
+          onSubmit={form.onSubmit((values) => {
+            const formData = new FormData();
+            formData.append('userAccount', form.values.account);
+            formData.append('userPwd', md5(form.values.password));
+            values &&
+              fetchLogin('/auth/user/login.action', {
                 method: 'POST',
-                body: JSON.stringify({
-                  userAccount: form.values.account,
-                  userPwd: 'e10adc3949ba59abbe56e057f20f883e' || form.values.password,
-                }),
-              })
-          )}
+                body: formData,
+              });
+          })}
         >
           <LoadingOverlay
-            visible={visible}
+            visible={loading}
             zIndex={1000}
             overlayProps={{ radius: 'sm', blur: 2 }}
           />
@@ -90,13 +98,7 @@ export function Authentication() {
           <Divider label="Or continue with other" labelPosition="center" my="lg" />
           <Group grow mb="md" mt="md">
             <ActionIcon
-              onClick={() => {
-                window.open(
-                  `https://github.com/login/oauth/authorize?client_id=${github_client_id}&scope=user:email&redirect_uri=${redirect_uri_github}`,
-                  'Github',
-                  windowFeatures
-                );
-              }}
+              onClick={() => handleOauth({ type: 'github' })}
               variant="filled"
               color="dark"
               radius="xl"
@@ -104,15 +106,7 @@ export function Authentication() {
               <IconBrandGithub size="1rem" />
             </ActionIcon>
             <ActionIcon
-              onClick={async () => {
-                console.log(alipay_app_id);
-                window.open(
-                  `https://openauth.alipay.com/oauth2/publicAppAuthorize.htm?app_id=${alipay_app_id}&scope=auth_user&redirect_uri=
-${redirect_uri_alipay}&state=init`,
-                  'Alipay',
-                  windowFeatures
-                );
-              }}
+              onClick={async () => handleOauth({ type: 'alipay' })}
               variant="filled"
               radius="xl"
             >

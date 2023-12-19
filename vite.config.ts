@@ -7,7 +7,8 @@ export default defineConfig({
   server: {
     proxy: {
       '/qy/api/v1/os/': {
-        target: 'http://192.168.0.131:7777',
+        target: 'http://82.157.67.120:8084',
+        // target: 'http://192.168.0.131:7777',
         changeOrigin: true,
       },
     },

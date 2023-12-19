@@ -1,10 +1,11 @@
-import { FetchData, FetchDataParams } from '../ts/types/types/fetchData.types';
+import React, { useReducer } from 'react';
 import { rem } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
 import { IconCheck, IconX } from '@tabler/icons-react';
-import { useReducer, useRef } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { FetchData, FetchDataParams } from '../ts/types/types/fetchData.type';
 
-const BASE_URL: string = '/qy/api/v1/os/';
+const BASE_URL: string = '/qy/api/v1/os';
 
 interface State<T> {
   fetchData: FetchData;
@@ -13,8 +14,6 @@ interface State<T> {
   loading: boolean;
 }
 
-type Cache<T> = { [url: string]: T };
-
 // discriminated union type
 type Action<T> =
   | { type: 'loading' }
@@ -22,12 +21,11 @@ type Action<T> =
   | { type: 'error'; payload: Error };
 
 function useFetch<T extends { code: number; message: string }>(
+  path?: string,
   showErrorNotification: boolean = true,
   showSuccessNotification: boolean = false,
   showAsyncNotification: boolean = false
 ): State<T> {
-  const cache = useRef<Cache<T>>({});
-
   // Used to prevent state update if the component is unmounted
 
   const initialState: State<T> = {
@@ -47,20 +45,17 @@ function useFetch<T extends { code: number; message: string }>(
       case 'error':
         return { ...initialState, loading: false, error: action.payload };
       default:
-        return state;
+        return initialState;
     }
   };
 
+  const navigate = useNavigate();
   const [state, dispatch] = useReducer(fetchReducer, initialState);
+  const location = useLocation();
 
   const fetchData = async (url: FetchDataParams[0], options: FetchDataParams[1]) => {
     dispatch({ type: 'loading' });
 
-    // If a cache exists for this url, return it
-    // if (cache.current[url]) {
-    //   dispatch({ type: 'fetched', payload: cache.current[url] })
-    //   return
-    // }
     let id;
     if (showAsyncNotification) {
       id = notifications.show({
@@ -73,9 +68,9 @@ function useFetch<T extends { code: number; message: string }>(
     }
 
     try {
-      const response = await fetch(BASE_URL + url, {
+      const response = await fetch(BASE_URL + (url || path), {
         headers: {
-          'Content-Type': 'application/json',
+          'request-origin-path': location.pathname,
         },
         mode: 'cors',
         ...options,
@@ -85,38 +80,47 @@ function useFetch<T extends { code: number; message: string }>(
       }
 
       const data = await response.json();
+      if (data.code === 200) {
+        showSuccessNotification &&
+          notifications.show({
+            withCloseButton: true,
+            autoClose: 3000,
+            title: '成功',
+            message: '操作成功',
+            color: 'green',
+            icon: <IconCheck />,
+            radius: 'lg',
+            loading: false,
+          });
 
-      if (data.code !== 200) {
-        throw {
-          name: data.message,
-          message: data.data,
-        };
+        showAsyncNotification &&
+          notifications.update({
+            id,
+            color: 'teal',
+            title: '成功',
+            message: '操作成功',
+            icon: <IconCheck style={{ width: rem(18), height: rem(18) }} />,
+            loading: false,
+            autoClose: 2000,
+          });
+        dispatch({ type: 'fetched', payload: data });
+        return;
       }
 
-      cache.current[url] = data;
-      showSuccessNotification &&
-        notifications.show({
-          withCloseButton: true,
-          autoClose: 3000,
-          title: '成功',
-          message: '操作成功',
-          color: 'green',
-          icon: <IconCheck />,
-          radius: 'lg',
-          loading: false,
-        });
+      if (data.code === 201) {
+        navigate('/');
+        dispatch({ type: 'fetched', payload: data });
+        return;
+      }
 
-      showAsyncNotification &&
-        notifications.update({
-          id,
-          color: 'teal',
-          title: '成功',
-          message: '操作成功',
-          icon: <IconCheck style={{ width: rem(18), height: rem(18) }} />,
-          loading: false,
-          autoClose: 2000,
-        });
-      dispatch({ type: 'fetched', payload: data });
+      if (data.code === 401) {
+        navigate('/users/auth');
+      }
+
+      throw Object({
+        name: data.code,
+        message: data.message,
+      });
     } catch (error: any) {
       notifications.update({
         id,

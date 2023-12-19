@@ -1,24 +1,24 @@
+import React, { useEffect, useState } from 'react';
 import { modals } from '@mantine/modals';
-import useFetch from '../useFetch';
 import { Flex, Text, PinInput, Button } from '@mantine/core';
+import useFetch from '../useFetch';
 import { Login } from '../../ts/types/interface/login.interface';
-import { useEffect, useState } from 'react';
-import { FetchData } from '../../ts/types/types/fetchData.types';
+import { FetchData } from '../../ts/types/types/fetchData.type';
 
 type UseAuthentication = {
-  fetchLogin: FetchData
+  fetchLogin: FetchData;
   loading: boolean;
-}
+};
 
-const useAuthentication = (toggle: () => void): UseAuthentication => {
+const useAuthentication = (): UseAuthentication => {
   const [code, setCode] = useState<string>('');
 
-  const { fetchData: fetchLogin, data: loginData, loading } = useFetch<Login>(false);
+  const { fetchData: fetchLogin, data: loginData, loading } = useFetch<Login>(undefined, true);
 
-  const { fetchData: twoFALogin, data: twoFARes, loading: towFALoading } = useFetch();
+  const { fetchData: twoFALogin, loading: towFALoading } = useFetch();
 
   useEffect(() => {
-    loginData?.data?.twoFA &&
+    if (loginData?.data?.twoFA) {
       modals.open({
         id: '2FA-modal',
         title: 'Two-factor authentication',
@@ -59,7 +59,7 @@ const useAuthentication = (toggle: () => void): UseAuthentication => {
                   twoFALogin('auth/user/2faLogin.action', {
                     method: 'POST',
                     body: JSON.stringify({
-                      code: code,
+                      code,
                     }),
                   });
                 }}
@@ -71,14 +71,8 @@ const useAuthentication = (toggle: () => void): UseAuthentication => {
           </>
         ),
       });
-  }, [loginData]);
-
-  useEffect(() => {
-    if(loading) {
-      toggle()
     }
-    toggle()
-  },[loading])
+  }, [loginData]);
 
   return { fetchLogin, loading };
 };

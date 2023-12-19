@@ -1,34 +1,49 @@
-import useFetch from '../../hooks/useFetch';
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
-
-const type_github = import.meta.env.VITE_THIRD_AUTH_TYPE_GITHUB;
-const type_alipay = import.meta.env.VITE_THIRD_AUTH_TYPE_ALIPAY;
+import { Stack, Text } from '@mantine/core';
+import useFetch from '../../hooks/useFetch';
+import useCountdown from '../../hooks/useCountdown';
 
 const Oauth = () => {
-  const search = useLocation().search;
+  const { search } = useLocation();
   const params = new URLSearchParams(search);
-  const channel = params.get("channel");
-  let authCode: string | null = "";
-  if (type_alipay === channel) {
-    authCode = params.get("auth_code")
-  } else if (type_github === channel) {
-    authCode = params.get("code")
-  }
+  const channel = params.get('channel');
+  const authCode = params.get('auth_code') || params.get('code');
+  const { fetchData, loading, error, data } = useFetch(true);
+  const { startCountdown, counter } = useCountdown(5);
 
-  const { fetchData, data, error } = useFetch(false, false, true);
   useEffect(() => {
     if (authCode) {
       fetchData('third/sso/login.action', {
         method: 'POST',
         body: JSON.stringify({
           authCode,
-          channel
+          channel,
         }),
-      }).then(r => {});
+      });
     }
   }, [authCode]);
-  return <div>跳转中...</div>;
+
+  useEffect(() => {
+    if (data && !error) {
+      startCountdown();
+    }
+  }, [data, error]);
+
+  return (
+    <div>
+      {loading ? (
+        'loading'
+      ) : error ? (
+        'error'
+      ) : (
+        <Stack>
+          <Text>Login successful</Text>
+          <Text>This window will closed by {counter} seconds automatically</Text>
+        </Stack>
+      )}
+    </div>
+  );
 };
 
 export default Oauth;

@@ -1,41 +1,51 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { Group, Box, Collapse, ThemeIcon, Text, UnstyledButton, rem } from '@mantine/core';
-import { Icon2fa, IconCalendarStats, IconChevronRight } from '@tabler/icons-react';
+import { IconChevronRight } from '@tabler/icons-react';
+import { Link, useNavigate } from 'react-router-dom';
+import { ResourceInterface } from '@/ts/types/interface/menu.res.interface';
+import { IconMap, IconMapKey } from '../../utils/icon';
 import classes from './NavbarLinksGroup.module.css';
 
-interface LinksGroupProps {
-  icon: React.FC<any>;
-  menuName: string;
+interface LinkGroupProps extends ResourceInterface {
   initiallyOpened?: boolean;
-  children?: { label: string; link: string }[];
 }
 
-export function LinksGroup({ icon: Icon, menuName, initiallyOpened, children }: LinksGroupProps) {
-  const hasLinks = Array.isArray(children);
+export function LinksGroup({
+  initiallyOpened,
+  resourceId,
+  resourcePath,
+  resourceName,
+  children,
+  resourceIcon,
+}: LinkGroupProps) {
   const [opened, setOpened] = useState(initiallyOpened || false);
-  const items = (hasLinks ? children : []).map((link: any) => (
-    <Text<'a'>
-      component="a"
+  const navigate = useNavigate();
+  const items = children?.map((link) => (
+    <Text<typeof Link>
+      key={link.resourceId}
+      component={Link}
       className={classes.link}
-      href={link?.link}
-      key={link.id}
-      onClick={(event) => event.preventDefault()}
+      to={link?.resourcePath || '#'}
     >
-      {link.menuName}
+      {link.resourceName}
     </Text>
   ));
 
   return (
     <>
-      <UnstyledButton onClick={() => setOpened((o) => !o)} className={classes.control}>
+      <UnstyledButton
+        key={resourceId}
+        onClick={() => (resourcePath ? navigate(resourcePath) : setOpened((o) => !o))}
+        className={classes.control}
+      >
         <Group justify="space-between" gap={0}>
           <Box style={{ display: 'flex', alignItems: 'center' }}>
             <ThemeIcon variant="light" size={30}>
-              <Icon2fa style={{ width: rem(18), height: rem(18) }} />
+              {IconMap[resourceIcon as IconMapKey]}
             </ThemeIcon>
-            <Box ml="md">{menuName}</Box>
+            <Box ml="md">{resourceName}</Box>
           </Box>
-          {hasLinks && (
+          {children.length > 0 && (
             <IconChevronRight
               className={classes.chevron}
               stroke={1.5}
@@ -48,7 +58,7 @@ export function LinksGroup({ icon: Icon, menuName, initiallyOpened, children }: 
           )}
         </Group>
       </UnstyledButton>
-      {hasLinks ? <Collapse in={opened}>{items}</Collapse> : null}
+      {children.length > 0 ? <Collapse in={opened}>{items}</Collapse> : null}
     </>
   );
 }

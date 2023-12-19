@@ -1,98 +1,171 @@
-import { ActionIcon, Box, Button, Container, Group, Text, Title, rem } from '@mantine/core';
+import React, { ReactElement, useState } from 'react';
+import {
+  ActionIcon,
+  Anchor,
+  Breadcrumbs,
+  Button,
+  Center,
+  Drawer,
+  Flex,
+  Group,
+  Text,
+  ThemeIcon,
+  Title,
+  rem,
+} from '@mantine/core';
+import { IconHome, IconPencil, IconPlus, IconTrash } from '@tabler/icons-react';
+import { useDisclosure } from '@mantine/hooks';
 import { Table } from '../../components/Table';
 import classes from './Table.module.css';
-import { ReactElement } from 'react';
-import { IconPencil, IconTrash } from '@tabler/icons-react';
+import useFetch from '../../hooks/useFetch';
+import { IconMap, IconMapKey } from '../../utils/icon';
 
 interface DataInterface {
   id: string;
-  device: string;
-  status: number;
-  times: string;
-  operation?: string;
+  isCatalog: boolean;
+  resourceIcon: IconMapKey;
+  resourceId: string;
+  resourceLevel: number;
+  resourceName: string;
+  resourcePath: string;
+  actions: DataInterface;
+}
+export interface ListRes {
+  code: number;
+  data: DataInterface[];
+  message: string;
 }
 
-const deviceColumns: {
-  title: string;
-  dataIndex: keyof DataInterface;
-  sorted?: boolean;
-  render?: any;
-}[] = [
-  {
-    title: 'ID',
-    sorted: true,
-    dataIndex: 'id',
-  },
-  {
-    title: '设备名称',
-    sorted: false,
-    dataIndex: 'device',
-  },
-  {
-    title: '设备状态',
-    dataIndex: 'status',
-    sorted: false,
-    render: (item: number) =>
-      item === 1 ? (
-        <label style={{ color: 'rgb(0, 181, 101)' }}>作业中</label>
-      ) : item === 2 ? (
-        <label style={{ color: 'rgb(66, 160, 255)' }}>待机中</label>
-      ) : (
-        <label style={{ color: 'rgb(217, 35, 35)' }}>故障</label>
-      ),
-  },
-  {
-    title: '作业次数',
-    dataIndex: 'times',
-    sorted: false,
-  },
-  {
-    title: '操作',
-    dataIndex: 'operation',
-    sorted: false,
-    render: () => (
-      <Group gap={0} justify="flex-end">
-        <ActionIcon variant="subtle" color="gray">
-          <IconPencil style={{ width: rem(16), height: rem(16) }} stroke={1.5} />
-        </ActionIcon>
-        <ActionIcon variant="subtle" color="red">
-          <IconTrash style={{ width: rem(16), height: rem(16) }} stroke={1.5} />
-        </ActionIcon>
-      </Group>
-    ),
-  },
-];
-const deviceData = [
-  {
-    id: '1',
-    device: '无人巡航机',
-    status: 1,
-    times: '1次',
-  },
-  {
-    id: '2',
-    device: '无人巡航机',
-    status: 2,
-    times: '1次',
-  },
-  {
-    id: '3',
-    device: '无人巡航机',
-    status: 3,
-    times: '1次',
-  },
+const items = [
+  <Anchor href="#" size="sm" key="home">
+    <IconHome size={12} />
+  </Anchor>,
+  <Anchor href="#" size="12" key="tablePage">
+    Table Page
+  </Anchor>,
 ];
 
 const TablePage = () => {
+  const [opened, { open, close }] = useDisclosure(false);
+  const [selectItem, setSelectItem] = useState<DataInterface | undefined>();
+  const { fetchData, data, loading, error } = useFetch<ListRes>('/router/getMenuTree', true);
+
+  const columns: {
+    name: string;
+    uid: keyof DataInterface;
+    sortable?: boolean;
+    searchable?: boolean;
+    defaultShow?: boolean;
+    width?: string | number;
+    render?: (item: DataInterface) => ReactElement | void;
+  }[] = [
+    {
+      name: 'id',
+      uid: 'resourceId',
+      sortable: true,
+      searchable: true,
+      defaultShow: true,
+    },
+    {
+      name: 'resourceName',
+      uid: 'resourceName',
+      sortable: true,
+      searchable: true,
+      defaultShow: true,
+    },
+    {
+      name: 'icon',
+      uid: 'resourceIcon',
+      sortable: true,
+      searchable: true,
+      defaultShow: false,
+      width: 50,
+      render: (item) => (
+        <ThemeIcon variant="light" size={30}>
+          {IconMap[item.icon]}
+        </ThemeIcon>
+      ),
+    },
+    {
+      name: 'level',
+      uid: 'resourceLevel',
+      sortable: true,
+      searchable: true,
+      defaultShow: true,
+      width: 50,
+    },
+    {
+      name: 'ACTIONS',
+      uid: 'actions',
+      sortable: false,
+      searchable: false,
+      defaultShow: true,
+      render: (item: DataInterface) => (
+        <Group wrap="nowrap">
+          <ActionIcon
+            variant="subtle"
+            color="gray"
+            onClick={(e) => {
+              e.stopPropagation();
+              open();
+              setSelectItem(item);
+            }}
+          >
+            <IconPencil style={{ width: rem(16), height: rem(16) }} stroke={1.5} />
+          </ActionIcon>
+          <ActionIcon
+            variant="subtle"
+            color="red"
+            onClick={(e) => {
+              e.stopPropagation();
+            }}
+          >
+            <IconTrash style={{ width: rem(16), height: rem(16) }} stroke={1.5} />
+          </ActionIcon>
+        </Group>
+      ),
+    },
+  ];
+
   return (
     <>
-      <Box className={classes.header}>
-        <Title order={2}>TablePage</Title>
-        <Text size="sm">This is a table page</Text>
-      </Box>
-      <Container p="md" size="lg">
-        <Table<DataInterface> columns={deviceColumns} data={deviceData} />
-      </Container>
+      <Flex className={classes.header}>
+        <Flex direction="column" gap="sm">
+          <Breadcrumbs mt="xs">{items}</Breadcrumbs>
+          <Title order={2} fz={27}>
+            TablePage
+          </Title>
+        </Flex>
+
+        <Button
+          rightSection={<IconPlus style={{ width: rem(18), height: rem(18) }} stroke={1.8} />}
+          style={{ alignSelf: 'end' }}
+        >
+          Add
+        </Button>
+      </Flex>
+      <Center mx="5vw" pt="lg">
+        <Table<DataInterface>
+          fetchData={fetchData}
+          loading={loading}
+          error={error}
+          columns={columns}
+          data={data?.data?.map((item) => ({
+            ...item,
+            actions: item,
+            id: item.resourceId,
+          }))}
+        />
+      </Center>
+      <Drawer
+        position="right"
+        opened={opened}
+        onClose={close}
+        withCloseButton={false}
+        overlayProps={{ backgroundOpacity: 0.5, blur: 4 }}
+      >
+        <Text>{JSON.stringify(selectItem)}</Text>
+      </Drawer>
     </>
   );
 };
