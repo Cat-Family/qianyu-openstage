@@ -12,31 +12,26 @@ import { ResourceInterface, ResourceTable } from '../../ts/types/interface/menu.
  * @return gradient style
  */
 const generateColorGradient = (resourceType: string) => {
-    switch (resourceType) {
-        case 'C':
-            return { from: 'blue', to: 'blue', deg: 180 };
-        case 'R':
-            return { from: 'orange', to: 'orange', deg: 180 };
-        case 'F':
-            return { from: 'green', to: 'green', deg: 180 };
-        default:
-            return { from: 'gray', to: 'gray', deg: 180 };
-    }
+  switch (resourceType) {
+    case 'C':
+      return { from: 'blue', to: 'blue', deg: 180 };
+    case 'R':
+      return { from: 'orange', to: 'orange', deg: 180 };
+    case 'F':
+      return { from: 'green', to: 'green', deg: 180 };
+    default:
+      return { from: 'gray', to: 'gray', deg: 180 };
+  }
 };
-
 
 /**
  * @description show gray badge
- * 
+ *
  * @param text show message
- * @returns 
+ * @returns
  */
 const renderGrayBadge = (text: string) => (
-  <Badge
-    size="md"
-    radius="sm"
-    color="rgb(180, 180, 180)"
-  >
+  <Badge size="md" radius="sm" color="rgb(180, 180, 180)">
     {text}
   </Badge>
 );
@@ -48,6 +43,7 @@ const columns: {
   searchable?: boolean;
   defaultShow?: boolean;
   w?: StyleProp<React.CSSProperties['width']> | undefined;
+  tooltip?: string | ReactElement;
   render?: (item: ResourceInterface) => ReactElement | void;
 }[] = [
   {
@@ -56,6 +52,7 @@ const columns: {
     searchable: true,
     defaultShow: true,
     w: 150,
+    tooltip: 'test',
     render: (item) => (
       <Box style={{ display: 'flex', alignItems: 'center' }} w="100%">
         {item.resourceIcon && (
@@ -74,18 +71,18 @@ const columns: {
     defaultShow: true,
     w: 180,
     render: (item) => (
-        <Box style={{ display: 'flex', alignItems: 'center' }} w="100%">
-          {item.resourceType && (
-              <Badge
-                size="md"
-                radius="sm"
-                variant="gradient"
-                gradient={generateColorGradient(item.resourceType)}
-              >
-                {ParseResourceType(item.resourceType)}
-              </Badge>
-          )}
-        </Box>
+      <Box style={{ display: 'flex', alignItems: 'center' }} w="100%">
+        {item.resourceType && (
+          <Badge
+            size="md"
+            radius="sm"
+            variant="gradient"
+            gradient={generateColorGradient(item.resourceType)}
+          >
+            {ParseResourceType(item.resourceType)}
+          </Badge>
+        )}
+      </Box>
     ),
   },
   {
@@ -96,12 +93,10 @@ const columns: {
     w: 180,
     render: (item) => (
       <Box style={{ display: 'flex', alignItems: 'center' }} w="100%">
-        {!item.resourcePath && (
-            renderGrayBadge('不可设置')
-        )}
+        {!item.resourcePath && renderGrayBadge('不可设置')}
         {item.resourcePath}
       </Box>
-  ),
+    ),
   },
   {
     name: '资源参数',
@@ -111,15 +106,11 @@ const columns: {
     w: 180,
     render: (item) => (
       <Box style={{ display: 'flex', alignItems: 'center' }} w="100%">
-        {item.resourceType !== 'R' ? (
-          renderGrayBadge('不可设置')
-        ) : (
-          item.resourceParams ? (
-            item.resourceParams
-          ) : (
-            renderGrayBadge('暂未设置')
-          )
-        )}
+        {item.resourceType !== 'R'
+          ? renderGrayBadge('不可设置')
+          : item.resourceParams
+            ? item.resourceParams
+            : renderGrayBadge('暂未设置')}
       </Box>
     ),
   },
@@ -131,15 +122,11 @@ const columns: {
     w: 180,
     render: (item) => (
       <Box style={{ display: 'flex', alignItems: 'center' }} w="100%">
-        {item.resourceType !== 'F' ? (
-          renderGrayBadge('不可设置')
-        ) : (
-          item.resourcePerms ? (
-            item.resourcePerms
-          ) : (
-            renderGrayBadge('暂未设置')
-          )
-        )}
+        {item.resourceType !== 'F'
+          ? renderGrayBadge('不可设置')
+          : item.resourcePerms
+            ? item.resourcePerms
+            : renderGrayBadge('暂未设置')}
       </Box>
     ),
   },
@@ -152,29 +139,29 @@ const columns: {
     w: 100,
     render: (_item: ResourceInterface) => (
       <Group wrap="nowrap">
-        {(_item.resourceType === 'C' || (_item.resourceType === 'R' && _item.parentId !== '0'))  && (
+        {(_item.resourceType === 'C' || (_item.resourceType === 'R' && _item.parentId !== '0')) && (
           <ActionIcon
-          variant="filled"
-          color="blue"
-          size="sm"
-          onClick={(e) => {
-            e.stopPropagation();
-          }}
-        >
-          <IconPlus style={{ width: rem(16), height: rem(16) }} stroke={1.5} />
-        </ActionIcon>
+            variant="filled"
+            color="blue"
+            size="sm"
+            onClick={(e) => {
+              e.stopPropagation();
+            }}
+          >
+            <IconPlus style={{ width: rem(16), height: rem(16) }} stroke={1.5} />
+          </ActionIcon>
         )}
-        {(_item.resourceType === 'F' && !_item.resourcePerms) && (
+        {_item.resourceType === 'F' && !_item.resourcePerms && (
           <ActionIcon
-          variant="filled"
-          color="green"
-          size="sm"
-          onClick={(e) => {
-            e.stopPropagation();
-          }}
-        >
-          <IconReplace style={{ width: rem(16), height: rem(16) }} stroke={1.5} />
-        </ActionIcon>
+            variant="filled"
+            color="green"
+            size="sm"
+            onClick={(e) => {
+              e.stopPropagation();
+            }}
+          >
+            <IconReplace style={{ width: rem(16), height: rem(16) }} stroke={1.5} />
+          </ActionIcon>
         )}
         <ActionIcon
           variant="filled"

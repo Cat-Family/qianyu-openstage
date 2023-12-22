@@ -1,5 +1,3 @@
-import { IconMapKey } from '../../../components/NavbarLinksGroup/NavbarLinksGroup';
-
 export type ResourceType = 'C' | 'R' | 'F';
 
 export interface ResourceTable extends ResourceInterface {

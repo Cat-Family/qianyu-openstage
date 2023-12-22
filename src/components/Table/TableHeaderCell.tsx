@@ -1,10 +1,26 @@
-import React, { FC } from 'react';
-import { Center, Group, TableTh, Text, UnstyledButton, rem } from '@mantine/core';
-import { IconChevronDown, IconChevronUp, IconSelector } from '@tabler/icons-react';
+import React, { FC, ReactElement } from 'react';
+import {
+  Center,
+  Group,
+  Indicator,
+  TableTh,
+  Text,
+  ThemeIcon,
+  Tooltip,
+  UnstyledButton,
+  rem,
+} from '@mantine/core';
+import {
+  IconChevronDown,
+  IconChevronUp,
+  IconQuestionMark,
+  IconSelector,
+} from '@tabler/icons-react';
 import classes from './Table.module.css';
 
 interface ThProps {
   children: React.ReactNode;
+  tooltip?: string | ReactElement;
   reversed?: boolean;
   width?: string | number;
   sortable: boolean;
@@ -19,6 +35,7 @@ const TableHeaderCell: FC<ThProps> = ({
   onSort,
   isSortable,
   width,
+  tooltip,
 }) => {
   const Icon = sortable ? (reversed ? IconChevronUp : IconChevronDown) : IconSelector;
 
@@ -27,7 +44,7 @@ const TableHeaderCell: FC<ThProps> = ({
       {isSortable ? (
         <UnstyledButton onClick={onSort} className={classes.control}>
           <Group justify="space-between" wrap="nowrap">
-            <Text fw={500} fz="sm">
+            <Text className={classes.text} fw={500} fz="sm">
               {children}
             </Text>
             <Center className={classes.icon}>
@@ -36,9 +53,28 @@ const TableHeaderCell: FC<ThProps> = ({
           </Group>
         </UnstyledButton>
       ) : (
-        <Text fw={500} fz="sm">
-          {children}
-        </Text>
+        <Indicator
+          color="none"
+          disabled={tooltip == null}
+          label={
+            <Tooltip
+              label={tooltip}
+              color="blue"
+              position="right"
+              arrowPosition="side"
+              arrowSize={5}
+              withArrow
+            >
+              <ThemeIcon radius="xl" size="13" style={{ marginLeft: '0.4rem' }}>
+                <IconQuestionMark />
+              </ThemeIcon>
+            </Tooltip>
+          }
+        >
+          <Text className={classes.text} fw={500} fz="sm">
+            {children}
+          </Text>
+        </Indicator>
       )}
     </TableTh>
   );

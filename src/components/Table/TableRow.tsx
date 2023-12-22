@@ -1,5 +1,5 @@
 import React, { ReactElement, useState } from 'react';
-import { ActionIcon, Checkbox, Space, TableTd, TableTr, rem } from '@mantine/core';
+import { ActionIcon, Checkbox, TableTd, TableTr, rem } from '@mantine/core';
 import { IconChevronDown, IconChevronRight } from '@tabler/icons-react';
 import { TableRowCell } from './TableRowCell';
 import { TableRowExpansion } from './TableRowExpansion';

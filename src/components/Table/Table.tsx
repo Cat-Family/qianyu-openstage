@@ -36,6 +36,7 @@ interface TableProps<T> {
     searchable?: boolean;
     defaultShow?: boolean;
     w?: StyleProp<React.CSSProperties['width']> | undefined;
+    tooltip?: string | ReactElement;
     uid: keyof T;
     render?: (item: any) => ReactElement | void;
   }[];
@@ -112,33 +113,36 @@ function Table<T extends { id: string }>({
             renderColumns={renderColumns}
             setRenderColumns={setRenderColumns}
           />
-          {!noSelector &&
-          <Flex justify="space-between" align="center" w="100%" mt="xs">
-            <Text size="xs">Total {total} users</Text>
-            <Menu shadow="lg" width={180}>
-              <MenuTarget>
-                <Button variant="subtle" disabled={selection.length === 0} ta="center" size="xs">
-                  {total} of {selection.length} selected
-                </Button>
-              </MenuTarget>
-              <MenuDropdown>
-                <Menu.Item leftSection={<IconChecks style={{ width: rem(14), height: rem(14) }} />}>
-                  Batch approvals
-                </Menu.Item>
-                <Menu.Item
-                  leftSection={<IconDownload style={{ width: rem(14), height: rem(14) }} />}
-                >
-                  Batch downloads
-                </Menu.Item>
-                <Menu.Item
-                  color="red"
-                  leftSection={<IconTrash style={{ width: rem(14), height: rem(14) }} />}
-                >
-                  Delete in bulk
-                </Menu.Item>
-              </MenuDropdown>
-            </Menu>
-          </Flex>}
+          {!noSelector && (
+            <Flex justify="space-between" align="center" w="100%" mt="xs">
+              <Text size="xs">Total {total} users</Text>
+              <Menu shadow="lg" width={180}>
+                <MenuTarget>
+                  <Button variant="subtle" disabled={selection.length === 0} ta="center" size="xs">
+                    {total} of {selection.length} selected
+                  </Button>
+                </MenuTarget>
+                <MenuDropdown>
+                  <Menu.Item
+                    leftSection={<IconChecks style={{ width: rem(14), height: rem(14) }} />}
+                  >
+                    Batch approvals
+                  </Menu.Item>
+                  <Menu.Item
+                    leftSection={<IconDownload style={{ width: rem(14), height: rem(14) }} />}
+                  >
+                    Batch downloads
+                  </Menu.Item>
+                  <Menu.Item
+                    color="red"
+                    leftSection={<IconTrash style={{ width: rem(14), height: rem(14) }} />}
+                  >
+                    Delete in bulk
+                  </Menu.Item>
+                </MenuDropdown>
+              </Menu>
+            </Flex>
+          )}
         </>
       )}
       <ScrollArea
@@ -159,7 +163,6 @@ function Table<T extends { id: string }>({
               sortBy={sortBy}
               reverseSortDirection={reverseSortDirection}
               setSorting={setSorting}
-              expansion={rowExpansion}
               noSelector={noSelector}
             />
           )}
