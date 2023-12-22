@@ -156,7 +156,9 @@ function Table<T extends { id: string }>({
       <ScrollArea
         w={w}
         pos="relative"
-        classNames={scrollClasses}
+        classNames={{
+          root: level ? scrollClasses.root : scrollClasses.withHeight,
+        }}
         onScrollPositionChange={({ y }) => setScrolled(y !== 0)}
       >
         <MantineTable withRowBorders>

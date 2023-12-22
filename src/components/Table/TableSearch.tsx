@@ -12,10 +12,11 @@ import {
   rem,
 } from '@mantine/core';
 import { IconArrowRight, IconDotsVertical, IconRefresh, IconSearch } from '@tabler/icons-react';
-import { useDisclosure } from '@mantine/hooks';
+import { useDisclosure, useInputState } from '@mantine/hooks';
 import multiSelectClasses from './multiSelectClasses.module.css';
 import { FetchData } from '../../ts/types/types/fetchData.type';
 import classes from './TableSearch.module.css';
+import { Form, useForm } from '@mantine/form';
 
 interface TableSearchProps<T> {
   columns: {
@@ -41,13 +42,13 @@ function TableSearch<T>({
   pageSize,
   pageNum,
 }: TableSearchProps<T>) {
-  const [searchItem, setSearchItem] = useState<string | null>(
-    columns.filter((item) => item.searchable)[0].name
-  );
-  const [searchItemUid, setSearchItemUid] = useState<keyof T | 'actions'>(
-      columns.filter((item) => item.searchable)[0].uid
-  );
+  const [searchItem, setSearchItem] = useState(columns.filter((item) => item.searchable)[0]);
+  const [value, setValue] = useInputState('');
   const [opened, { open, close }] = useDisclosure(false);
+
+  const form = useForm({
+    initialValues: {},
+  });
 
   return (
     <>
@@ -55,18 +56,30 @@ function TableSearch<T>({
         <Group wrap="nowrap" visibleFrom="sm">
           <Select
             w={120}
-            value={searchItem}
-            onChange={setSearchItem}
+            value={searchItem.name}
+            onChange={(value) => {
+              setSearchItem(columns.filter((item) => item.name === value)[0]);
+              setValue('');
+            }}
             allowDeselect={false}
             data={columns.filter((item) => item.searchable).map((item) => item.name)}
           />
-          <TextInput className={classes.search} placeholder={`Search by ${searchItem}...`} />
+          <TextInput
+            className={classes.search}
+            placeholder={`Search by ${searchItem.name}...`}
+            value={value}
+            onChange={setValue}
+          />
         </Group>
         <Group>
           <Button
             visibleFrom="sm"
             variant="outline"
-            onClick={() => sigleSearch()}
+            onClick={() => {
+              const formData = new FormData();
+              formData.append(searchItem.uid.toString(), value);
+              fetchData?.('', { method: 'POST', body: formData });
+            }}
             rightSection={<IconSearch style={{ width: rem(18), height: rem(18) }} stroke={1.8} />}
           >
             Search
@@ -110,17 +123,38 @@ function TableSearch<T>({
           blur: 3,
         }}
       >
-        <Stack>
-          {columns
-            .filter((item) => item.searchable)
-            .map((item) => (
-              <TextInput label={item.name} key={item.name} placeholder={item.name} />
-            ))}
-          <Group style={{ alignSelf: 'end' }}>
-            <Button variant="outline">Reset</Button>
-            <Button rightSection={<IconArrowRight size={14} />}>Submit</Button>
-          </Group>
-        </Stack>
+        <form
+          onSubmit={form.onSubmit((values) => {
+            const formData = new FormData();
+            for (var key in values) {
+              if (Object.hasOwn(values, key)) {
+                formData.append(key, values[key]);
+              }
+            }
+            fetchData?.('', { method: 'POST', body: formData });
+          })}
+        >
+          <Stack>
+            {columns
+              .filter((item) => item.searchable)
+              .map((item) => (
+                <TextInput
+                  label={item.name}
+                  key={item.uid.toString()}
+                  placeholder={item.name}
+                  {...form.getInputProps(item.uid.toString())}
+                />
+              ))}
+            <Group style={{ alignSelf: 'end' }}>
+              <Button variant="outline" onClick={() => form.reset()}>
+                Reset
+              </Button>
+              <Button rightSection={<IconArrowRight size={14} />} type="submit">
+                Submit
+              </Button>
+            </Group>
+          </Stack>
+        </form>
       </Modal>
     </>
   );
