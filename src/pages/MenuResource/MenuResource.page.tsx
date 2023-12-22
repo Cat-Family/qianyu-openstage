@@ -54,10 +54,11 @@ const MenuResourcePage = () => {
           noSelector
           rowExpansion={{
             level: 1,
-            content: ({ children }: ResourceTable) =>
+            content: ({ children }: ResourceTable, renderColumns: string[]) =>
               children.length > 0 ? (
                 <Table<ResourceTable>
                   w="100%"
+                  showColumns={renderColumns}
                   columns={columns}
                   level={1}
                   noHeader
@@ -65,15 +66,16 @@ const MenuResourcePage = () => {
                   data={children.map((item) => ({ ...item, actions: item, id: item.resourceId }))}
                   rowExpansion={{
                     level: 2,
-                    content: ({ children }: ResourceTable) =>
+                    content: ({ children: nextChildren }: ResourceTable, showColumns: string[]) =>
                       children.length > 0 ? (
                         <Table<ResourceTable>
                           w="100%"
+                          showColumns={showColumns}
                           level={2}
                           columns={columns}
                           noHeader
                           noSelector
-                          data={children.map((item) => ({
+                          data={nextChildren.map((item) => ({
                             ...item,
                             actions: item,
                             id: item.resourceId,

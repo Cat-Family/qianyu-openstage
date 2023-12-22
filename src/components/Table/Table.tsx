@@ -1,4 +1,4 @@
-import React, { ReactElement, useLayoutEffect, useState } from 'react';
+import React, { ReactElement, useEffect, useLayoutEffect, useState } from 'react';
 import {
   Table as MantineTable,
   ScrollArea,
@@ -52,6 +52,7 @@ interface TableProps<T> {
   noSelector?: boolean;
   w?: StyleProp<React.CSSProperties['width']> | undefined;
   level?: number;
+  showColumns?: string[];
 }
 
 function Table<T extends { id: string }>({
@@ -66,11 +67,12 @@ function Table<T extends { id: string }>({
   noHeader,
   noFooter,
   noSelector,
+  showColumns,
   w,
   level,
 }: TableProps<T>) {
   const [renderColumns, setRenderColumns] = useState(
-    columns.filter((item) => item.defaultShow).map((item) => item.name)
+    showColumns || columns.filter((item) => item.defaultShow).map((item) => item.name)
   );
   const [sortBy, setSortBy] = useState<keyof T | null>(null);
   const [reverseSortDirection, setReverseSortDirection] = useState(false);
@@ -100,6 +102,12 @@ function Table<T extends { id: string }>({
     formData.append('pageNum', pageNum.toString());
     fetchData?.('', { method: 'POST', body: formData });
   }, []);
+
+  useEffect(() => {
+    if (level && showColumns) {
+      setRenderColumns(showColumns);
+    }
+  }, [showColumns]);
 
   return (
     <Stack gap="sm" pos="relative">

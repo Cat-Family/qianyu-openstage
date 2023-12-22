@@ -8,9 +8,16 @@ type TableRowExpansionProps<T> = {
   colSpan: number;
   content?: any;
   item: T;
+  renderColumns: string[];
 };
 
-export function TableRowExpansion<T>({ open, colSpan, content, item }: TableRowExpansionProps<T>) {
+export function TableRowExpansion<T>({
+  open,
+  colSpan,
+  content,
+  item,
+  renderColumns,
+}: TableRowExpansionProps<T>) {
   const { expanded, visible } = useRowExpansionStatus(open, 200);
 
   return visible ? (
@@ -18,7 +25,7 @@ export function TableRowExpansion<T>({ open, colSpan, content, item }: TableRowE
       <TableTr />
       <TableTr className={classes.expansion}>
         <TableTd colSpan={colSpan} p={0}>
-          <Collapse in={expanded}>{content?.(item)}</Collapse>
+          <Collapse in={expanded}>{content?.(item, renderColumns)}</Collapse>
         </TableTd>
       </TableTr>
     </>

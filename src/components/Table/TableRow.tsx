@@ -79,6 +79,7 @@ export function TableRow<T>({
           open={open}
           content={expansion?.content}
           item={item}
+          renderColumns={renderColumns}
         />
       )}
     </>
