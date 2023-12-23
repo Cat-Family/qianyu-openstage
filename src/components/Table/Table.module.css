@@ -15,17 +15,17 @@
   position: sticky;
   top: -1px;
   z-index: 500;
-  background-color: rgb(245,245,245);
+  background-color: light-dark(var(--mantine-color-gray-0), var(--mantine-color-dark-6));
   transition: box-shadow 150ms ease;
 
-  &::after {
+  /* &::after {
     content: '';
     position: absolute;
     left: 0;
     right: 0;
     bottom: 0;
     border: rem(1px) solid light-dark(var(--mantine-color-gray-2), var(--mantine-color-dark-3));
-  }
+  } */
 }
 
 .scrolled {

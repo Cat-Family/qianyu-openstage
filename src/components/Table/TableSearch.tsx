@@ -136,6 +136,7 @@ function TableSearch<T>({
         }}
       >
         <form
+          className={classes.form}
           ref={formRef}
           onSubmit={form.onSubmit((data) => {
             if (!formRef.current) {

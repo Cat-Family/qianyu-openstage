@@ -1,41 +1,21 @@
 import React from 'react';
-import { ActionIcon, Badge, Group, rem } from '@mantine/core';
-import { IconPencil, IconPlus, IconTrash } from '@tabler/icons-react';
+import { ActionIcon, Badge, Group, Menu, MenuItem, rem } from '@mantine/core';
+import { IconDotsVertical, IconPencil, IconPlus, IconTrash } from '@tabler/icons-react';
 import { ResourceInterface } from '../../ts/types/interface/menu.res.interface';
 
 const renderGrayBadge = (text: string) => (
-  <Badge w="100%" size="md" radius="sm" color="rgb(180, 180, 180)">
+  <Badge w="100%" size="md" radius="sm" color="gray" variant="light">
     {text}
   </Badge>
 );
 
 const renderAddBtn = (item: ResourceInterface) => {
   if (item.resourceType === 'C') {
-    return (
-      <ActionIcon
-        variant="outline"
-        size="sm"
-        onClick={(e) => {
-          e.stopPropagation();
-        }}
-      >
-        <IconPlus style={{ width: rem(16), height: rem(16) }} stroke={1.5} />
-      </ActionIcon>
-    );
+    return <IconPlus style={{ width: rem(16), height: rem(16) }} stroke={1.5} />;
   }
 
   if (item.resourceType === 'R' && item.parentId !== '0') {
-    return (
-      <ActionIcon
-        variant="outline"
-        size="sm"
-        onClick={(e) => {
-          e.stopPropagation();
-        }}
-      >
-        <IconPlus style={{ width: rem(16), height: rem(16) }} stroke={1.5} />
-      </ActionIcon>
-    );
+    return <IconPlus style={{ width: rem(16), height: rem(16) }} stroke={1.5} />;
   }
 
   return null;
@@ -52,17 +32,21 @@ const renderActions = (item: ResourceInterface) => (
     >
       <IconPencil style={{ width: rem(16), height: rem(16) }} stroke={1.5} />
     </ActionIcon>
-    <ActionIcon
-      variant="subtle"
-      color="red"
-      size="sm"
-      onClick={(e) => {
-        e.stopPropagation();
-      }}
-    >
-      <IconTrash style={{ width: rem(16), height: rem(16) }} stroke={1.5} />
-    </ActionIcon>
-    {renderAddBtn(item)}
+    <Menu>
+      <Menu.Target>
+        <ActionIcon variant="transparent" color="dark" size="sm">
+          <IconDotsVertical style={{ width: rem(16), height: rem(16) }} stroke={1.5} />
+        </ActionIcon>
+      </Menu.Target>
+      <Menu.Dropdown>
+        <MenuItem
+          w={42}
+          color="red"
+          leftSection={<IconTrash style={{ width: rem(16), height: rem(16) }} stroke={1.5} />}
+        />
+        {renderAddBtn(item) && <MenuItem w={42} color="blue" leftSection={renderAddBtn(item)} />}
+      </Menu.Dropdown>
+    </Menu>
   </Group>
 );
 

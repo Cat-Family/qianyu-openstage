@@ -30,7 +30,7 @@ export function Search() {
   return (
     <Spotlight
       store={searchStore}
-      shortcut={['mod + K', 'mod + P', '/']}
+      shortcut={['mod + K', 'mod + P']}
       actions={actions}
       tagsToIgnore={[]}
       highlightQuery
