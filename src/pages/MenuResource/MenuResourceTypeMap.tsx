@@ -52,4 +52,10 @@ resourceTypeMap.set(
   </Tooltip>
 );
 
+const resourceNameOfTypeMap = new Map();
+resourceNameOfTypeMap.set('C', '目录');
+resourceNameOfTypeMap.set('R', '路由');
+resourceNameOfTypeMap.set('F', '功能');
+
 export default resourceTypeMap;
+export { resourceNameOfTypeMap };
