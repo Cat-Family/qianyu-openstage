@@ -2,7 +2,7 @@ import React, { ReactElement } from 'react';
 import { StyleProp } from '@mantine/core';
 import resourceTypeMap from './MenuResourceTypeMap';
 import HoverText from './HoverText';
-import { renderActions, renderGrayBadge } from './ResourceUtils';
+import { renderActions, renderBanGrayBadge, renderNoneGrayBadge } from './ResourceUtils';
 import { ResourceInterface, ResourceTable } from '../../ts/types/interface/menu.res.interface';
 
 const columns: {
@@ -35,23 +35,23 @@ const columns: {
     uid: 'resourcePath',
     searchable: true,
     defaultShow: true,
-    w: 150,
+    w: 120,
     render: (item) =>
-      item.resourcePath ? HoverText(item.resourcePath) : renderGrayBadge('不可设置'),
+      item.resourcePath ? HoverText(item.resourcePath) : renderBanGrayBadge('只对路由有效'),
   },
   {
     name: '资源参数',
     uid: 'resourceParams',
     searchable: true,
     defaultShow: true,
-    w: 150,
+    w: 100,
     render: (item) => (
       <>
         {item.resourceType !== 'R'
-          ? renderGrayBadge('不可设置')
+          ? renderBanGrayBadge('只对路由有效')
           : item.resourceParams
             ? HoverText(item.resourceParams)
-            : renderGrayBadge('暂未设置')}
+            : renderNoneGrayBadge('暂未设置')}
       </>
     ),
   },
@@ -64,10 +64,10 @@ const columns: {
     render: (item) => (
       <>
         {item.resourceType !== 'F'
-          ? renderGrayBadge('不可设置')
+          ? renderBanGrayBadge('只对功能有效')
           : item.resourcePerms
             ? HoverText(item.resourcePerms)
-            : renderGrayBadge('暂未设置')}
+            : renderNoneGrayBadge('暂未设置')}
       </>
     ),
   },

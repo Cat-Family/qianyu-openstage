@@ -55,7 +55,7 @@ const MenuResourcePage = () => {
           rowExpansion={{
             level: 1,
             content: ({ children }: ResourceTable, renderColumns: string[]) =>
-              children.length > 0 ? (
+              children?.length > 0 ? (
                 <Table<ResourceTable>
                   w="100%"
                   showColumns={renderColumns}

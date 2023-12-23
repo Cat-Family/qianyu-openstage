@@ -54,16 +54,19 @@ export function TableRow<T>({
                   />
                 </ActionIcon>
               ) : (
-                <ActionIcon
-                  variant="light"
-                  onClick={() => setOpen(!open)}
-                  disabled={!expansion?.content?.(item)}
-                >
-                  <IconChevronRight
-                    style={{ width: rem(16), height: rem(16), lineHeight: rem(16) }}
-                    stroke={1.5}
-                  />
-                </ActionIcon>
+                <>
+                  {expansion?.content?.(item) && (
+                    <ActionIcon
+                      variant="light"
+                      onClick={() => setOpen(!open)}
+                    >
+                      <IconChevronRight
+                        style={{ width: rem(16), height: rem(16), lineHeight: rem(16) }}
+                        stroke={1.5}
+                      />
+                    </ActionIcon>
+                  )}
+                </>
               )
             ) : null}
           </Flex>

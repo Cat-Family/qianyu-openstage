@@ -1,12 +1,27 @@
 import React from 'react';
-import { ActionIcon, Badge, Group, Menu, MenuItem, rem } from '@mantine/core';
-import { IconDotsVertical, IconPencil, IconPlus, IconTrash } from '@tabler/icons-react';
+import { ActionIcon, Badge, Center, Group, Menu, MenuItem, Tooltip, rem } from '@mantine/core';
+
+import { IconBan, IconDotsVertical, IconPencil, IconPlus, IconQuestionMark, IconTrash } from '@tabler/icons-react';
 import { ResourceInterface } from '../../ts/types/interface/menu.res.interface';
 
-const renderGrayBadge = (text: string) => (
-  <Badge w="100%" size="md" radius="sm" color="gray" variant="light">
-    {text}
-  </Badge>
+const renderBanGrayBadge = (message: string) => (
+  <Tooltip label={message}>
+    <Badge style={{ cursor: 'help' }} size="sm" radius="sm" color="gray" variant="light">
+      <Center>
+        <IconBan width={14} height={14} />
+      </Center>
+    </Badge>
+  </Tooltip>
+);
+
+const renderNoneGrayBadge = (message: string) => (
+  <Tooltip label={message}>
+    <Badge style={{ cursor: 'help' }} size="sm" radius="sm" color="gray" variant="light">
+      <Center>
+        <IconQuestionMark width={14} height={14} />
+      </Center>
+    </Badge>
+  </Tooltip>
 );
 
 const renderAddBtn = (item: ResourceInterface) => {
@@ -50,4 +65,4 @@ const renderActions = (item: ResourceInterface) => (
   </Group>
 );
 
-export { renderActions, renderGrayBadge };
+export { renderActions, renderBanGrayBadge, renderNoneGrayBadge };
