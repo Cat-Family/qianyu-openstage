@@ -199,7 +199,14 @@ function Table<T extends { id: string }>({
           visible={!loading && data?.length === 0}
           zIndex={800}
           overlayProps={{ radius: 'sm', blur: 2 }}
-          loaderProps={{ children: <IconDatabaseOff scale={2} height={35} width={35} /> }}
+          loaderProps={{
+            children: (
+              <Stack align="center" gap="xs">
+                <IconDatabaseOff scale={2} height={35} width={35} />
+                <Text>Empty Data</Text>
+              </Stack>
+            ),
+          }}
         />
         <LoadingOverlay
           visible={Boolean(error)}

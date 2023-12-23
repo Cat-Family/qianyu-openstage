@@ -1,4 +1,4 @@
-import React, { ReactElement, useState } from 'react';
+import React, { ReactElement, useRef, useState } from 'react';
 import {
   Button,
   Flex,
@@ -34,6 +34,10 @@ interface TableSearchProps<T> {
   setRenderColumns: React.Dispatch<React.SetStateAction<string[]>>;
 }
 
+type FormType = {
+  [key: string]: string;
+};
+
 function TableSearch<T>({
   columns,
   renderColumns,
@@ -45,12 +49,13 @@ function TableSearch<T>({
   const [searchItem, setSearchItem] = useState(columns.filter((item) => item.searchable)[0]);
   const [value, setValue] = useInputState('');
   const [opened, { open, close }] = useDisclosure(false);
+  const formRef = useRef(null);
 
-  const form = useForm({
+  const form = useForm<FormType>({
     initialValues: columns
       .filter((item) => item.searchable)
-      .reduce((acc, current) => {
-        acc[current.uid] = '';
+      .reduce((acc: FormType, current) => {
+        acc[current.uid as string] = '';
         return acc;
       }, {}),
   });
@@ -62,8 +67,8 @@ function TableSearch<T>({
           <Select
             w={120}
             value={searchItem.name}
-            onChange={(value) => {
-              setSearchItem(columns.filter((item) => item.name === value)[0]);
+            onChange={(val) => {
+              setSearchItem(columns.filter((item) => item.name === val)[0]);
               setValue('');
             }}
             allowDeselect={false}
@@ -130,7 +135,19 @@ function TableSearch<T>({
           blur: 3,
         }}
       >
-        <Stack>
+        <form
+          ref={formRef}
+          onSubmit={form.onSubmit((data) => {
+            if (!formRef.current) {
+              return;
+            }
+            const formData = new FormData();
+            const keys = Object.keys(data);
+            keys.map((key) => formData.append(key, data[key]));
+
+            fetchData?.('', { method: 'POST', body: formData });
+          })}
+        >
           {columns
             .filter((item) => item.searchable)
             .map((item) => (
@@ -142,14 +159,23 @@ function TableSearch<T>({
               />
             ))}
           <Group style={{ alignSelf: 'end' }}>
-            <Button variant="outline" onClick={() => form.reset()}>
+            <Button
+              variant="outline"
+              onClick={() => {
+                form.reset();
+                const formData = new FormData();
+                formData.append('pageSize', pageSize.toString());
+                formData.append('pageNum', pageNum.toString());
+                fetchData?.('', { method: 'POST', body: formData });
+              }}
+            >
               Reset
             </Button>
-            <Button rightSection={<IconArrowRight size={14} />} type="submit">
+            <Button type="submit" rightSection={<IconArrowRight size={14} />}>
               Submit
             </Button>
           </Group>
-        </Stack>
+        </form>
       </Modal>
     </>
   );
