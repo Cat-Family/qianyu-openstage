@@ -41,7 +41,7 @@ function TableHeader<T>({
   return (
     <MantineTable.Thead className={cx(classes.header, { [classes.scrolled]: scrolled })}>
       <MantineTable.Tr key="head">
-        <TableTd w={40} />
+        <TableTd w={70} />
         {!noSelector && (
           <TableTd key="check">
             <Checkbox

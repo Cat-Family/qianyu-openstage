@@ -1,5 +1,5 @@
 import React, { ReactElement } from 'react';
-import { StyleProp, TableTd, Text } from '@mantine/core';
+import { Box, Flex, StyleProp, TableTd, Text } from '@mantine/core';
 
 type TableRowCellProps<T> = {
   item: T;
@@ -16,7 +16,11 @@ type TableRowCellProps<T> = {
 
 function TableRowCell<T>({ column, item }: TableRowCellProps<T>) {
   return (
-    <TableTd w={column.w}>{column.render?.(item) ?? (item[column.uid] as ReactElement)}</TableTd>
+    <TableTd>
+      <Flex style={{ overflow: 'hidden' }} wrap="nowrap" justify="flex-start" gap="xs" w={column.w}>
+        {column.render?.(item) ?? (item[column.uid] as ReactElement)}
+      </Flex>
+    </TableTd>
   );
 }
 
