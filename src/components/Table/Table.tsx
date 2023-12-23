@@ -43,7 +43,7 @@ interface TableProps<T> {
   data?: T[];
   rowExpansion?: any;
   loading?: boolean;
-  fetchData?: FetchData;
+  fetchData?: FetchData<T>;
   pages?: number;
   total?: number;
   error?: Error;

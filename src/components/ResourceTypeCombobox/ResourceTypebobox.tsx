@@ -4,18 +4,22 @@ import resourceTypeMap, {
   resourceNameOfTypeMap,
 } from '../../pages/MenuResource/MenuResourceTypeMap';
 
-export function ResourceTypeCombobox(props: { value: string }) {
+export function ResourceTypeCombobox({
+  value,
+  onChange,
+}: {
+  value: string;
+  onChange: (val: string) => void;
+}) {
   const combobox = useCombobox({
     onDropdownClose: () => combobox.resetSelectedOption(),
   });
-
-  const [value, setValue] = useState<string>(props.value);
 
   const options = [...resourceTypeMap.keys()].map((item) => (
     <Combobox.Option value={item} key={item}>
       <Group>
         {resourceTypeMap.get(item)}
-        <Text>{resourceNameOfTypeMap.get(item)}</Text>
+        <Text size="sm">{resourceNameOfTypeMap.get(item)}</Text>
       </Group>
     </Combobox.Option>
   ));
@@ -25,7 +29,7 @@ export function ResourceTypeCombobox(props: { value: string }) {
       store={combobox}
       withinPortal={false}
       onOptionSubmit={(val) => {
-        setValue(val);
+        onChange(val);
         combobox.closeDropdown();
       }}
     >
@@ -41,7 +45,7 @@ export function ResourceTypeCombobox(props: { value: string }) {
           onClick={() => combobox.toggleDropdown()}
           rightSectionPointerEvents="none"
         >
-          {<Text ml={20}>{resourceNameOfTypeMap.get(value)}</Text> || (
+          {<Text size="sm" ml={20}>{resourceNameOfTypeMap.get(value)}</Text> || (
             <Input.Placeholder>Pick value</Input.Placeholder>
           )}
         </InputBase>

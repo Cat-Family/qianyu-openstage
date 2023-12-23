@@ -27,6 +27,7 @@ import { ResourceInterface } from '../../ts/types/interface/menu.res.interface';
 import { IconCombobox } from '../../components/IconCombobox/IconCombobox';
 import { ResourceTypeCombobox } from '../../components/ResourceTypeCombobox/ResourceTypebobox';
 import { useEditMenuResource } from '../../hooks/actions/useMenuResource';
+import classes from './MenuResource.module.css';
 
 const renderBanGrayBadge = (message: string) => (
   <Tooltip label={message}>
@@ -61,21 +62,24 @@ const renderAddBtn = (item: ResourceInterface) => {
 };
 
 const renderActions = (item: ResourceInterface) => {
-  const form = useForm({
+  const form = useForm<ResourceInterface>({
     initialValues: {
       resourceId: item.resourceId || '',
       resourceIcon: item.resourceIcon || '',
       resourceName: item.resourceName || '',
-      resourceType: item.resourceType || '',
+      resourceType: item.resourceType,
       resourcePath: item.resourcePath || '',
       resourceParams: item.resourceParams || '',
       resourcePerms: item.resourcePerms || '',
-      resourceLevel: item.resourceLevel || '',
+      resourceLevel: item.resourceLevel,
+      parentId: item.parentId,
+      effective: item.effective,
+      children: item.children,
     },
   });
 
   const [opened, { open, close }] = useDisclosure(false);
-  const { editMenuResource, loading, error } = useEditMenuResource();
+  const { editMenuResource, loading } = useEditMenuResource();
 
   return (
     <Group wrap="nowrap">
@@ -100,25 +104,36 @@ const renderActions = (item: ResourceInterface) => {
 
       <Modal opened={opened} onClose={close} title="Authentication">
         <form
-          onSubmit={form.onSubmit((values) => {
+          className={classes.form}
+          onSubmit={form.onSubmit(async (values) => {
             const formData = new FormData();
-            const keys = Object.keys(values);
-            keys.map((key) => values[key] && formData.append(key, values[key]));
-            editMenuResource('/resource/update', { method: 'PATCH', body: formData });
+            const keys: Array<keyof ResourceInterface> = Object.keys(
+              values
+            ) as (keyof ResourceInterface)[];
+            keys.map((key) => values[key] && formData.append(key, values[key]?.toString() || ''));
+
+            const res = await editMenuResource('/resource/update', {
+              method: 'PATCH',
+              body: formData,
+            });
+
+            if (res.code === 200) {
+              close();
+            }
           })}
         >
-          <TextInput label="ID" {...form.getInputProps('resourceId')} disabled />
+          <TextInput size="sm" label="ID" {...form.getInputProps('resourceId')} disabled />
           <IconCombobox {...form.getInputProps('resourceIcon')} />
-          <TextInput label="资源名称" {...form.getInputProps('resourceName')} />
+          <TextInput size="sm" label="资源名称" {...form.getInputProps('resourceName')} />
           <ResourceTypeCombobox {...form.getInputProps('resourceType')} />
-          {item.resourceType === 'R' && (
-            <TextInput label="资源路径" {...form.getInputProps('resourcePath')} />
+          {form.getInputProps('resourceType').value === 'R' && (
+            <TextInput size="sm" label="资源路径" {...form.getInputProps('resourcePath')} />
           )}
-          {item.resourceType === 'R' && (
-            <TextInput label="资源参数" {...form.getInputProps('resourceParams')} />
+          {form.getInputProps('resourceType').value === 'R' && (
+            <TextInput size="sm" label="资源参数" {...form.getInputProps('resourceParams')} />
           )}
-          {item.resourceType === 'F' && (
-            <TextInput label="资源权限" {...form.getInputProps('resourcePerms')} />
+          {form.getInputProps('resourceType').value === 'F' && (
+            <TextInput size="sm" label="资源权限" {...form.getInputProps('resourcePerms')} />
           )}
           <Button loading={loading} loaderProps={{ type: 'dots' }} fullWidth mt="md" type="submit">
             Submit

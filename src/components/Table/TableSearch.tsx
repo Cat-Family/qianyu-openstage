@@ -6,7 +6,6 @@ import {
   Modal,
   MultiSelect,
   Select,
-  Stack,
   TextInput,
   UnstyledButton,
   rem,
@@ -29,7 +28,7 @@ interface TableSearchProps<T> {
   }[];
   pageNum: number;
   pageSize: number;
-  fetchData?: FetchData;
+  fetchData?: FetchData<T>;
   renderColumns: string[];
   setRenderColumns: React.Dispatch<React.SetStateAction<string[]>>;
 }
