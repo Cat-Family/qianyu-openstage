@@ -13,10 +13,10 @@ import {
 } from '@mantine/core';
 import { IconArrowRight, IconDotsVertical, IconRefresh, IconSearch } from '@tabler/icons-react';
 import { useDisclosure, useInputState } from '@mantine/hooks';
+import { useForm } from '@mantine/form';
 import multiSelectClasses from './multiSelectClasses.module.css';
 import { FetchData } from '../../ts/types/types/fetchData.type';
 import classes from './TableSearch.module.css';
-import { Form, useForm } from '@mantine/form';
 
 interface TableSearchProps<T> {
   columns: {
@@ -47,7 +47,12 @@ function TableSearch<T>({
   const [opened, { open, close }] = useDisclosure(false);
 
   const form = useForm({
-    initialValues: {},
+    initialValues: columns
+      .filter((item) => item.searchable)
+      .reduce((acc, current) => {
+        acc[current.uid] = '';
+        return acc;
+      }, {}),
   });
 
   return (
@@ -78,6 +83,8 @@ function TableSearch<T>({
             onClick={() => {
               const formData = new FormData();
               formData.append(searchItem.uid.toString(), value);
+              formData.append('pageSize', pageSize.toString());
+              formData.append('pageNum', pageNum.toString());
               fetchData?.('', { method: 'POST', body: formData });
             }}
             rightSection={<IconSearch style={{ width: rem(18), height: rem(18) }} stroke={1.8} />}
@@ -123,38 +130,26 @@ function TableSearch<T>({
           blur: 3,
         }}
       >
-        <form
-          onSubmit={form.onSubmit((values) => {
-            const formData = new FormData();
-            for (var key in values) {
-              if (Object.hasOwn(values, key)) {
-                formData.append(key, values[key]);
-              }
-            }
-            fetchData?.('', { method: 'POST', body: formData });
-          })}
-        >
-          <Stack>
-            {columns
-              .filter((item) => item.searchable)
-              .map((item) => (
-                <TextInput
-                  label={item.name}
-                  key={item.uid.toString()}
-                  placeholder={item.name}
-                  {...form.getInputProps(item.uid.toString())}
-                />
-              ))}
-            <Group style={{ alignSelf: 'end' }}>
-              <Button variant="outline" onClick={() => form.reset()}>
-                Reset
-              </Button>
-              <Button rightSection={<IconArrowRight size={14} />} type="submit">
-                Submit
-              </Button>
-            </Group>
-          </Stack>
-        </form>
+        <Stack>
+          {columns
+            .filter((item) => item.searchable)
+            .map((item) => (
+              <TextInput
+                label={item.name}
+                key={item.uid.toString()}
+                placeholder={item.name}
+                {...form.getInputProps(item.uid.toString())}
+              />
+            ))}
+          <Group style={{ alignSelf: 'end' }}>
+            <Button variant="outline" onClick={() => form.reset()}>
+              Reset
+            </Button>
+            <Button rightSection={<IconArrowRight size={14} />} type="submit">
+              Submit
+            </Button>
+          </Group>
+        </Stack>
       </Modal>
     </>
   );

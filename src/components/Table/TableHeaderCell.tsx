@@ -65,7 +65,7 @@ const TableHeaderCell: FC<ThProps> = ({
               arrowSize={5}
               withArrow
             >
-              <ThemeIcon radius="xl" size="13" style={{ marginLeft: '0.4rem' }}>
+              <ThemeIcon radius="xl" size="13" style={{ marginLeft: '-13.5rem', marginTop: '1.2rem' }}>
                 <IconQuestionMark />
               </ThemeIcon>
             </Tooltip>
