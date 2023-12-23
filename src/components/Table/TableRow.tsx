@@ -1,5 +1,5 @@
 import React, { ReactElement, useState } from 'react';
-import { ActionIcon, Checkbox, TableTd, TableTr, rem } from '@mantine/core';
+import { ActionIcon, Box, Checkbox, Flex, TableTd, TableTr, rem } from '@mantine/core';
 import { IconChevronDown, IconChevronRight } from '@tabler/icons-react';
 import { TableRowCell } from './TableRowCell';
 import { TableRowExpansion } from './TableRowExpansion';
@@ -43,28 +43,30 @@ export function TableRow<T>({
             <Checkbox checked={selection.includes(id)} onChange={() => toggleRow(id)} />
           </TableTd>
         )}
-        <TableTd w={50} pl={(level || 0) * 15}>
-          {expansion ? (
-            expansion?.content?.(item) && open ? (
-              <ActionIcon variant="light" onClick={() => setOpen(!open)}>
-                <IconChevronDown
-                  style={{ width: rem(16), height: rem(16), lineHeight: rem(16) }}
-                  stroke={1.5}
-                />
-              </ActionIcon>
-            ) : (
-              <ActionIcon
-                variant="light"
-                onClick={() => setOpen(!open)}
-                disabled={!expansion?.content?.(item)}
-              >
-                <IconChevronRight
-                  style={{ width: rem(16), height: rem(16), lineHeight: rem(16) }}
-                  stroke={1.5}
-                />
-              </ActionIcon>
-            )
-          ) : null}
+        <TableTd w={80}>
+          <Flex w={80} gap={0} pl={(level || 0) * 15}>
+            {expansion ? (
+              expansion?.content?.(item) && open ? (
+                <ActionIcon variant="light" onClick={() => setOpen(!open)}>
+                  <IconChevronDown
+                    style={{ width: rem(16), height: rem(16), lineHeight: rem(16) }}
+                    stroke={1.5}
+                  />
+                </ActionIcon>
+              ) : (
+                <ActionIcon
+                  variant="light"
+                  onClick={() => setOpen(!open)}
+                  disabled={!expansion?.content?.(item)}
+                >
+                  <IconChevronRight
+                    style={{ width: rem(16), height: rem(16), lineHeight: rem(16) }}
+                    stroke={1.5}
+                  />
+                </ActionIcon>
+              )
+            ) : null}
+          </Flex>
         </TableTd>
         {columns.map(
           (column) =>

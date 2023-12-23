@@ -1,5 +1,5 @@
 import React, { ReactElement } from 'react';
-import { ActionIcon, Box, Group, StyleProp, ThemeIcon, rem, Badge } from '@mantine/core';
+import { ActionIcon, Box, Group, StyleProp, ThemeIcon, rem, Badge, Text } from '@mantine/core';
 import { IconPencil, IconTrash, IconPlus, IconReplace } from '@tabler/icons-react';
 import { IconMap, IconMapKey } from '../../utils/icon';
 import { ParseResourceType } from '../../constant/ResourceType';
@@ -31,7 +31,7 @@ const generateColorGradient = (resourceType: string) => {
  * @returns
  */
 const renderGrayBadge = (text: string) => (
-  <Badge size="md" radius="sm" color="rgb(180, 180, 180)">
+  <Badge w="100%" size="md" radius="sm" color="rgb(180, 180, 180)">
     {text}
   </Badge>
 );
@@ -51,51 +51,46 @@ const columns: {
     uid: 'resourceName',
     searchable: true,
     defaultShow: true,
-    w: 150,
-    tooltip: 'test',
-    render: (item) => (
-      <Box style={{ display: 'flex', alignItems: 'center' }} w="100%">
-        {item.resourceIcon && (
-          <ThemeIcon variant="light" size={30}>
-            {IconMap[item.resourceIcon as IconMapKey]}
-          </ThemeIcon>
-        )}
-        <Box ml="md">{item.resourceName}</Box>
-      </Box>
-    ),
+    w: 100,
   },
   {
     name: '资源类型',
     uid: 'resourceType',
     searchable: true,
     defaultShow: true,
-    w: 180,
-    render: (item) => (
-      <Box style={{ display: 'flex', alignItems: 'center' }} w="100%">
-        {item.resourceType && (
-          <Badge
-            size="md"
-            radius="sm"
-            variant="gradient"
-            gradient={generateColorGradient(item.resourceType)}
-          >
-            {ParseResourceType(item.resourceType)}
-          </Badge>
-        )}
-      </Box>
-    ),
+    w: 50,
+    render: (item) =>
+      item.resourceType && (
+        <Badge
+          size="md"
+          radius="sm"
+          variant="gradient"
+          gradient={generateColorGradient(item.resourceType)}
+        >
+          {ParseResourceType(item.resourceType)}
+        </Badge>
+      ),
   },
   {
     name: '资源路径',
     uid: 'resourcePath',
     searchable: true,
     defaultShow: true,
-    w: 180,
+    w: 100,
     render: (item) => (
-      <Box style={{ display: 'flex', alignItems: 'center' }} w="100%">
+      <>
         {!item.resourcePath && renderGrayBadge('不可设置')}
-        {item.resourcePath}
-      </Box>
+        <Text
+          w="max-content"
+          style={{
+            whiteSpace: 'nowrap',
+            textOverflow: 'ellipsis',
+            overflow: 'hidden',
+          }}
+        >
+          {item.resourcePath}
+        </Text>
+      </>
     ),
   },
   {
@@ -103,15 +98,26 @@ const columns: {
     uid: 'resourceParams',
     searchable: true,
     defaultShow: true,
-    w: 180,
+    w: 100,
     render: (item) => (
-      <Box style={{ display: 'flex', alignItems: 'center' }} w="100%">
-        {item.resourceType !== 'R'
-          ? renderGrayBadge('不可设置')
-          : item.resourceParams
-            ? item.resourceParams
-            : renderGrayBadge('暂未设置')}
-      </Box>
+      <>
+        {item.resourceType !== 'R' ? (
+          renderGrayBadge('不可设置')
+        ) : item.resourceParams ? (
+          <Text
+            w="max-content"
+            style={{
+              whiteSpace: 'nowrap',
+              textOverflow: 'ellipsis',
+              overflow: 'hidden',
+            }}
+          >
+            {item.resourceParams}
+          </Text>
+        ) : (
+          renderGrayBadge('暂未设置')
+        )}
+      </>
     ),
   },
   {
@@ -119,15 +125,26 @@ const columns: {
     uid: 'resourcePerms',
     searchable: true,
     defaultShow: true,
-    w: 180,
+    w: 100,
     render: (item) => (
-      <Box style={{ display: 'flex', alignItems: 'center' }} w="100%">
-        {item.resourceType !== 'F'
-          ? renderGrayBadge('不可设置')
-          : item.resourcePerms
-            ? item.resourcePerms
-            : renderGrayBadge('暂未设置')}
-      </Box>
+      <>
+        {item.resourceType !== 'F' ? (
+          renderGrayBadge('不可设置')
+        ) : item.resourcePerms ? (
+          <Text
+            w="max-content"
+            style={{
+              whiteSpace: 'nowrap',
+              textOverflow: 'ellipsis',
+              overflow: 'hidden',
+            }}
+          >
+            {item.resourcePerms}
+          </Text>
+        ) : (
+          renderGrayBadge('暂未设置')
+        )}
+      </>
     ),
   },
   {
