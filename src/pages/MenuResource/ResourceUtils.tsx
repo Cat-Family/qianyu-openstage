@@ -8,6 +8,8 @@ import {
   Menu,
   MenuItem,
   Modal,
+  NumberInput,
+  Text,
   TextInput,
   Tooltip,
   rem,
@@ -23,6 +25,7 @@ import {
 } from '@tabler/icons-react';
 import { useForm } from '@mantine/form';
 import { useDisclosure } from '@mantine/hooks';
+import { modals } from '@mantine/modals';
 import { ResourceInterface } from '../../ts/types/interface/menu.res.interface';
 import { IconCombobox } from '../../components/IconCombobox/IconCombobox';
 import { ResourceTypeCombobox } from '../../components/ResourceTypeCombobox/ResourceTypebobox';
@@ -61,6 +64,22 @@ const renderAddBtn = (item: ResourceInterface) => {
   return null;
 };
 
+const openDeleteModal = () =>
+  modals.openConfirmModal({
+    title: 'Delete your profile',
+    centered: true,
+    children: (
+      <Text size="sm">
+        Are you sure you want to delete your profile? This action is destructive and you will have
+        to contact support to restore your data.
+      </Text>
+    ),
+    labels: { confirm: 'Delete account', cancel: "No don't delete it" },
+    confirmProps: { color: 'red' },
+    onCancel: () => console.log('Cancel'),
+    onConfirm: () => console.log('Confirmed'),
+  });
+
 const renderActions = (item: ResourceInterface) => {
   const form = useForm<ResourceInterface>({
     initialValues: {
@@ -96,6 +115,7 @@ const renderActions = (item: ResourceInterface) => {
           <MenuItem
             w={42}
             color="red"
+            onClick={openDeleteModal}
             leftSection={<IconTrash style={{ width: rem(16), height: rem(16) }} stroke={1.5} />}
           />
           {renderAddBtn(item) && <MenuItem w={42} color="blue" leftSection={renderAddBtn(item)} />}
@@ -135,7 +155,7 @@ const renderActions = (item: ResourceInterface) => {
           {form.getInputProps('resourceType').value === 'F' && (
             <TextInput size="sm" label="资源权限" {...form.getInputProps('resourcePerms')} />
           )}
-          <TextInput label="资源相对层级" {...form.getInputProps('resourceLevel')} />
+          <NumberInput label="资源相对层级" {...form.getInputProps('resourceLevel')} />
           <Button loading={loading} loaderProps={{ type: 'dots' }} fullWidth mt="md" type="submit">
             Submit
           </Button>
