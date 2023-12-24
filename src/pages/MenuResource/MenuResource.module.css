@@ -12,3 +12,9 @@
     background-color: var(--mantine-color-dark-6);
   }
 }
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}

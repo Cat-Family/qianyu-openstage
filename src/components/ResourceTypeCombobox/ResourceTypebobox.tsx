@@ -1,21 +1,27 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Combobox, Group, Input, InputBase, Text, useCombobox } from '@mantine/core';
 import resourceTypeMap, {
   resourceNameOfTypeMap,
 } from '../../pages/MenuResource/MenuResourceTypeMap';
 
-export function ResourceTypeCombobox(props: { value: string, defaultDisabled: boolean }) {
+export function ResourceTypeCombobox({
+  value,
+  onChange,
+  defaultDisabled,
+}: {
+  value: string;
+  onChange: (val: string) => void;
+   defaultDisabled: boolean
+}) {
   const combobox = useCombobox({
     onDropdownClose: () => combobox.resetSelectedOption(),
   });
-
-  const [value, setValue] = useState<string>(props.value);
 
   const options = [...resourceTypeMap.keys()].map((item) => (
     <Combobox.Option value={item} key={item}>
       <Group>
         {resourceTypeMap.get(item)}
-        <Text>{resourceNameOfTypeMap.get(item)}</Text>
+        <Text size="sm">{resourceNameOfTypeMap.get(item)}</Text>
       </Group>
     </Combobox.Option>
   ));
@@ -25,13 +31,13 @@ export function ResourceTypeCombobox(props: { value: string, defaultDisabled: bo
       store={combobox}
       withinPortal={false}
       onOptionSubmit={(val) => {
-        setValue(val);
+        onChange(val);
         combobox.closeDropdown();
       }}
     >
       <Combobox.Target>
         <InputBase
-          disabled={props.defaultDisabled}
+          disabled={defaultDisabled}
           label="资源类型"
           component="button"
           type="button"
@@ -42,9 +48,11 @@ export function ResourceTypeCombobox(props: { value: string, defaultDisabled: bo
           onClick={() => combobox.toggleDropdown()}
           rightSectionPointerEvents="none"
         >
-          {<Text ml={20}>{resourceNameOfTypeMap.get(value)}</Text> || (
-            <Input.Placeholder>Pick value</Input.Placeholder>
-          )}
+          {(
+            <Text size="sm" ml={20}>
+              {resourceNameOfTypeMap.get(value)}
+            </Text>
+          ) || <Input.Placeholder>Pick value</Input.Placeholder>}
         </InputBase>
       </Combobox.Target>
 

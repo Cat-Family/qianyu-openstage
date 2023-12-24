@@ -2,18 +2,24 @@ import React, { useState } from 'react';
 import { Combobox, Group, Input, InputBase, Text, useCombobox } from '@mantine/core';
 import { IconMap, IconMapKey } from '../../utils/icon';
 
-export function IconCombobox(props: { value: string, defaultDisabled: boolean }) {
+export function IconCombobox({
+  value,
+  onChange,
+  defaultDisabled,
+}: {
+  value: string;
+  onChange: (val: string) => void;
+  defaultDisabled: boolean;
+}) {
   const combobox = useCombobox({
     onDropdownClose: () => combobox.resetSelectedOption(),
   });
-
-  const [value, setValue] = useState<string | null>(props.value);
 
   const options = Object.keys(IconMap).map((item) => (
     <Combobox.Option value={item} key={item}>
       <Group>
         {IconMap[item as IconMapKey]}
-        <Text>{item}</Text>
+        <Text size="sm">{item}</Text>
       </Group>
     </Combobox.Option>
   ));
@@ -23,7 +29,7 @@ export function IconCombobox(props: { value: string, defaultDisabled: boolean })
       store={combobox}
       withinPortal={false}
       onOptionSubmit={(val) => {
-        setValue(val);
+        onChange(val);
         combobox.closeDropdown();
       }}
     >
@@ -32,14 +38,15 @@ export function IconCombobox(props: { value: string, defaultDisabled: boolean })
           label="图标"
           component="button"
           type="button"
-          disabled={props.defaultDisabled}
+          disabled={defaultDisabled}
           pointer
+          size="sm"
           leftSection={IconMap[value as IconMapKey]}
           rightSection={<Combobox.Chevron />}
           onClick={() => combobox.toggleDropdown()}
           rightSectionPointerEvents="none"
         >
-          {value || <Input.Placeholder>Pick value</Input.Placeholder>}
+          {<Text size="sm">{value}</Text> || <Input.Placeholder>Pick value</Input.Placeholder>}
         </InputBase>
       </Combobox.Target>
 

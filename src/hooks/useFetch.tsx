@@ -8,7 +8,7 @@ import { FetchData, FetchDataParams } from '../ts/types/types/fetchData.type';
 const BASE_URL: string = '/qy/api/v1/os';
 
 interface State<T> {
-  fetchData: FetchData;
+  fetchData: FetchData<T>;
   data?: T;
   error?: Error;
   loading: boolean;
@@ -29,10 +29,12 @@ function useFetch<T extends { code: number; message: string }>(
   // Used to prevent state update if the component is unmounted
 
   const initialState: State<T> = {
-    fetchData: async () => {},
     error: undefined,
     data: undefined,
     loading: false,
+    fetchData(): Promise<{ code: number; message: string; data: T }> {
+      throw new Error('Function not implemented.');
+    },
   };
 
   // Keep state logic separated
@@ -53,7 +55,7 @@ function useFetch<T extends { code: number; message: string }>(
   const [state, dispatch] = useReducer(fetchReducer, initialState);
   const location = useLocation();
 
-  const fetchData = async (url: FetchDataParams[0], options: FetchDataParams[1]) => {
+  const fetchData = async (url: FetchDataParams<T>[0], options: FetchDataParams<T>[1]) => {
     dispatch({ type: 'loading' });
 
     let id;
@@ -86,7 +88,7 @@ function useFetch<T extends { code: number; message: string }>(
             withCloseButton: true,
             autoClose: 3000,
             title: '成功',
-            message: '操作成功',
+            message: data.message || '操作成功',
             color: 'green',
             icon: <IconCheck />,
             radius: 'lg',
@@ -104,13 +106,13 @@ function useFetch<T extends { code: number; message: string }>(
             autoClose: 2000,
           });
         dispatch({ type: 'fetched', payload: data });
-        return;
+        return data;
       }
 
       if (data.code === 201) {
         navigate('/');
         dispatch({ type: 'fetched', payload: data });
-        return;
+        return data;
       }
 
       if (data.code === 401) {
@@ -144,6 +146,8 @@ function useFetch<T extends { code: number; message: string }>(
           loading: false,
         });
       dispatch({ type: 'error', payload: error as Error });
+
+      return error;
     }
   };
 

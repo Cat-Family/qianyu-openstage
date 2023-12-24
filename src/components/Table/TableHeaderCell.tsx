@@ -24,7 +24,7 @@ interface ThProps {
   reversed?: boolean;
   width?: string | number;
   sortable: boolean;
-  onSort?(): void;
+  onSort?: () => void;
   isSortable?: boolean;
 }
 
