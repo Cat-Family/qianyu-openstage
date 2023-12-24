@@ -4,7 +4,7 @@ import resourceTypeMap, {
   resourceNameOfTypeMap,
 } from '../../pages/MenuResource/MenuResourceTypeMap';
 
-export function ResourceTypeCombobox(props: { value: string }) {
+export function ResourceTypeCombobox(props: { value: string, defaultDisabled: boolean }) {
   const combobox = useCombobox({
     onDropdownClose: () => combobox.resetSelectedOption(),
   });
@@ -31,6 +31,7 @@ export function ResourceTypeCombobox(props: { value: string }) {
     >
       <Combobox.Target>
         <InputBase
+          disabled={props.defaultDisabled}
           label="资源类型"
           component="button"
           type="button"

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Combobox, Group, Input, InputBase, Text, useCombobox } from '@mantine/core';
 import { IconMap, IconMapKey } from '../../utils/icon';
 
-export function IconCombobox(props: { value: string }) {
+export function IconCombobox(props: { value: string, defaultDisabled: boolean }) {
   const combobox = useCombobox({
     onDropdownClose: () => combobox.resetSelectedOption(),
   });
@@ -32,6 +32,7 @@ export function IconCombobox(props: { value: string }) {
           label="图标"
           component="button"
           type="button"
+          disabled={props.defaultDisabled}
           pointer
           leftSection={IconMap[value as IconMapKey]}
           rightSection={<Combobox.Chevron />}

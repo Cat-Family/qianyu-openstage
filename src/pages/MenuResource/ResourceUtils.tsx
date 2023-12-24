@@ -108,9 +108,14 @@ const renderActions = (item: ResourceInterface) => {
           })}
         >
           <TextInput label="ID" {...form.getInputProps('resourceId')} disabled />
-          <IconCombobox {...form.getInputProps('resourceIcon')} />
           <TextInput label="资源名称" {...form.getInputProps('resourceName')} />
-          <ResourceTypeCombobox {...form.getInputProps('resourceType')} />
+          <ResourceTypeCombobox {...form.getInputProps('resourceType')} defaultDisabled />
+          <IconCombobox
+            {...form.getInputProps('resourceIcon')}
+            defaultDisabled={
+              item.resourceType === 'F' || (item.resourceType === 'R' && item.parentId !== '0')
+            }
+          />
           {item.resourceType === 'R' && (
             <TextInput label="资源路径" {...form.getInputProps('resourcePath')} />
           )}
@@ -120,6 +125,7 @@ const renderActions = (item: ResourceInterface) => {
           {item.resourceType === 'F' && (
             <TextInput label="资源权限" {...form.getInputProps('resourcePerms')} />
           )}
+          <TextInput label="资源相对层级" {...form.getInputProps('resourceLevel')} />
           <Button loading={loading} loaderProps={{ type: 'dots' }} fullWidth mt="md" type="submit">
             Submit
           </Button>
